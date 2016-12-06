@@ -1,0 +1,11 @@
+.vertical(@color) {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 200%;
+  border-left: 1px solid @color;
+  transform-origin: left top;
+  transform: scale3d(.5, .5, .5);
+}

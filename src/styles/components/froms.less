@@ -1,0 +1,167 @@
+/*
+主要用于from表单元素
+input checkbox radio等
+*/
+.input-outer{
+  position: relative;
+  width: 100%;
+}
+.process-form li .input-tit {
+    position: absolute;
+    top: -9px;
+    left: 8px;
+    right: initial;
+    bottom: initial;
+    padding: 0 5px;
+    height: 18px;
+    display: none;
+    line-height: 18px;
+    font-size: 16px;
+    color: #999;
+    background-color: #fff;
+    -webkit-animation: input-fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: input-fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.process-form li .remind-text {
+    position: absolute;
+    top: -35px;
+    left: initial;
+    right: 0px;
+    bottom: initial;
+    z-index: 10;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 6px;
+    line-height: 40px;
+    font-size: 16px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.85);
+    &::before{
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      right: 16px;
+      z-index: 9;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid rgba(0, 0, 0, 0.85);
+    }
+}
+.input-style {
+    box-sizing: border-box;
+    width: 100%;
+    -webkit-appearance: none;
+    height: 54px;
+    line-height: normal;
+    padding: 16px 4%;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    font-size: 20px;
+    color: #333;
+}
+.input-style-error {
+    border-color: #c71a20;
+}
+.input-tit {
+  .absolute( -9px, initial, 8px );
+  padding: 0 5px;
+  height: 18px;
+  display: none;
+  line-height: 18px;
+  font-size: 16px;
+  color: #d3d3d3;
+  background-color: #fff;
+  animation: input-fade-in 0.5s cubic-bezier(.25, .46, .45, .94);
+}
+.remind-icon-error {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    .size(44px,54px);
+    width: 44px;
+    height: 54px;
+    .img-retina("~images/icon_error.png";24px;24px);
+    background-position: center;
+}
+.remind-text {
+  .absolute( -35px, 0px);
+  z-index: 10;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 6px;
+  line-height: 40px;
+  font-size: 16px;
+  color: #fff;
+  background: rgba( 0, 0, 0, .85);
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    right: 16px;
+    z-index: 9;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid rgba( 0, 0, 0, .85);
+  }
+}
+
+.select-cont{
+  box-sizing: border-box;
+  width: 100%;
+  -webkit-appearance: none;
+  height: 54px;
+  line-height: normal;
+  padding: 12px 4%;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  font-size: 20px;
+  color: #333;
+  background-color: #fff;
+}
+.select-icon{
+  .absolute(15px;12px);
+  .size(0;0);
+  margin-top: 8px;
+  margin-left: 6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #999;
+  display: block;
+}
+.select-tit{
+  .absolute(-9px;initial;8px);
+  background-color: #fff;
+  padding: 0 5px;
+  font-size: 16px;
+  color: #d3d3d3;
+  height: 18px;
+}
+
+.lab-checkbox{
+  display: inline-block;
+  .size(18px,18px);
+  .img-retina("~images/box_nochose.png"; 18px; 18px);
+}
+.ipt-checkbox{
+  display: none;
+  &:checked + .lab-checkbox{
+    .img-retina("~images/box_chose.png"; 18px; 18px);
+  }
+}
+
+.lab-checkbox2{
+  display: inline-block;
+  .size(24px,24px);
+  .img-retina("~images/box_nochose.png"; 24px; 24px);
+}
+.ipt-checkbox{
+  display: none;
+  &:checked + .lab-checkbox2{
+    .img-retina("~images/box_chose.png"; 24px; 24px);
+  }
+}

@@ -1,0 +1,152 @@
+.mask {
+  .make-mask(rgba(0,0,0,.6));
+}
+.modalWrap {
+  animation: fadeInUp .3s .1s cubic-bezier(.25, .46, .45, .94) both;
+}
+.popup-box {
+  .make-popup-box();
+  animation:pulse .3s .2s ease both;
+  transform: translateX(-50%);
+  & .title {
+    text-align: center;
+    font-size: 15px;
+    color:  #4a4a4a;
+  }
+}
+
+.btn-horizontally {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.phone-verification {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0 25px 0;
+  position: relative;
+  font-size: 14px;
+  .size(100%, 44px);
+  & .input {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    border: 0;
+    margin-left: 15px;
+    color: #4a4a4a;
+    &::-webkit-input-placeholder {
+      color: #ccc;
+    }
+  }
+  & .line {
+    display: flex;
+    height: 40px;
+    border-right: 1px solid #ccc;
+    transform: scale3d(.5,.5,.5);
+  }
+  & .btn {
+    -webkit-appearance: none;
+    width: 115px;
+    background-color: rgba(0,0,0,0);
+    font-size: 14px;
+    padding: 0;
+    color: #4a90e2;
+    border: none;
+  }
+  & .btn-disable {
+    color: #ccc;
+  }
+
+  &::before {
+    .horizontal(#ccc);
+    top: 0;
+  }
+  &::after {
+    .horizontal(#ccc);
+    bottom: 0;
+  }
+}
+
+.popup-password {
+  margin: 15px 0;
+}
+
+.pay-pwd-forget {
+  width: 280px;
+  margin: 0 auto;
+  text-align: right;
+  font-size: 14px;
+  color: #666;
+  padding-right: 22px;
+  padding-bottom: 15px;
+}
+
+.popup-btns-box {
+  padding: 0 20px;
+  & .btn {
+    padding: 10px 0;
+  }
+}
+
+// Dialog fixed bottom
+.dialog-fixed-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 84%;
+    padding: 25px 8%;
+    z-index: 99;
+    background: #fff;
+    color: #666;
+    font-size: 16px;
+    line-height: 24px;
+    & a {
+        font-size: 20px;
+        margin-top: 25px;
+        display: block;
+        text-align: center;
+        color: #666;
+    }
+}
+
+// fade-out
+.fade-out{
+    animation: fade-out .3s .2s ease both;
+}
+
+// Wechat ninimum height *****414px-479px
+@media screen and ( min-height:414px ) and ( max-height: 479px) {
+    .self-adaption {
+        top: 1%;
+    }
+}
+
+// iPhone4 ****480px-567px
+@media screen and ( min-height:480px ) and ( max-height: 567px) {
+    .self-adaption {
+        top: 9%;
+    }
+}
+
+// iPhone5 ****480px-567px
+@media screen and ( min-height:568px ) and ( max-height: 666px) {
+    .self-adaption {
+        top: 17%;
+    }
+}
+
+// iPhone6 ****568px-666px
+@media screen and ( min-height:665px ) and ( max-height: 735px) {
+    .self-adaption {
+        top: 21%;
+    }
+}
+
+// iPhone6plus ****735px
+@media screen and ( min-height: 735px) {
+    .self-adaption {
+        top: 24%;
+    }
+}

@@ -1,0 +1,28 @@
+/*主要用户输出各种button元素*/
+.incomplete-fill-btn{
+  margin:0 auto;
+  .button-width(64%; @btn-height; 18px; @btn-height; 26px);
+  .button-variant(#fff; @bg-style-color; 1px; @bg-style-color);
+  text-align: center;
+}
+.no-fill-btn{
+  margin:0 auto;
+  .button-width(64%; @btn-height; 18px; @btn-height; 26px);
+  .button-variant(@bg-style-color; #fff; 1px;@bg-style-color);
+  text-align: center;
+}
+.complete-fill-btn{
+  position: fixed;
+  bottom: 0;
+  max-width: 640px;
+  .button-width(100%; @complete-btn-height; 20px; @complete-btn-height; 0);
+  .button-variant(#fff; @bg-style-color;);
+  text-align: center;
+}
+.btn-remind-blue {
+    .btn;
+    .button-width(75%, 46px, 20px, 46px,30px);
+    .button-variant( #1da4f9;#fff;1px;#1da4f9);
+    display: flex;
+    justify-content: center;
+}
