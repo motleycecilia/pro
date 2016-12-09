@@ -4,29 +4,10 @@ export default function (name, code, handlers) {
     unlogin: '900002'
   }
   const apiMap = [ {//news
-    name: 'getDetail',
-    statusCode: defaultSetting
-  }, {
-    name: 'isLogin',
-    statusCode: defaultSetting
-  }, {
-    name:'checkOrderPayCondition',
-    statusCode:defaultSetting
-  }, {
-    name:'getAccessTicket',
-    statusCode:defaultSetting
-  }, {
-    name: 'getAccountInfo',//用户信息回显
-    statusCode: defaultSetting
-  },{
-    name:'orangeAccount',
-    statusCode:{
-      submit:'000001',
-      authenticate:'000002',
-      orange:'000003'
+      name: 'getDetail',
+      statusCode: defaultSetting
     }
-  }]
-
+  ]
   apiMap.forEach(api => {
     if (api.name === name) {
       const index = Object.values(api.statusCode).indexOf(code)

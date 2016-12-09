@@ -1,140 +1,293 @@
-/*详情页*/
-.detail-describe{
-  position: relative;
-  padding:18px 14px;
-  font-size: 15px;
-  line-height: 18px;
-  color:#4a4a4a;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
+.top-line {
+    .horizontal(@gray-obvious);
+    top: 0;
 }
-.detail-money{
-  color: #4a90e2;
-  padding-right: 12%;
+.bottom-line {
+    .horizontal(@gray-obvious);
+    bottom: 0;
 }
-.detail-proname{
-  width: 56%;
-  display: inline-block;
-  .text-overflow;
+.list-style ( @color ) {
+    position: relative;
+    padding: 15px 0 15px 5px;
+    color: @color;
+    font-size: @font-size-middle;
+
+    &::after {
+        .bottom-line;
+    }
 }
-.col-line-nbd{
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 13px;
-  height: 54px;
-  font-size: 16px;
-  color: #4a4a4a;
-  .img-retina("~images/arrow_down.png";19px;11px;96%;23px);
+.banner {
+    position: relative;
+    width: 100%;
+
+    & img {
+        width: 100%;
+        display: block;
+    }
+
+    &-text {
+        position: absolute;
+        bottom:0;
+        left: 0;
+        width: 94%;
+        padding: 3%;
+        background-color: rgba(0, 0, 0, .5);
+        color: #fff;
+        font-size: 13px;
+        font-weight: normal;
+        & h2 {
+            font-size: 17px;
+            padding-bottom: 8px;
+        }
+    }
+}
+.pa-b72 {
+    padding-bottom: 72px;
+}
+.ma-t13 {
+    margin-top: 13px;
+}
+.tabmenu {
+    position: relative;
+    width: 100%;
+    background: #f9f9f9;
+    overflow: hidden;
+    display: flex;
+
+    & li {
+        position: relative;
+        padding: 18px 0;
+        color: @gray;
+        flex: 1;
+        cursor: pointer;
+        & h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        &:first-child {
+            &::before {
+                border-left: 0;
+            }
+        }
+        &::before {
+            .vertical(@gray-obvious);
+        }
+        &::after {
+            .horizontal(@gray-obvious);
+            bottom: 0;
+        }
+
+        &.current {
+            width: 100%;
+            color: @brand-primary;
+            background: @content-block;
+
+            &::after {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 200%;
+                height: 4px;
+                background-color: @brand-primary;
+                // z-index: 9999;
+                border-bottom: none;
+            }
+        }
+    }
+
+    &::before {
+        .horizontal(@gray-obvious);
+        border-top: 1px solid @gray-obvious;
+        top: 0;
+    }
+
+    // One Column
+    &.column1 {
+        &::before {
+            border-top: noen;
+        }
+        li{
+            padding-left: 15px;
+            font-size: 13px;
+            background: #fff;
+
+            & h2 { color: @gray-base; }
+            & span { margin-right: 14px; }
+            &::after { border: none;}
+        }
+    }
+
+    // Two Column
+    &.column2 li{
+        width: 50%;
+        text-align: center;
+        // font-size: 20px;
+    }
+
+    // Three Column
+    &.column3 li {
+        padding-left: 20px;
+        font-size: 13px;
+        width:33%;
+        & p {
+            padding-bottom: 5px;
+            line-height: 16px;
+            &:last-child { padding-bottom: 0;}
+        }
+    }
 }
 
-.content-list-text {
-  padding: 0 13px;
-  padding-bottom: 15px;
-  line-height: 20px;
-  font-size: 13px;
-}
-.col-bd{
-  position: relative;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-  & .count-up{
-    .img-retina("~images/arrow_up.png";19px;11px;96%;23px);
-  }
+.white-bg {
+    background: #fff;
 }
 
-/*保单填写页*/
-.mation-top-tit{
-  position: relative;
-  padding: 12px 14px;
-  font-size: 12px;
-  line-height: 16px;
-  background-color: #ddecff;
-  color: #66a2d6;
-}
-.mation-top-enddate{
-  padding: 18px 2px;
-  font-size: 14px;
-  color: #4a4a4a;
-}
-.checbox-waner{
-  position: relative;
-  height: 54px;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: #4a4a4a;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-}
-.policy-error{
-  height: 22px;
-  padding: 16px 25px 0 25px;
-  color: red;
+.content {
+    position: relative;
+
+    &-title {
+        height: 45px;
+        line-height: 45px;
+        padding-left: 35px;
+        .img-retina('~images/icon-guarantee.png'; 16px; 18px);
+        background-position: 12px center;
+        font-size: @font-size-middle;
+        color: @gray-dark;
+    }
+
+    &-tit2{
+      height: 45px;
+      line-height: 45px;
+      padding-left: 35px;
+      background-position: 12px center;
+      font-size: @font-size-middle;
+      color: @gray-dark;
+    }
+
+    &-list {
+        position: relative;
+        padding-left: 10px;
+
+        & h2 {
+            .list-style(@gray);
+        }
+
+        & li {
+            .list-style( @gray-base );
+            padding:0 0 0 5px;
+
+            & a {
+                padding: 15px 0;
+                display: block;
+                color: @gray-base;
+                &.arrow-up {
+                    background-position: 96% 19px;
+                }
+                &.arrow-down {
+                    background-position: 96% 19px;
+                }
+                &.arrow-right {
+                  background-position: 96% 14px;
+                }
+            }
+            & .content-list-title {
+                & span.project-name {
+                    width: 56%;
+                    display: inline-block;
+                    .text-overflow;
+                }
+                & span.money {
+                    margin-right: 12%;
+                    float: right;
+                }
+                & p {
+                    margin-top: 5px;
+                    font-size: 13px;
+                    color: #999;
+                }
+            }
+            & .content-list-text {
+                padding-right: 4%;
+                padding-bottom: 15px;
+                line-height: 20px;
+                font-size: @font-size-lesser;
+            }
+
+            &::after {
+                .horizontal(@gray-obvious);
+                bottom: 0;
+            }
+
+            &:last-child {
+                &::after {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+        &::before {
+            .top-line;
+        }
+    }
 }
 
+.content-list-s{
+  position: relative;
+  padding-left: 10px;
+  & li {
+      .list-style( @gray-base );
+      padding:0 0 0 5px;
 
-/*报保险人编辑页*/
-.bePeople-content{
-  position: relative;
-  padding: 24px 25px;
-  background-color: #fff;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-}
+      & a {
+          padding: 15px 0;
+          display: block;
+          color: @gray-base;
+          &.arrow-up {
+              background-position: 96% 19px;
+          }
+          &.arrow-down {
+              background-position: 96% 19px;
+          }
+          &.arrow-right {
+            background-position: 96% 14px;
+          }
+      }
+      & .content-list-title {
+          & span.project-name {
+              width: 56%;
+              display: inline-block;
+              .text-overflow;
+          }
+          & span.money {
+              margin-right: 12%;
+              float: right;
+          }
+          & p {
+              margin-top: 5px;
+              font-size: 13px;
+              color: #999;
+          }
+      }
+      & .content-list-text {
+          padding-right: 4%;
+          padding-bottom: 15px;
+          line-height: 20px;
+          font-size: @font-size-lesser;
+      }
 
-/*保障内容页*/
-.guarantee-content{
-  position: relative;
-  padding: 24px 14px;
-  background-color: #fff;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-}
-.guarantee-con-tit{
-  padding-bottom:6px;
-  font-size: 16px;
-  line-height: 22px;
-  color: #4a4a4a;
-}
-.guarantee-clauseList{
-  position: relative;
-  display: block;
-  color: #333;
-  padding: 14px 0;
-  text-indent: 13px;
-  background-color: #fff;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-}
-.guarantee-clauseList-one{
-  padding: 14px 0;
-  text-indent: 13px;
-  position: relative;
-  color: #333;
-  display: block;
-  background-color: #fff;
-  &::before{
-    .bd-top(1px, #cbcbcb);
-  }
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
-}
-.guarantee-con-info{
-  font-size: 14px;
-  line-height: 21px;
-  color: #9b9b9b;
-}
+      &::after {
+          .horizontal(@gray-obvious);
+          bottom: 0;
+      }
 
-/*登录页*/
-.login-err{
-  padding: 10px 14px;
+      &:last-child {
+          &::after {
+              border-bottom: 0;
+          }
+      }
+  }
+
+  &::before {
+      .top-line;
+  }
 }

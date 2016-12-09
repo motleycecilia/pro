@@ -10,7 +10,7 @@ import { App, YztApp } from 'utils/native_h5'
 
 @connect(
   state => ({
-    detail: state.detail
+    detailInfo: state.detailInfo
   }),
   {
     queryDetilInfo
@@ -24,14 +24,15 @@ export default class guarantee extends React.Component {
   }
 
   componentWillMount() {
-    this.props.queryDetilInfo(this.props.location.query.productId)//
+    // this.props.queryDetilInfo(this.props.location.query.productId)//
+    this.props.queryDetilInfo(10018844)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
     let category = this.props.location.query.category
-    let titles = category === '1' ? '投保人声明' :
+    let titles = category === '1' ? '投保声明' :
     category === '2' ? '保险条款' :
-    category === '3' ? '常见问题' : '理赔指南'
+    category === '3' ? '常见问题' : '理赔流程'
     YztApp.setTitle(titles)
   }
   onClickBack() {
@@ -104,27 +105,26 @@ export default class guarantee extends React.Component {
   renderContent(resData, category) {
     return(
         category === '1' ?
-        this.renderStatement(resData.insuranceNotice) :
+        this.renderStatement(resData.insuranceStatement) :
         category === '2' ?
         this.renderInsure(resData.insuranceClauseList) :
         category === '3' ?
         this.renderProblem(resData.commonIssue) :
-        this.renderClaims(resData.insuranceScope)
+        this.renderClaims(resData.urlLiPeiFuWu)
     )
   }
-  //this.props.location.query.category
   render() {
     const { title } = this.props.route
     let category = this.props.location.query.category
-    let titles = category === '1' ? '投保人声明' :
+    let titles = category === '1' ? '投保声明' :
     category === '2' ? '保险条款' :
-    category === '3' ? '常见问题' : '理赔指南'
-    const { detail } = this.props
+    category === '3' ? '常见问题' : '理赔流程'
+    const { detailInfo } = this.props
     return (
       <div className="bg-fff">
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)}
           title={titles}/>
-        { !detail.getDetailSuccess ? <Loading /> : this.renderContent(detailJSON.responseData, this.props.location.query.category) }
+        { !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfo.detail, this.props.location.query.category) }
       </div>
     )
   }

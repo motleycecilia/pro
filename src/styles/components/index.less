@@ -29,20 +29,30 @@ margin
     .size(100%, 42px);
     width: 100%;
     max-width: 640px;
-    line-height: 42px;
+    line-height: @brand-title-height;
     text-align: center;
-    background-color: @bg-style-color;
-    color: #fff;
-    font-size: 18px;
+    background-color: @content-block;
+    color: @gray-base;
+    font-size: @font-size-big;
     z-index: 9;
     &-back {
         position: absolute;
         top: 0;
-        left: 13px;
+        left: 0;
         display: inline-block;
-        .size(20px, 42px);
-        .img-retina("~images/back.png", 10px, 17px);
-        background-position:left center;
+        padding-left: 20px;
+        .size(@brand-title-height, 42px);
+        .img-retina("~images/title_back.png", 10px, auto);
+        background-position: 10px center;
+        // &::before {
+        //   content: "";
+        //   position: absolute;
+        //   top: 14px;
+        //   left: 10px;
+        //   display: block;
+        //   .square(12px);
+        //   .icon-arrowLeft(2px, #333);
+        // }
     }
     &-finish {
         position: absolute;
@@ -197,4 +207,15 @@ margin
 }
 .align-center {
   text-align: center;
+}
+
+
+/*报保险人编辑页*/
+.bePeople-content{
+  position: relative;
+  padding: 24px 25px;
+  background-color: #fff;
+  &::after{
+    .bd-bottom(1px, #cbcbcb);
+  }
 }

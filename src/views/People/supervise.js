@@ -31,7 +31,15 @@ export default class supervise extends React.Component {
     YztApp.setTitle(this.props.route.title)
     this.props.getInsuredUserInfo('')
   }
-
+  componentWillReceiveProps(nextProps) {
+    const {insured} = nextProps
+    if(insured.getIResultData && insured.getIResultData.responseCode === '900002') {
+      this.context.router.push({
+        pathname: '/login'
+      })
+      return
+    }
+  }
   componentWillUnmount() {
     this.props.resetInsuredUserInfo()
   }
@@ -110,11 +118,6 @@ export default class supervise extends React.Component {
   render() {
     const { title } = this.props.route
     const { insured } = this.props
-    // insured.getInsuredUserBegin ?
-    // <Loading /> :
-    // insured.getIResultData && !!insured.getIResultData.responseData ?
-    // this.renderContent(insured.getIResultData.responseData) :
-    // "系统异常请稍后重试"
     return(
       <div>
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={title}/>

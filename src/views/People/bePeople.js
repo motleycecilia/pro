@@ -61,6 +61,12 @@ export default class bePeople extends React.Component {
   componentWillReceiveProps(nextProps) {
     const {insured} = nextProps
     let errorContent = ''
+    if(insured.getIResultData && insured.getIResultData.responseCode === '900002') {
+      this.context.router.push({
+        pathname: '/login'
+      })
+      return
+    }
     if(insured.getIResultData && insured.getIResultData.responseCode === '000000') {
       const getResultData = this.getChoseBePeople(insured.getIResultData.responseData)[0]
       console.log(getResultData)

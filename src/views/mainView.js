@@ -68,7 +68,7 @@ export default class mainView extends React.Component {
     const { title } = this.props.route
     return(
       <div>
-        <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={title}/>
+        <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title="main"/>
         <section >
           main
         </section>
@@ -191,7 +191,6 @@ export default class mainView extends React.Component {
         <div className="h_45"></div>
         <div className="h_45"></div>
         <div className="mask modalWrap">
-
         </div>
       </div>
     )

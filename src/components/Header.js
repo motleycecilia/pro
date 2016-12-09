@@ -13,8 +13,8 @@ class Header extends React.Component {
         isVisibility
         ?
           <header className="brand-title">
-            <span className="brand-title-back" onTouchTap={onClickBack}></span>
             {title}
+            <div className="brand-title-back goBack" onTouchTap={onClickBack}></div>
           </header>
         : <div></div>
     )

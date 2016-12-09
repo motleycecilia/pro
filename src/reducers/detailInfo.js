@@ -1,20 +1,14 @@
 import {
   GET_DETAIL_BEGIN,
   GET_DETAIL_SUCCESS,
-  GET_DETAIL_ERROR,
-  GET_CONFIRMATION_BEGIN,
-  GET_CONFIRMATION_SUCCESS,
-  GET_CONFIRMATION_ERROR
+  GET_DETAIL_ERROR
 }
 from 'constants/actionTypes'
 
 const defaultState = {
   getDetailBegin: false,
   getDetailSuccess: false,
-  getDetailError: false,
-  getConfirmationBegin: false,
-  getConfirmationSuccess: false,
-  getConfirmationError: false
+  getDetailError: false
 }
 
 export default function detail(state = defaultState, action) {
@@ -34,22 +28,6 @@ export default function detail(state = defaultState, action) {
         getDetailBegin: false,
         getDetailError: true,
         errorCode: action.errorCode,
-        errorMsg: action.errorMsg
-      })
-    case GET_CONFIRMATION_BEGIN:
-      return Object.assign({}, state, {
-        getConfirmationBegin: true
-      })
-    case GET_CONFIRMATION_SUCCESS:
-      return Object.assign({}, state, {
-        getConfirmationBegin: false,
-        getConfirmationSuccess: true,
-        confirmDetailResData: action.confirmDetailResData
-      })
-    case GET_CONFIRMATION_ERROR:
-      return Object.assign({}, state, {
-        getConfirmationBegin: false,
-        getConfirmationError: true,
         errorMsg: action.errorMsg
       })
     default:

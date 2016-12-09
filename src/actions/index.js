@@ -1,7 +1,47 @@
 import * as api from 'api'
 import * as types from '../constants/actionTypes'
 import incinerator from 'hooks/incinerator'
-//"15660511002"
+
+/*
+查询详情页
+*/
+export function queryDetilInfo(productId){
+  return (dispatch, getState) => {
+    dispatch(getDetailInfoBegin())
+    return api.queryDetilInfo(productId)
+    .then(res => {
+      incinerator('getDetail', res.responseCode, {
+        success: dispatch.bind(this, getDetailSuccess(res.responseData)),
+        fail: dispatch.bind(this, getDetailInfoError(res.responseCode, res.responseMessage))
+      })
+    })
+    .fail(() => {
+      dispatch(getDetailInfoError('90012','系统异常'))
+    })
+  }
+}
+
+function getDetailInfoBegin() {
+  return {
+    type: types.GET_DETAIL_BEGIN
+  }
+}
+
+function getDetailSuccess(resultData) {
+  return {
+    type: types.GET_DETAIL_SUCCESS,
+    resultData: resultData
+  }
+}
+
+function getDetailInfoError(errorCode, errorMsg) {
+  return {
+    type: types.GET_DETAIL_ERROR,
+    errorCode: errorCode,
+    errorMsg: errorMsg
+  }
+}
+
 /*
 是否登录
 */
@@ -42,43 +82,6 @@ function getLoginstatusError(){
 export function resetLogin() {
   return {
     type: types.RESET_LOGIN_STATUS
-  }
-}
-
-/*
-查询详情页
-*/
-export function queryDetilInfo(productId){
-  return (dispatch, getState) => {
-    dispatch(getDetailInfoBegin())
-    return api.queryDetilInfo(productId)
-    .then(res => {
-      dispatch(getDetailSuccess(res))
-    })
-    .fail(() => {
-      dispatch(getDetailInfoError('90012','系统异常'))
-    })
-  }
-}
-
-function getDetailInfoBegin() {
-  return {
-    type: types.GET_DETAIL_BEGIN
-  }
-}
-
-function getDetailSuccess(resultData) {
-  return {
-    type: types.GET_DETAIL_SUCCESS,
-    resultData: resultData
-  }
-}
-
-function getDetailInfoError(errorCode, errorMsg) {
-  return {
-    type: types.GET_DETAIL_ERROR,
-    errorCode: errorCode,
-    errorMsg: errorMsg
   }
 }
 
@@ -282,377 +285,4 @@ export function resetInsuredUserInfo() {
   return {
     type: types.RESET_INSURED_USER
   }
-}
-
-/*价格查询*/
-function getPremium(params){
-  return (dispatch, getState) => {
-    return api.getPremium(params)
-    .then(res => {
-      dispatch(getPremiumSuccess(res))
-    })
-    .fail(() => {
-      dispatch(getPremiumError('系统异常'))
-    })
-  }
-}
-
-function getPremiumSuccess(resultData) {
-  return {
-    type: types.GET_PREMIUM_SUCCESS,
-    premiumResultData: resultData
-  }
-}
-
-function getPremiumError(errorMsg) {
-  return {
-    type: types.GET_PREMIUM_ERROR,
-    errorMsg: errorMsg
-  }
-}
-
-/*核保*/
-export function preSubmit(params){
-  return (dispatch, getState) => {
-    dispatch(getPreSubmitBegin())
-    return api.preSubmit(params)
-    .then(res => {
-      dispatch(getPreSubmitSuccess(res))
-    })
-    .fail(() => {
-      dispatch(getPreSubmitError('系统异常'))
-    })
-  }
-}
-
-function getPreSubmitBegin(resultData) {
-  return {
-    type: types.GET_PRESUBMIT_BEGIN
-  }
-}
-function getPreSubmitSuccess(resultData) {
-  return {
-    type: types.GET_PRESUBMIT_SUCCESS,
-    preResultData: resultData
-  }
-}
-
-function getPreSubmitError(errorMsg) {
-  return {
-    type: types.GET_PRESUBMIT_ERROR,
-    errorMsg: errorMsg
-  }
-}
-
-export function resetPreSubmit() {
-  return {
-    type: types.RESET_PRESUBMIT
-  }
-}
-
-/*保单信息确认*/
-export function confirmation(orderNo) {
-  return (dispatch, getState) => {
-    dispatch(confirmationBegin())
-    return api.confirmation(orderNo)
-    .then(res => {
-      dispatch(confirmationSuccess(res))
-    })
-    .fail(() => {
-      dispatch(confirmationError('系统异常'))
-    })
-  }
-}
-
-function confirmationBegin() {
-  return {
-    type: types.GET_CONFIRMATION_BEGIN
-  }
-}
-
-function confirmationSuccess(confirmDetailResData) {
-  return {
-    type: types.GET_CONFIRMATION_SUCCESS,
-    confirmDetailResData: confirmDetailResData
-  }
-}
-
-function confirmationError() {
-  return {
-    type: types.GET_CONFIRMATION_ERROR
-  }
-}
-/**
- * APP用户同步登录态
- */
-
-
-function appLoginBegin(){
-	return {
-		type: types.APP_LOGIN_BEGIN
-	}
-}
-
-function appLoginSuccess(responseData){
-	return {
-		type: types.APP_LOGIN_SUCCESS,
-    appLoginResult: responseData
-	}
-}
-
-function appLoginFail(errorCode, error){
-	return {
-		type: types.APP_LOGIN_ERROR,
-    errorCode: errorCode,
-		error:error
-	}
-}
-
-export function AppUserLogin() {
-	function getSSO(){
-		return new Promise((resolve,reject)=>{
-			YztApp.getLoginStatus((status,data)=>{
-				if(status != 'success'){
-					reject('native api call error');
-				}
-				if(status === 'success' && !data.clientNo){
-					YztApp.accessNativeModule('patoa://pingan.com/login')
-				}
-				if(data.clientNo){
-					YztApp.getSSOTicket((status,data)=>{
-						if(status==='success' && data){
-							resolve(data)
-						}
-						else{
-							reject('native api call error')
-						}
-					})
-				}
-			})
-		})
-	}
-
-	return (dispatch, getState) => {
-		dispatch(appLoginBegin())
-		return (async function(){
-			try{
-				let sso = await getSSO();
-				api.getAccessTicket(sso)
-          .then(res => {
-            // dispatch(appLoginSuccess(res.responseData))
-            if(res.responseData && res.responseData.clientNo){
-              dispatch(appLoginSuccess(res.responseData))
-            }
-            else{
-              dispatch(appLoginFail('90002','未登录'))
-            }
-          })
-          .fail(() => {
-						dispatch(appLoginFail('111','当前网络异常，请检查您的网络设置'))
-					});
-			}
-			catch(err){
-				dispatch(appLoginFail('22',err))
-			}
-		})()
-	}
-}
-
-// 获取升级信息
-function getUpdataInfoBegin(){
-	return {
-		type:types.GET_UPDATREINFO_BEGIN
-	}
-}
-
-function getUpdataInfoSuccess(upDataInfos){
-	return {
-		type:types.GET_UPDATREINFO_SUCCESS,
-		upDataInfo: upDataInfos
-	}
-}
-function getUpdataInfoFail(errorCode,errorMessage){
-	return {
-		type:types.GET_UPDATREINFO_FAIL,
-		errorCode: errorCode,
-		errorMessage: errorMessage
-	}
-}
-
-export function resetUpdataInfo(){
-	return {
-		type:types.RESET_UPDATREINFO
-	}
-}
-
-export function getUpdateInfo(params){
-	return (dispatch, getState) => {
-		dispatch(getUpdataInfoBegin())
-		return api.getUpdateInfo(params)
-			.then(res => {
-				incinerator('checkOrderPayCondition', res.responseCode, {
-					success: dispatch.bind(this, getUpdataInfoSuccess(res.responseData)),
-					fail: dispatch.bind(this, getUpdataInfoFail(res.responseCode, res.responseMessage)),
-					unlogin: ()=>{
-            YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
-            })
-          }
-				})
-			})
-			.fail(() => {
-				dispatch(getUpdataInfoFail('77777', '当前网络异常，请检查您的网络设置'))
-			})
-	}
-}
-
-//用户信息回显
-export function getAccountInfo(){
-	return (dispatch, getState) => {
-		dispatch(getAccountInfoBegin())
-		return api.getAccountInfo()
-		.then(res => {
-			incinerator('getAccountInfo', res.responseCode, {
-				success: dispatch.bind(this, getAccountInfoSuccess(res)),
-				fail: dispatch.bind(this, getAccountInfoFail(res.responseCode, res.responseMessage)),
-				//unlogin: dispatch.bind(this, loginAccountFail(getState().routing.path, res.url))
-        unlogin:()=>{
-          dispatch(getAccountInfoFail(res.responseCode,res.responseMessage));
-          YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
-          })
-        }
-			})
-		})
-		.fail(() => {
-			dispatch(getAccountInfoFail('77777', '当前网络异常，请检查您的网络设置'))
-		})
-	}
-}
-
-export function getAccountInfoBegin() {
-	return {
-		type: types.GET_ACCOUNT_INFO_BEGIN
-	}
-}
-
-export function getAccountInfoSuccess(result) {
-	return {
-		type: types.GET_ACCOUNT_INFO_SUCCESS,
-		result: result
-	}
-}
-
-function getAccountInfoFail(errorCode, errorMessage) {
-	return {
-		type: types.GET_ACCOUNT_INFO_FAIL,
-		errorCode: errorCode,
-		errorMessage: errorMessage
-	}
-}
-
-// 用户态实效
-export function loginAccountFail(currentUrl, loginUrl) {
-  return {
-    type: types.LOGIN_ACCOUNT_FAIL,
-    currentUrl,
-    loginUrl
-  }
-}
-
-
-//用户登录
-
-function loginBegin(){
-	return {
-		type: types.LOGIN_BEGIN
-	}
-}
-
-function loginSuccess(clientNo){
-	return {
-		type: types.LOGIN_SUCCESS,
-	}
-}
-
-function loginFail(error){
-	return {
-		type: types.LOGIN_FAIL,
-		error:error
-	}
-}
-
-function ssoBegin(){
-	return {
-		type:types.SSO_BEGIN
-	}
-}
-
-function ssoSuccess(clientNo){
-	return {
-		type:types.SSO_SUCCESS,
-		clientNo:clientNo
-	}
-}
-
-function ssoFail(error){
-	return {
-		type:types.SSO_FAIL,
-		error:error
-	}
-}
-
-export function userLogin() {
-	//if(!App.IS_YZT ){
-	//	YztApp.getLoginStatus= function(cb){
-	//		setTimeout(()=>{cb('success',{clientNo:'111'})},1000);
-	//	}
-	//	YztApp.getSSOTicket= function(cb){
-	//		setTimeout(()=>{cb('success',JSON.stringify({signature:'111'}))},1000);
-	//	}
-	//	//return
-	//};
-	return (dispatch, getState) => {
-		dispatch(loginBegin())
-		return YztApp.getLoginStatus((status,data)=> {
-			if (status !== 'success') {
-				dispatch(ssoFail('native api call error'));
-				return;
-			}
-			if (status === 'success' && !data.clientNo) {//未登录先去登录
-				YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
-				})
-			}
-			if(data.clientNo){
-				dispatch(loginSuccess(data.clientNo))
-				dispatch(ssoBegin());
-				YztApp.getSSOTicket((status,data)=>{
-						//let sso = data ?JSON.parse(data.toString()):false;
-            let sso = data
-						if(status==='success' && sso){
-							api.getAccessTicket(sso)
-								.then(res => {
-									incinerator('getAccessTicket', res.responseCode, {
-										success:()=>{
-											if(res.responseData && res.responseData.clientNo){
-												dispatch(ssoSuccess(res.responseData.clientNo))
-											}
-											else{
-												dispatch(ssoFail('请求接口失败'))
-											}
-										},
-										fail:dispatch.bind(this, ssoFail(res.responseMessage)),
-										unlogin:()=>{
-											dispatch(ssoFail(res.responseMessage));
-											YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
-											})
-										}
-									})
-								})
-								.fail(() => {
-									dispatch(ssoFail('请求接口失败'))
-								});
-						}
-					})
-			}
-		})
-	}
 }
