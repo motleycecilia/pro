@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 
-class Header extends React.Component {
+class Headert extends React.Component {
   static propTypes = {
     isVisibility: PropTypes.bool.isRequired,
     onClickBack: PropTypes.func.isRequired,
@@ -12,13 +12,13 @@ class Header extends React.Component {
     return (
         isVisibility
         ?
-          <header className="brand-title">
+          <header className="brand-titlet">
             {title}
-            <div className="brand-title-back goBack" onTouchTap={onClickBack}>返回</div>
+            <div className="brand-title-backc" onTouchTap={onClickBack}></div>
           </header>
         : <div></div>
     )
   }
 }
 
-export default Header
+export default Headert

@@ -6,7 +6,6 @@ import Loading from 'components/loading'
 import util from 'utils/utils'
 import {getInsuredUserInfo, addInsuredUserInfo, updateInsuredUserInfo, deleteInsuredUserInfo, resetPolicyUserInfo} from 'actions'
 import { createChecker } from 'utils/checker'
-import beInsure from 'mock/beInsure'
 import { App, YztApp } from 'utils/native_h5'
 
 @connect(

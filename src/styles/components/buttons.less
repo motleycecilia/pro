@@ -26,3 +26,31 @@
     display: flex;
     justify-content: center;
 }
+.iphone-chose{
+  position: relative;
+  .size(50px, 30px);
+  background-color: #d5d5d5;
+  transition: background .3s;
+  border: 1px solid #d5d5d5;
+  .border-alls(16px);
+}
+.iphone-nochose-btn {
+  transition: left .3s,top .3s, width .3s, height .3s;
+  .square(25px);
+  border: 1px solid #ccc;
+  background-color: #fff;
+  .border-alls(50%);
+  .absolute(1px; 0; 1px);
+}
+.iphone-chose-btn {
+  left: 23px;
+  top: 2px;
+  .square(23px);
+  border-color: #fff;
+}
+.delete-icon-btn {
+  display: inline-block;
+  margin-right: 12px;
+  .square(25px);
+  .img-retina("~images/icon_delete.png";25px;25px);
+}

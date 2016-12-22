@@ -4,8 +4,6 @@ import {connect} from 'react-redux'
 import { queryDetilInfo} from 'actions'
 import Loading from 'components/loading'
 import Header from 'components/Header'
-import { createChecker } from 'utils/checker'
-import detailJSON from 'resJSON/detailJSON'
 import { App, YztApp } from 'utils/native_h5'
 
 @connect(

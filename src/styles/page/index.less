@@ -1,0 +1,24 @@
+.col-no-bd {
+  &::after {
+    border:none;
+  }
+}
+.btn-add-icon {
+    .btn;
+    position: relative;
+    .button-width(58px, 22px, @font-size-smaller, 22px,30px);
+    .button-variant(@brand-primary,@content-block,1px,@brand-primary);
+    .add-icon-imgs {
+        .square(8px);
+        position: absolute;
+        top: 7px;
+        left: 10px;
+        .img-retina('~images/add-icon.jpg'; 8px; 8px);
+    }
+    .add-icon-txt {
+      position: absolute;
+      top: 0px;
+      right: 10px;
+    }
+}
+/*被保人管理页面*/

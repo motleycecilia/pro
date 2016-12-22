@@ -136,7 +136,7 @@ export default class detail extends React.Component {
                       </div>
                     </a>
                     <div className={this.state.isShowCharac === true ? "content-list-text" : "content-list-text hide"}>
-                      <p>
+                      <p className="col-9b9b9b">
                         1、专为前往青海、西藏、云南、贵州等高原地区旅行设计；
                         2、特有高原反应意外伤害及医疗保障，全面保障出行人士安全。
                       </p>

@@ -6,10 +6,15 @@ import mainView from 'react-router!views/mainView'
 import detail from 'react-router!views/detail'
 import bePeople from 'react-router!views/People/bePeople'
 import supervise from 'react-router!views/People/supervise'
+import policyUser from 'react-router!views/People/policyUser'
 import login from 'react-router!views/login'
 import testView from 'react-router!views/testView'
 import guarantee from 'react-router!views/detail/guarantee'
 import guaranteeInfo from 'react-router!views/detail/guaranteeInfo'
+import healthInform from 'react-router!views/detail/healthInform'
+import fillmation from 'react-router!views/fillmation'
+import premium from 'react-router!views/premium'
+
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -19,6 +24,10 @@ export default (
     <Route      component={supervise} path='/supervise' title="被投保人管理"/>
     <Route      component={guarantee} path='/guarantee' title="保障内容"/>
     <Route      component={guaranteeInfo} path='/guaranteeInfo' title="保障内容"/>
+    <Route      component={healthInform} path='/healthInform' title="健康告知"/>
+    <Route      component={fillmation} path='/fillmation' title="保单填写"/>
+    <Route      component={policyUser} path='/policyUser' title="编辑投保人"/>
+    <Route      component={premium} path='/premium' title="保费测算"/>
     <Route      component={mainView} path='/main' title="main"/>
     <Route      component={testView} path='/testView' title="testView"/>
     <Route      component={login} path='/login' title="回话超时"/>

@@ -63,6 +63,29 @@ margin
         .size(42px, 42px);
     }
 }
+.brand-titlet {
+    position: fixed;
+    top: 0;
+    height: 42px;
+    width: 100%;
+    max-width: 640px;
+    line-height: 42px;
+    text-align: center;
+    background-color: #2d4487;
+    color: #fff;
+    font-size: 18px;
+    z-index: 9;
+}
+.brand-title-backc {
+    position: absolute;
+    top: 0;
+    left: 13px;
+    display: inline-block;
+    width: 20px;
+    height: 42px;
+    .img-retina("~images/back.png", 10px, 17px);
+    background-position: left center;
+}
 /**/
 .tagging{
   position: relative;
@@ -89,21 +112,83 @@ margin
   justify-content: space-between;
   align-items: center;
   padding: 0 13px;
-  height: 54px;
+  height: 40px;
   font-size: 16px;
   color: #4a4a4a;
   &::after{
     .bd-bottom(1px, #cbcbcb);
   }
 }
+.col-line-two {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 13px;
+  padding-left: 5px;
+  height: 40px;
+  font-size: 16px;
+  color: #4a4a4a;
+  &::after{
+    .bd-bottom(1px, #cbcbcb);
+  }
+}
+.col-line-threee {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 13px;
+  padding-left: 5px;
+  height: 55px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #4a4a4a;
+  &::after{
+    .bd-bottom(1px, #cbcbcb);
+  }
+}
+.col-line-threeetbd {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 13px;
+  padding-left: 5px;
+  height: 55px;
+  font-size: 16px;
+  color: #4a4a4a;
+  &::before{
+    .bd-top(1px, #cbcbcb);
+  }
+}
+.col-line-for {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+  font-size: 15px;
+  color: #9b9b9b;
+}
+.col-line-cr {
+  position: absolute;
+  right: 45px;
+}
+.col-line-with {
+  display: flex;
+  align-items: center;
+}
+.w-100 {width: 100px;}
 
 .m-l55{margin-left:55px;}
 .m-l2{margin-left: 2px;}
 .m-l12{margin-left: 12px;}
 .m-l7{margin-left: 7px;}
+.m-l3{margin-left: 3px;}
 
 .m-r8{margin-right: 8px;}
 .m-r15{margin-right: 15px;}
+.m-r10{margin-right: 10px;}
 
 .m-t12{
   margin-top: 12px;
@@ -116,6 +201,9 @@ margin
 }
 .m-t8{
   margin-top: 8px;
+}
+.m-t17{
+  margin-top: 17px;
 }
 
 .m-b20 {
@@ -148,9 +236,14 @@ margin
 .p-lr-14{
   padding: 0 14px;
 }
-
+.p-l-10{
+  padding-left: 10px;
+}
 .p-lr-16 {
   padding: 0 16px;
+}
+.p-lr-13 {
+  padding: 0 13px;
 }
 .p-lr25{
   padding: 0 25px;
@@ -172,6 +265,12 @@ margin
 .p-b12{
   padding-bottom: 12px;
 }
+.p-b-10 {
+  padding-bottom: 10px;
+}
+.p-b-20 {
+  padding-bottom: 20px;
+}
 
 .h_45{
   height: 45px;
@@ -183,7 +282,6 @@ margin
 .f-s14{
   font-size: 14px;
 }
-
 .col-9b9b9b{
   color: #9b9b9b;
 }
@@ -202,20 +300,18 @@ margin
 .bg-f5f5f5{
   background-color: #f5f5f5;
 }
+.bg-3399ff {
+  background-color: #3399ff;
+}
+.bd-col-3399ff{
+  border-color: #3399ff;
+}
 .hide{
   display: none;
 }
 .align-center {
   text-align: center;
 }
-
-
-/*报保险人编辑页*/
-.bePeople-content{
-  position: relative;
-  padding: 24px 25px;
-  background-color: #fff;
-  &::after{
-    .bd-bottom(1px, #cbcbcb);
-  }
+.clear {
+  clear: both;
 }

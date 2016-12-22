@@ -91,7 +91,11 @@ export function getPolicyUserInfo(){
     dispatch(getPolicyUserInfoBegin())
     return api.getPolicyUserInfo()
     .then(res => {
-      dispatch(getPolicyUserInfoSuccess(res))
+      incinerator('getPolicyUserInfo', res.responseCode, {
+        success: dispatch.bind(this, getPolicyUserInfoSuccess(res.responseData)),
+        fail: dispatch.bind(this, getPolicyUserInfoError(res.responseMessage)),
+        unlogin: dispatch.bind(this, getPolicyUserInfoError('90002'))
+      })
     })
     .fail(() => {
       dispatch(getPolicyUserInfoError('系统异常'))
@@ -124,7 +128,11 @@ export function updatePolicyUserInfo(params){
     dispatch(updatePolicyUserInfoBegin())
     return api.updatePolicyUserInfo(params)
     .then(res => {
-      dispatch(updatePolicyUserInfoSuccess(res))
+      incinerator('getPolicyUserInfo', res.responseCode, {
+        success: dispatch.bind(this, updatePolicyUserInfoSuccess(res.responseData)),
+        fail: dispatch.bind(this, updatePolicyUserInfoError(res.responseMessage)),
+        unlogin: dispatch.bind(this, updatePolicyUserInfoError('90002'))
+      })
     })
     .fail(() => {
       dispatch(updatePolicyUserInfoError('系统异常'))
@@ -146,7 +154,7 @@ function updatePolicyUserInfoSuccess(resultData) {
 function updatePolicyUserInfoError(errorMsg) {
   return {
     type: types.UPDATE_POLICY_USER_ERROR,
-    errorMsg: errorMsg
+    updataPolicyErrorMsg: errorMsg
   }
 }
 

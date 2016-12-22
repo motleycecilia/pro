@@ -6,6 +6,10 @@ export default function (name, code, handlers) {
   const apiMap = [ {//news
       name: 'getDetail',
       statusCode: defaultSetting
+    },
+    {
+      name: 'getPolicyUserInfo',
+      statusCode: defaultSetting
     }
   ]
   apiMap.forEach(api => {

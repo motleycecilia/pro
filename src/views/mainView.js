@@ -9,7 +9,9 @@ export default class mainView extends React.Component {
 
   state = {
     phone: '',
-    errorPhone: ''
+    errorPhone: '',
+    iphoneChoseBtn: false,
+    chose: ''
   }
 
   componentWillMount() {
@@ -21,7 +23,16 @@ export default class mainView extends React.Component {
   onClickBack() {
     history.go(-1)
   }
-
+  onClickChoseBtn() {
+    this.setState({
+      iphoneChoseBtn: !this.state.iphoneChoseBtn
+    })
+  }
+  onClickChoseOption() {
+    this.setState({
+      chose: !this.state.chose
+    })
+  }
   onFocusPhone() {
     const { phone } = this.refs
     if (!this.state.phone) {
@@ -98,6 +109,86 @@ export default class mainView extends React.Component {
             <span>left</span>
             <span className="icon-right"></span>
           </a>
+          <div className="p-l-10">
+            <div className="col-line-two">
+              <span>left</span>
+              <span className="icon-max-right"></span>
+            </div>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee">
+              <span>left</span>
+              <span className="col-line-cr">left</span>
+              <span className="icon-max-right"></span>
+            </div>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee">
+              <span>left</span>
+              <div className="btn-add-icon" >
+                  <span className="add-icon-imgs"></span>
+                  <span className="add-icon-txt">编辑</span>
+              </div>
+            </div>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee">
+              <div className="col-line-with">
+                <span className="delete-icon-btn m-l3">
+                </span>
+                李平安
+              </div>
+              <span className="icon-max-right"></span>
+            </div>
+          </div>
+          <div className="p-lr-13">
+            <input type="text" className="search-txt" placeholder="国家名称拼音、中文、英文"/>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee">
+              <div className="col-line-with">
+                <span className="delete-icon-btn m-l3">
+                </span>
+                <input type="date" className="premium-chose-date"/>
+              </div>
+              <span>￥100/人</span>
+            </div>
+          </div>
+          <div className="col-line-for">
+            <div>
+              经济型
+              <p className="m-t8">
+                ￥84起
+              </p>
+            </div>
+            <div className={this.state.chose ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this)}></span>
+              <span className="checbox-chose"></span>
+            </div>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee h_80">
+              <div className="col-line-with">
+                <div className={this.state.chose ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+                  <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this)}></span>
+                  <span className="checbox-chose"></span>
+                </div>
+                <div className="m-l12">
+                  为范围
+                  <p>
+                    <span className="col-9b9b9b">身份证 </span>
+                    2340 **** **** 2312
+                  </p>
+                </div>
+              </div>
+              <span></span>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <span className="delete-icon-btn">
+          </span>
         </section>
         <section>
           <div className="incomplete-fill-btn">
@@ -188,10 +279,18 @@ export default class mainView extends React.Component {
             <BtnLoading />
           }
         </section>
+        <section>
+          <div className={this.state.iphoneChoseBtn ? "iphone-chose bg-3399ff bd-col-3399ff" : "iphone-chose"} onTouchTap={this.onClickChoseBtn.bind(this)}>
+            <div className={this.state.iphoneChoseBtn ? "iphone-nochose-btn iphone-chose-btn" : "iphone-nochose-btn"}></div>
+          </div>
+        </section>
         <div className="h_45"></div>
         <div className="h_45"></div>
-        <div className="mask modalWrap">
-        </div>
+        {
+          this.state.ty ? <div className="mask modalWrap">
+        </div> : ""
+        }
+
       </div>
     )
   }

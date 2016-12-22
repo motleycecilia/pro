@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import Header from 'components/Header'
 import Loading from 'components/loading'
 import {getInsuredUserInfo, resetInsuredUserInfo} from 'actions'
-import beInsure from 'mock/beInsure'
 import { App, YztApp } from 'utils/native_h5'
 
 

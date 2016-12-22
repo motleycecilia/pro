@@ -1,3 +1,8 @@
+.policy-error{
+  height: 22px;
+  padding: 16px 25px 0 25px;
+  color: red;
+}
 .top-line {
     .horizontal(@gray-obvious);
     top: 0;
@@ -152,7 +157,7 @@
         .img-retina('~images/icon-guarantee.png'; 16px; 18px);
         background-position: 12px center;
         font-size: @font-size-middle;
-        color: @gray-dark;
+        color: #4a4a4a;
     }
 
     &-tit2{
@@ -179,7 +184,7 @@
             & a {
                 padding: 15px 0;
                 display: block;
-                color: @gray-base;
+                color: #4a4a4a;
                 &.arrow-up {
                     background-position: 96% 19px;
                 }
@@ -207,10 +212,10 @@
                 }
             }
             & .content-list-text {
-                padding-right: 4%;
-                padding-bottom: 15px;
-                line-height: 20px;
-                font-size: @font-size-lesser;
+              padding-right: 4%;
+              padding-bottom: 15px;
+              line-height: 20px;
+              font-size: @font-size-lesser;
             }
 
             &::after {
@@ -241,7 +246,7 @@
       & a {
           padding: 15px 0;
           display: block;
-          color: @gray-base;
+          color: #4a4a4a;
           &.arrow-up {
               background-position: 96% 19px;
           }
@@ -287,7 +292,86 @@
       }
   }
 
-  &::before {
-      .top-line;
+  // &::before {
+  //     .top-line;
+  // }
+}
+/*报保险人编辑页*/
+.bePeople-content{
+  position: relative;
+  padding: 24px 25px;
+  background-color: #fff;
+  &::after{
+    .bd-bottom(1px, #cbcbcb);
   }
+}
+/* 健康告知*/
+.guarantee-content{
+  padding: 15px;
+  font-size: 14px;
+}
+.heath-buttons{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  .heath-btn{
+    height: 60px;
+    width: 50%;
+    align-items:center;
+    flex-grow: 1;
+    justify-content:center;
+    display: flex;
+    font-size: 20px;
+    background-color: #283d78;
+    color: #fff;
+  }
+  .heath-btn-sub{
+    border-right: 1px solid #a9b1c9;
+  }
+}
+.pop-heath-bottom{
+  position: fixed;
+  transform: translate(0,248px);
+  bottom:0;
+  z-index: 99;
+  width: 100%;
+  background-color: #fff;
+  padding:30px 0;
+  & .pop-top-font{
+    text-align: center;
+    font-size: 16px;
+    color: #4a4a4a;
+    line-height: 23px;
+  }
+}
+.pop-center-button {
+  display: block;
+  margin:0 auto;
+  text-align: center;
+  .button-width(66%;48px;18px;48px;32px);
+  border:1px solid #2d4486;
+  .button-variant(#fff;#2d4486;#2d4486);
+  &:last-child {
+    .button-variant(#2d4486;#fff;#2d4486);
+  }
+}
+@keyframes dialog-btns {
+  0%{transform: translate(0,248px);}
+  100%{transform: translate(0,0);}
+}
+.dialog-btns{
+  animation: dialog-btns .5s;
+}
+.dialog-btns-show{
+  transform: translate(0,0);
+}
+.m-tb18 {
+  margin: 18px auto;
+}
+.m-tb6{
+  margin: 6px auto;
+}
+.hide {
+  display: none;
 }

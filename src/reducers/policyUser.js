@@ -22,8 +22,7 @@ export default function policyUserInfo(state = defaultState, action) {
   switch(action.type){
     case GET_POLICY_USER_BEGIN:
     return Object.assign({}, state, {
-      getPolicyUserBegin: true,
-      getResultData: action.getResultData
+      getPolicyUserBegin: true
     })
     case GET_POLICY_USER_SUCCESS:
       return Object.assign({}, state, {
@@ -34,7 +33,8 @@ export default function policyUserInfo(state = defaultState, action) {
     case GET_POLICY_USER_ERROR:
       return Object.assign({}, state, {
         getPolicyUserBegin: false,
-        getPolicyUserError: true
+        getPolicyUserError: true,
+        errorMsg: action.errorMsg
       })
     case UPDATE_POLICY_USER_BEGIN:
       return Object.assign({}, state, {
@@ -51,7 +51,8 @@ export default function policyUserInfo(state = defaultState, action) {
     case UPDATE_POLICY_USER_ERROR:
       return Object.assign({}, state, {
         updatePolicyUserBegin: false,
-        updatePolicyUserError: true
+        updatePolicyUserError: true,
+        errorMsg: action.updataPolicyErrorMsg
       })
     case RESET_POLICY_USER:
       return defaultState
