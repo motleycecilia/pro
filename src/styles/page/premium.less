@@ -31,7 +31,7 @@
 .pre-col-citys {
   position: relative;
   margin-left: 13px;
-  padding:0 13px 10px 0;
+  padding:0 13px 10px 5px;
   &::after {
     .bottom-line;
   }
@@ -44,10 +44,96 @@
 .pre-center-package {
   position: relative;
   margin-left: 13px;
-  padding: 25px 13px 25px 0;
+  padding: 25px 13px 25px 5px;
   font-size: 16px;
   color: #4a4a4a;
   &::after {
     .bottom-line;
   }
+}
+.pre-content {
+  padding-left: 13px;
+  margin-top: 25px;
+}
+.pre-date-txt {
+  padding-left: 5px;
+  font-size: 16px;
+  color: #4a4a4a;
+}
+.pre-date-tr {
+  padding: 25px 13px 0 5px;
+}
+.pre-decribes {
+  position: relative;
+  padding: 15px 13px 22px 5px;
+  line-height: 16px;
+  font-size: 14px;
+  color: #9b9b9b;
+  &&::after{
+    .bottom-line;
+  }
+}
+.pre-tail {
+  position: relative;
+  height: 10px;
+  background-color: #f9f9f9;
+  &::before {
+    .top-line;
+  }
+}
+.pre-btn {
+  position: relative;
+  padding: 0 25px;
+  height: 55px;
+  line-height: 55px;
+  font-size: 14px;
+  background-color: #1da4f9;
+  color: #fff;
+  & .pre-btn-left {
+    display: inline-block;
+    height: 14px;
+    line-height: 14px;
+  }
+  & .pre-btn-right {
+    position: absolute;
+    top:10px;
+    right: 25px;
+    height: 46px;
+    line-height: 17px;
+    padding-left: 14px;
+    border-left: 1px solid #fff;
+    display: inline-block;
+    font-size: 17px;
+    z-index: 9;
+  }
+}
+.pre-btn-rbtn {
+  display: inline-block;
+  margin-top: 9px;
+}
+/*旅游目的地*/
+.search-waner {
+  padding: 8px 13px 12px 13px;
+  background-color: #fff;
+}
+.country-m-tit {
+  position: relative;
+  height: 33px;
+  line-height: 33px;
+  padding: 0 13px;
+  &::before {
+    .top-line;
+  }
+  &::after {
+    .bottom-line;
+  }
+}
+.country-names {
+  padding: 7px 13px;
+  color: #4c4c4c;
+  background-color: #fff;
+}
+.country-name {
+  height: 33px;
+  line-height: 33px;
 }

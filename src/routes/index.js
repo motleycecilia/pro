@@ -14,7 +14,9 @@ import guaranteeInfo from 'react-router!views/detail/guaranteeInfo'
 import healthInform from 'react-router!views/detail/healthInform'
 import fillmation from 'react-router!views/fillmation'
 import premium from 'react-router!views/premium'
-
+import invoice from 'react-router!views/invoice'
+import country from 'react-router!views/premium/country'
+import confirm from 'react-router!views/fillmation/confirm'
 
 export default (
   <Route        component={CoreLayout} path='/'>
@@ -28,6 +30,9 @@ export default (
     <Route      component={fillmation} path='/fillmation' title="保单填写"/>
     <Route      component={policyUser} path='/policyUser' title="编辑投保人"/>
     <Route      component={premium} path='/premium' title="保费测算"/>
+    <Route      component={invoice} path='/invoice' title="发票信息"/>
+    <Route      component={confirm} path='/confirm' title="保单信息确认"/>
+    <Route      component={country} path='/country' title="国家"/>
     <Route      component={mainView} path='/main' title="main"/>
     <Route      component={testView} path='/testView' title="testView"/>
     <Route      component={login} path='/login' title="回话超时"/>

@@ -22,7 +22,6 @@ export default class fillmation extends React.Component {
     })
   }
 
-
   render() {
     const { title } = this.props.route
     return(

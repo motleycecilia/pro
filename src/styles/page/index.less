@@ -22,3 +22,33 @@
     }
 }
 /*被保人管理页面*/
+.sup-btns {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  font-size: 15px;
+  background-color: #fff;
+  color: @brand-primary;
+  & .sup-btn {
+    padding-left: 13px;
+    height: 15px;
+    .img-retina('~images/add-icon.jpg'; 10px; 10px);
+    background-position: left center;
+  }
+  &::after{
+    .bd-bottom(1px, #cbcbcb);
+  }
+}
+/*发票信息*/
+.invoice-content {
+  position: relative;
+  padding: 24px 25px;
+  background-color: #fff;
+}
+.invoice-describe{
+  margin-top: 10px;
+  font-size: 14px;
+  color: #9b9b9b;
+}

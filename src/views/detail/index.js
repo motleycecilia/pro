@@ -90,7 +90,7 @@ export default class detail extends React.Component {
       planList.map((val, index) => {
         return(
           <li key={index} onTouchTap={this.onClickGuarantee.bind(this, index)}>
-            <a href="javascript: void(0);" className="arrow-down showInfo">
+            <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
               <div className="content-list-title">
                 <span className="project-name">{val.securityProName}</span>
                 <span className="money">{val.minPrice}{val.maxPrice === val.minPrice ? "" : "-"+val.maxPrice}</span>
@@ -129,7 +129,7 @@ export default class detail extends React.Component {
               <div className="content-list-s">
                 <ul>
                   <li>
-                    <a href="javascript: void(0);" className="arrow-down showInfo" onTouchTap={this.onClickisShowCharac.bind(this)}>
+                    <a href="javascript: void(0);" className={this.state.isShowCharac === true ? "arrow-up showInfo" : "arrow-down showInfo"} onTouchTap={this.onClickisShowCharac.bind(this)}>
                       <div className="content-list-title">
                         <span className="project-name">产品特点</span>
                         <span className="money"></span>

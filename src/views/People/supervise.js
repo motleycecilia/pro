@@ -19,6 +19,9 @@ import { App, YztApp } from 'utils/native_h5'
 
 
 export default class supervise extends React.Component {
+  state = {
+    choseList: []
+  }
   static contextTypes = {
       router: React.PropTypes.object.isRequired
   }
@@ -45,14 +48,22 @@ export default class supervise extends React.Component {
   onClickBack() {
     history.go(-1)
   }
-
+  onClickRight() {
+    console.log(this.state.choseList)
+  }
   onClickEditInsurant(id) {
     this.context.router.push({
       pathname: '/bePeople',
       query: { operation: 1, ide: id }
     })
   }
-
+  onClickChoseOption(index) {
+    var cList = this.state.choseList
+    cList[index] = !this.state.choseList[index]
+    this.setState({
+      choseList: cList
+    })
+  }
   onclickAddInsured() {
     this.context.router.push({
       pathname: '/bePeople',
@@ -60,29 +71,25 @@ export default class supervise extends React.Component {
     })
   }
 
-  onclickBcakFilmation() {
-    const filmaPara = JSON.parse(sessionStorage.getItem('filmaPara'))
-    this.context.router.push({
-      pathname: '/fillMation',
-      query: {
-        productId: filmaPara.productId,
-        insurancePriod: filmaPara.insurancePriod,
-        insurancePriodUnit: filmaPara.insurancePriodUnit,
-        productCode: filmaPara.productCode,
-        skuId: filmaPara.skuId,
-        productInsuranceCode: filmaPara.productInsuranceCode,
-        annualPremium: filmaPara.annualPremium
-      }
-    })
-  }
-
   renderInsuredList(insuredResponse) {
     return(
       insuredResponse.map((val,index) => {
         return(
-          <div className="col-line" key={index} onTouchTap={this.onClickEditInsurant.bind(this, val.id)}>
-            <span>{val.insurantName}</span>
-            <span className="icon-right"></span>
+          <div className="col-line-threee h_80" key={index}>
+            <div className="col-line-with">
+              <div className={this.state.choseList[index] ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+                <span className="lab-checkbox-2" onTouchTap={this.onClickChoseOption.bind(this, index)}></span>
+                <span className="checbox-chose"></span>
+              </div>
+              <div className="m-l12" onTouchTap={this.onClickEditInsurant.bind(this, val.id)}>
+                {val.insurantName}
+                <p>
+                  <span className="col-9b9b9b">身份证 </span>
+                  2340 **** **** 2312
+                </p>
+              </div>
+            </div>
+            <span></span>
           </div>
         )
       })
@@ -92,22 +99,17 @@ export default class supervise extends React.Component {
   renderContent(insuredResponse) {
     return(
       <div>
-        <div className="tagging bd-top-y">
-          被投保人
+        <div className="tagging">
+          选择被保人
         </div>
-        <div className="bg-fff">
+        <div className="p-l-10 bg-fff">
           {
             this.renderInsuredList(insuredResponse)
           }
         </div>
-        <div className="m-tb24">
-          <div className="incomplete-fill-btn" onTouchTap={this.onclickAddInsured.bind(this)}>
-            添加被保人
-          </div>
-        </div>
-        <div className="m-tb24">
-          <div className="incomplete-fill-btn" onTouchTap={this.onclickBcakFilmation.bind(this)}>
-            返回保单填写页
+        <div className="sup-btns" onTouchTap={this.onclickAddInsured.bind(this)}>
+          <div className="sup-btn">
+            添加被保险人
           </div>
         </div>
       </div>
@@ -119,7 +121,7 @@ export default class supervise extends React.Component {
     const { insured } = this.props
     return(
       <div>
-        <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={title}/>
+        <Header isVisibility={!App.IS_YZT} rightTxt="完成" onClickRight={this.onClickRight.bind(this)} onClickBack={this.onClickBack.bind(this)} title={title}/>
         {
           insured.getInsuredUserBegin ?
           <Loading /> :
