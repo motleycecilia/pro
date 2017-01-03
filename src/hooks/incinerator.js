@@ -10,6 +10,10 @@ export default function (name, code, handlers) {
     {
       name: 'getPolicyUserInfo',
       statusCode: defaultSetting
+    },
+    {
+      name: 'premiumMeasure',
+      statusCode: defaultSetting
     }
   ]
   apiMap.forEach(api => {

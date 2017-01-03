@@ -6,6 +6,7 @@ const timeout = 10000
 
 export function queryDetilInfo(productId) {
 	return request({
+		///insurance/product/detail
 		url: domain + '/support/insurance/productInfo.do',
 		method: 'GET',
 		type: 'jsonp',
@@ -15,6 +16,36 @@ export function queryDetilInfo(productId) {
 			productId: productId,
       productSide: '20001',
       platformType: '02'
+		}
+	})
+}
+
+export function premiumMeasure(params){
+	return request({
+		url: domain + '/insurance/premium/calculate',
+		method: 'GET',
+		type: 'jsonp',
+		timeout: timeout,
+		contentType: 'application/json;charset=utf-8',
+		data: {
+			serialNo: params.serialNo,
+			from: '',
+			userChannel: '',
+			buyPlatform: '1',
+			orderType: '2',
+			productId: params.productId,
+			productCode: params.productCode,
+			orderSpliteFlag: '1',
+			productInsuranceCode: params.productInsuranceCode,
+			skuid: params.skuid,
+			insurantInfoList: params.insurantInfoList,
+			policyInfo: {
+				insuranceBeginTime: params.insuranceBeginTime,
+				insuranceStartTime: params.insuranceStartTime,
+				insuranceEndTime: params.insuranceEndTime,
+				insurancePeriod: params.insurancePeriod,
+				insurancePriodUnit: params.insurancePriodUnit
+			}
 		}
 	})
 }

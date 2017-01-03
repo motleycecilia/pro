@@ -4,15 +4,29 @@ import {connect} from 'react-redux'
 import Header from 'components/Header'
 import Loading from 'components/loading'
 import { App, YztApp } from 'utils/native_h5'
+import countrys from 'mock/countrys'
 
 
 export default class country extends React.Component {
   static propTypes = {
     onClickCountry: PropTypes.func.isRequired
   }
-  
+
   onClickCountry(name) {
     this.props.onClickCountry(name)
+  }
+  renderCountry() {
+    return(
+      countrys.map((val, index) => {
+        return(
+          <div className="country-name" key={index} onTouchTap={this.onClickCountry.bind(this,val.name)}>
+            {
+              val.name
+            }
+          </div>
+        )
+      })
+    )
   }
 
   render() {
@@ -26,12 +40,9 @@ export default class country extends React.Component {
             热门国家和地区
           </div>
           <div className="country-names">
-            <div className="country-name" onTouchTap={this.onClickCountry.bind(this,"申根国家 Schengen states")}>
-              申根国家 Schengen states
-            </div>
-            <div className="country-name">
-              申根国家 Schengen states
-            </div>
+            {
+              this.renderCountry()
+            }
           </div>
         </section>
       </div>

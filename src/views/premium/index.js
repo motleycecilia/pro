@@ -1,21 +1,64 @@
 import React, { PropTypes } from 'react'
+import Link from 'valuelink'
 import Header from 'components/Header'
+import {connect} from 'react-redux'
 import { createChecker } from 'utils/checker'
 import Country from 'components/country'
 import { App, YztApp } from 'utils/native_h5'
+import { queryDetilInfo } from 'actions'
+import util from 'utils/utils'
+import Loading from 'components/loading'
+import Modal from 'components/modal'
+import TYpes from 'utils/Types'
+import BtnLoading from 'components/btnLoading'
+
+@connect(
+  state => ({
+    detailInfo: state.detailInfo
+  }),
+  {
+    queryDetilInfo
+  }
+)
 
 export default class premium extends React.Component {
   state = {
-    chose: false,
     startDate: '',
-    isShowCountry: false
+    endDate: '',
+    content: '',
+    isShowCountry: false,
+    isShowAddCountry: false,
+    countrys: [],
+    name: '',
+    bePeopleDate: [],
+    guaranteePeriod: 1,
+    insurancePriodUnit: 'Y',
+    showModal: false,
+    premiumStatus: 0
   }
 
   componentWillMount() {
+    this.props.queryDetilInfo(10013242)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
     YztApp.setTitle(this.props.route.title)
+  }
+  componentWillReceiveProps(nextProps) {
+    const { detailInfo } = nextProps
+    if(detailInfo.getDetailSuccess === true) {
+      this.setState({
+        name: detailInfo.detail.typelist[0].priceName,
+        guaranteePeriod: detailInfo.detail.guaranteePeriod || 1,//保险期限
+        insurancePriodUnit: detailInfo.detail.guaranteePeriod || 'Y',//保险期限单位
+        isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类
+      })
+    }
+  }
+  goto() {
+    this.setState({
+      showModal: false
+    })
   }
   onClickBack() {
     history.go(-1)
@@ -23,20 +66,54 @@ export default class premium extends React.Component {
   onClickRight() {
     console.log(1)
   }
-  onClickChoseOption() {
+  onClickChoseOption(name) {
     this.setState({
-      chose: !this.state.chose
+      name: name,
+      premiumStatus: 0
     })
   }
   onClickCountry(name) {
+    let country = this.state.countrys
+    country.indexOf(name)> -1 ? '' : country.push(name)
     this.setState({
-      isShowCountry: false
+      isShowCountry: false,
+      countrys: country
     })
-    console.log(name)
+  }
+  onClickDeleteCountry(index) {
+    let country = this.state.countrys
+    country.splice(index, 1)
+    this.setState({
+      countrys: country
+    })
   }
   onClickIsAddCountry(flag) {
     this.setState({
-      isShowCountry: flag
+      isShowCountry: flag,
+      premiumStatus: 0
+    })
+  }
+  onClickDeleteBeDate(index) {
+    let bePeopleDates = this.state.bePeopleDate
+    bePeopleDates.splice(index, 1)
+    this.setState({
+      bePeopleDate: bePeopleDates
+    })
+  }
+  onClickMeasurePremium() {
+
+  }
+  addBepoleDate() {
+    let bePeopleDates = this.state.bePeopleDate
+    bePeopleDates.push({
+      insurantBirth: '',
+      type: '1',
+      personType: '2',
+      insurantCount: '1'
+    })
+    this.setState({
+      premiumStatus: 0,
+      bePeopleDate: bePeopleDates
     })
   }
   onFocusPhone() {
@@ -46,22 +123,30 @@ export default class premium extends React.Component {
       phone.previousSibling.style.display = 'block'
     }
   }
-  onChangePhone(va, e) {
-    console.log(va)
-    this.setState(
-      Object.assign({
-
-      },
-        {
-          va: e.target.value
-        }
-      )
-    )
-    console.log(this.state.phone)
-
-    // this.setState({
-    //   phone: e.target.value
-    // })
+  onChangeBepopleDate(index, e) {
+    let bePeopleDates = this.state.bePeopleDate
+    bePeopleDates[index].date = e.target.value
+    this.setState({
+      bePeopleDate: bePeopleDates
+    })
+    console.log(this.state.bePeopleDate)
+  }
+  onChageStartDate(e) {
+    this.setState({
+      startDate: e.target.value,
+      premiumStatus: 0
+    })
+    if(this.state.isShowAddCountry === false) {
+      this.setState({
+        endDate: util.getEndDatet(e.target.value, this.state.guaranteePeriod, this.state.insurancePriodUnit)
+      })
+    }
+  }
+  onChangeEndDate(e) {
+    this.setState({
+      endDate: e.target.value,
+      premiumStatus: 0
+    })
   }
   onBlurPhone() {
     const { phone } = this.refs
@@ -80,74 +165,137 @@ export default class premium extends React.Component {
       errorPhone: !!errorContents ? errorContents : ''
     })
   }
-
-  renderPremium() {
+  renderChoseCountry() {
+    return(
+      this.state.countrys.map((val, index) => {
+        return(
+          <div className="col-line-with pre-col-city" key={index}>
+            <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteCountry.bind(this, index)}>
+            </span>
+            {
+              this.state.countrys[index]
+            }
+          </div>
+        )
+      })
+    )
+  }
+  renderPackageType(typeList) {
+    return(
+      typeList.map((val, index) => {
+        return(
+          <div className="col-line-for m-t24" key={index}>
+            <div>
+              {
+                val.priceName
+              }
+              <p className="m-t8">
+                ￥
+                {
+                  val.minPrice
+                }起
+              </p>
+            </div>
+            <div className={this.state.name === val.priceName ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this, val.priceName)}></span>
+              <span className="checbox-chose"></span>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
+  renderBePopleDate() {
+    return(
+      this.state.bePeopleDate.map((val, index) => {
+        return(
+          <div className="col-line-threeetbd" key={index}>
+            <div className="col-line-with">
+              <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, index)}>
+              </span>
+              <input type="date" className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, index)}/>
+            </div>
+            <span>￥100/人</span>
+          </div>
+        )
+      })
+    )
+  }
+  renderEndDate() {
+    return(
+      <section className="pre-date-tr">
+        <div className="input-outer">
+          <div className="select-tit">结束时间</div>
+          <input
+            type="date"
+            className="input-style"
+            placeholder="结束时间"
+            onChange={this.onChangeEndDate.bind(this)}
+          />
+        </div>
+      </section>
+    )
+  }
+  renderEndDateText() {
+    return(
+      <section className="pre-date-tr">
+        <div className="input-outer">
+          <div className="select-tit">结束时间</div>
+          <input
+            type="text"
+            className="input-style"
+            placeholder="结束时间"
+            readOnly
+            value={this.state.endDate}
+          />
+        </div>
+      </section>
+    )
+  }
+  renderPremiumBtn() {
+    return(
+      <div className="complete-fill-btn position-rela"
+        onTouchTap={this.onClickMeasurePremium.bind(this)}>测算保费</div>
+    )
+  }
+  renderInsureBtn() {
+    return(
+      <div className="pre-btn">
+        <span className="pre-btn-left">保费总额：0元</span>
+        <span className="pre-btn-right">
+          <span className="pre-btn-rbtn">
+            立即投保
+          </span>
+        </span>
+      </div>
+    )
+  }
+  renderPremium(detailInfo) {
     return(
       <div>
         <div className="premium-waner">
-          <div className="pre-header-line">
-            <span className="pre-header-txt">
-              旅游目的地
-            </span>
-            <div className="btn-add-icon pre-header-btn" onTouchTap={this.onClickIsAddCountry.bind(this, true)}>
-                <span className="add-icon-imgs"></span>
-                <span className="add-icon-txt">添加</span>
+          {
+            this.state.isShowAddCountry && <div className="pre-header-line">
+              <span className="pre-header-txt">
+                旅游目的地
+              </span>
+              <div className="btn-add-icon pre-header-btn" onTouchTap={this.onClickIsAddCountry.bind(this, true)}>
+                  <span className="add-icon-imgs"></span>
+                  <span className="add-icon-txt">添加</span>
+              </div>
             </div>
-          </div>
+          }
           <div className="pre-col-citys">
-            <div className="col-line-with pre-col-city">
-              <span className="delete-icon-btn m-l3">
-              </span>
-              李平安
-            </div>
-            <div className="col-line-with pre-col-city">
-              <span className="delete-icon-btn m-l3">
-              </span>
-              李平安
-            </div>
-            <div className="col-line-with pre-col-city">
-              <span className="delete-icon-btn m-l3">
-              </span>
-              李平安
-            </div>
-            <div className="col-line-with pre-col-city">
-              <span className="delete-icon-btn m-l3">
-              </span>
-              李平安
-            </div>
-            <div className="col-line-with pre-col-city">
-              <span className="delete-icon-btn m-l3">
-              </span>
-              李平安
-            </div>
+            {
+              this.renderChoseCountry()
+            }
             <div className="clear"></div>
           </div>
           <div className="pre-center-package">
             <p>旅游类型</p>
-            <div className="col-line-for m-t24">
-              <div>
-                经济型
-                <p className="m-t8">
-                  ￥84起
-                </p>
-              </div>
-              <div className={this.state.chose ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-                <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this)}></span>
-                <span className="checbox-chose"></span>
-              </div>
-            </div>
-            <div className="col-line-for m-t24">
-              <div>
-                经济型
-                <p className="m-t8">
-                  ￥84起
-                </p>
-              </div>
-              <div className={this.state.chose ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-                <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this)}></span>
-                <span className="checbox-chose"></span>
-              </div>
-            </div>
+            {
+              this.renderPackageType(detailInfo.typelist)
+            }
           </div>
           <div className="pre-content">
             <p className="pre-date-txt">保障时间</p>
@@ -159,76 +307,48 @@ export default class premium extends React.Component {
                   className="input-style"
                   placeholder="开始时间"
                   maxLength="11"
+                  onChange={this.onChageStartDate.bind(this)}
                 />
               </div>
             </section>
-            <section className="pre-date-tr">
-              <div className="input-outer">
-                <div className="select-tit">结束时间</div>
-                <input
-                  type="date"
-                  className="input-style"
-                  placeholder="结束时间"
-                  maxLength="11"
-                />
-              </div>
-            </section>
+            {
+              this.state.isShowAddCountry ? this.renderEndDate() : this.renderEndDateText()
+            }
             <p className="pre-decribes">
               *如果用于办理签证，建议选择旅行日期时间前后各延长2天，详询使馆
             </p>
             <div className="col-line-threee col-no-bd">
               <span>被保险人</span>
-              <div className="btn-add-icon" >
+              <div className="btn-add-icon" onTouchTap={this.addBepoleDate.bind(this)}>
                   <span className="add-icon-imgs"></span>
                   <span className="add-icon-txt">添加</span>
               </div>
             </div>
-            <div className="col-line-threeetbd">
-              <div className="col-line-with">
-                <span className="delete-icon-btn m-l3">
-                </span>
-                <input type="date" className="premium-chose-date"/>
-              </div>
-              <span>￥100/人</span>
-            </div>
-            <div className="col-line-threeetbd">
-              <div className="col-line-with">
-                <span className="delete-icon-btn m-l3">
-                </span>
-                <input type="date" className="premium-chose-date"/>
-              </div>
-              <span>￥100/人</span>
-            </div>
-            <div className="col-line-threeetbd">
-              <div className="col-line-with">
-                <span className="delete-icon-btn m-l3">
-                </span>
-                <input type="date" className="premium-chose-date"/>
-              </div>
-              <span>￥100/人</span>
-            </div>
+            {
+              this.renderBePopleDate()
+            }
           </div>
           <div className="pre-tail">
           </div>
-          <div className="pre-btn">
-            <span className="pre-btn-left">保费总额：3860.00元</span>
-            <span className="pre-btn-right">
-              <span className="pre-btn-rbtn">
-                立即投保
-              </span>
-            </span>
-          </div>
+          {
+            this.state.premiumStatus === 0 ?
+            this.renderPremiumBtn() : (
+              this.state.premiumStatus === 1 ?
+              this.renderInsureBtn() : <BtnLoading />
+            )
+          }
         </div>
       </div>
     )
   }
   render() {
+    const { detailInfo } = this.props
     return(
       <div>
         {
           this.state.isShowCountry ?
           <Header
-            isVisibility="true"
+            isVisibility={true}
             rightTxt="不承保地区"
             onClickRight={this.onClickRight.bind(this)}
             onClickBack={this.onClickIsAddCountry.bind(this, false)}
@@ -244,7 +364,10 @@ export default class premium extends React.Component {
           <Country
             onClickCountry={this.onClickCountry.bind(this)}
             onClickBacks={this.onClickIsAddCountry.bind(this, false)}
-          /> : this.renderPremium()
+          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : '加载中...'
+        }
+        {
+          this.state.showModal && <Modal content={this.state.content} goto={this.goto} />
         }
       </div>
     )

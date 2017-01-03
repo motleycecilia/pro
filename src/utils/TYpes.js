@@ -15,7 +15,10 @@ const TYpes = {
   sex: {
     'F': "女",
     'M': "男"
-  }
+  },
+  tourism: [//区分旅游险
+    '10000014'
+  ]
 }
 
 export default TYpes

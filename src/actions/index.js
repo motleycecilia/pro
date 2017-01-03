@@ -43,6 +43,50 @@ function getDetailInfoError(errorCode, errorMsg) {
 }
 
 /*
+查询详情页
+*/
+export function premiumMeasure(params){
+  return (dispatch, getState) => {
+    dispatch(premiumMeasureBegin())
+    return api.premiumMeasure(params)
+    .then(res => {
+      incinerator('premiumMeasure', res.responseCode, {
+        success: dispatch.bind(this, premiumMeasureSuccess(res.responseData)),
+        fail: dispatch.bind(this, premiumMeasureError(res.responseCode, res.responseMessage))
+      })
+    })
+    .fail(() => {
+      dispatch(premiumMeasureError('90012','系统异常'))
+    })
+  }
+}
+function premiumMeasureBegin() {
+  return {
+    type: types.MEASURE_PREMIUM_BEGIN
+  }
+}
+
+function premiumMeasureSuccess(resultData) {
+  return {
+    type: types.MEASURE_PREMIUM_SUCCESS,
+    resultData: resultData
+  }
+}
+
+function premiumMeasureError(errorCode, errorMsg) {
+  return {
+    type: types.MEASURE_PREMIUM_ERROR,
+    errorCode: errorCode,
+    errorMsg: errorMsg
+  }
+}
+export default function premiumMeasureReset() {
+  return {
+    type: types.RESET_MEASURE_PREMIUM
+  }
+}
+
+/*
 是否登录
 */
 export function isLogin(){

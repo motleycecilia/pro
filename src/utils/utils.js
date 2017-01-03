@@ -76,15 +76,39 @@ const util = {
   @params date :系统时间
   @params edate : n日期
   @params unit : 单位 (赞支持月和天M为月)
-  @params yearAdd : 年份是否多加1年
+  @params yearAdd : +yearAdd年
   **/
-  getEndDate: function(date, edate, unit,yearAdd){
+  getEndDate: function(date, edate, unit, yearAdd){
     if(new Date(date) == "Invalid Date"){
       return "";
     }
     let dd = new Date(date);
     unit === 'M' ? dd.setMonth(dd.getMonth()+edate) : dd.setDate(dd.getDate()+edate);
-  	var y = dd.getFullYear() + (yearAdd === true ? 1 : 0);
+  	var y = dd.getFullYear() + (!!yearAdd ? +yearAdd : 0);
+  	var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+  	var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate(); //获取当前几号，不足10补0
+  	return y+"-"+m+"-"+d;
+  },
+  /**
+  获取当前日期n日期以后的时间
+  @params date :系统时间
+  @params edate : n日期
+  @params unit : 单位 (M为月Y为年 默认或其它为天)
+  @params yearAdd : +yearAdd年
+  **/
+  getEndDatet: function(date, edate, unit){
+    if(new Date(date) == "Invalid Date"){
+      return "";
+    }
+    let dd = new Date(date);
+    if(unit === 'M') {
+      dd.setMonth(+edate + dd.getMonth())
+    } else if(unit === 'Y') {
+      dd.setFullYear(+edate + dd.getFullYear())
+    }else {
+      dd.setDate(+edate + dd.getDate())
+    }
+    var y = dd.getFullYear();
   	var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
   	var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate(); //获取当前几号，不足10补0
   	return y+"-"+m+"-"+d;
