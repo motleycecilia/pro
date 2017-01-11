@@ -59,15 +59,14 @@ export default class bePeople extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const {insured} = nextProps
-    let errorContent = ''
-    if(insured.getIResultData && insured.getIResultData.responseCode === '900002') {
+    if(insured.errorMsg === '90002') {
       this.context.router.push({
         pathname: '/login'
       })
       return
     }
-    if(insured.getIResultData && insured.getIResultData.responseCode === '000000') {
-      const getResultData = this.getChoseBePeople(insured.getIResultData.responseData)[0]
+    if(insured.getInsuredUserSuccess === true) {
+      const getResultData = this.getChoseBePeople(insured.getIResultData)[0]
       console.log(getResultData)
       this.setState({
         name: getResultData.insurantName,
@@ -82,43 +81,16 @@ export default class bePeople extends React.Component {
     if(insured.addInsuredUserBegin === true || insured.updateInsuredUserBegin === true || insured.deleteInsuredUserBegin === true) {
       console.log('lodding...')
     }
-    if(insured.addInsuredUserSuccess === true) {
-      if(insured.addIResultData.responseCode === '000000') {
-        console.log('添加成功')
-        this.context.router.push({
-          pathname: '/supervise'
-        })
-      }else {
-        this.setState({
-          errorInfo: insured.addIResultData.responseMessage
-        })
-      }
-      return
+    if(insured.addInsuredUserSuccess === true || insured.deleteInsuredUserSuccess === true || insured.updateInsuredUserSuccess === true) {
+      this.context.router.push({
+        pathname: '/supervise'
+      })
     }
+    if(insured.addInsuredUserError === true || insured.updateInsuredUserError === true || insured.deleteInsuredUserError === true || insured.getInsuredUserError === true)
     if(insured.updateInsuredUserSuccess === true) {
-      if(insured.updateIResultData.responseCode === '000000') {
-        console.log('编辑成功')
-        this.context.router.push({
-          pathname: '/supervise'
-        })
-      }else {
-        this.setState({
-          errorInfo: insured.updateIResultData.responseMessage
-        })
-      }
-      return
-    }
-    if(insured.deleteInsuredUserSuccess === true) {
-      if(insured.deleteIResultData.responseCode === '000000') {
-        this.context.router.push({
-          pathname: '/supervise'
-        })
-      }else {
-        this.setState({
-          errorInfo: insured.deleteIResultData.responseMessage
-        })
-      }
-      return
+      this.setState({
+        errorInfo: insured.errorMsg
+      })
     }
   }
 
@@ -494,8 +466,8 @@ export default class bePeople extends React.Component {
           this.renderContent({}) :
           (insured.getInsuredUserBegin ?
           <Loading /> :
-          insured.getIResultData ?
-          this.renderContent(this.getChoseBePeople(insured.getIResultData.responseData)[0]) :
+          insured.getInsuredUserSuccess === true ?
+          this.renderContent(this.getChoseBePeople(insured.getIResultData)[0]) :
           "系统异常请稍后重试")
         }
       </div>

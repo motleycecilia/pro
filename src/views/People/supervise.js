@@ -5,6 +5,7 @@ import Header from 'components/Header'
 import Loading from 'components/loading'
 import {getInsuredUserInfo, resetInsuredUserInfo} from 'actions'
 import { App, YztApp } from 'utils/native_h5'
+import util from 'utils/utils'
 
 
 @connect(
@@ -20,7 +21,8 @@ import { App, YztApp } from 'utils/native_h5'
 
 export default class supervise extends React.Component {
   state = {
-    choseList: []
+    choseList: [],
+    beList: []
   }
   static contextTypes = {
       router: React.PropTypes.object.isRequired
@@ -35,11 +37,16 @@ export default class supervise extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const {insured} = nextProps
-    if(insured.getIResultData && insured.getIResultData.responseCode === '900002') {
+    if(insured.errorMsg === '90002') {
       this.context.router.push({
         pathname: '/login'
       })
       return
+    }
+    if(insured.getInsuredUserSuccess === true && insured.getIResultData.length > 0) {
+      this.setState({
+        beList: insured.getIResultData
+      })
     }
   }
   componentWillUnmount() {
@@ -49,7 +56,17 @@ export default class supervise extends React.Component {
     history.go(-1)
   }
   onClickRight() {
-    console.log(this.state.choseList)
+    let choseLists = [],
+    beLists = this.state.beList;
+    this.state.choseList.forEach((val, index) => {
+      val === true && choseLists.push(beLists[index].id)
+    })
+    this.context.router.push({
+      pathname: '/fillmation',
+      query: {
+        choseBeList: choseLists.join()
+      }
+    })
   }
   onClickEditInsurant(id) {
     this.context.router.push({
@@ -57,8 +74,9 @@ export default class supervise extends React.Component {
       query: { operation: 1, ide: id }
     })
   }
-  onClickChoseOption(index) {
+  onClickChoseOption(index, id) {
     var cList = this.state.choseList
+
     cList[index] = !this.state.choseList[index]
     this.setState({
       choseList: cList
@@ -78,14 +96,14 @@ export default class supervise extends React.Component {
           <div className="col-line-threee h_80" key={index}>
             <div className="col-line-with">
               <div className={this.state.choseList[index] ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-                <span className="lab-checkbox-2" onTouchTap={this.onClickChoseOption.bind(this, index)}></span>
+                <span className="lab-checkbox-2" onTouchTap={this.onClickChoseOption.bind(this, index, val.id)}></span>
                 <span className="checbox-chose"></span>
               </div>
               <div className="m-l12" onTouchTap={this.onClickEditInsurant.bind(this, val.id)}>
                 {val.insurantName}
                 <p>
-                  <span className="col-9b9b9b">身份证 </span>
-                  2340 **** **** 2312
+                  <span className="col-9b9b9b">证件号码:</span>
+                  {util.outputAddOverweight(val.insurantIdNo)}
                 </p>
               </div>
             </div>
@@ -125,8 +143,8 @@ export default class supervise extends React.Component {
         {
           insured.getInsuredUserBegin ?
           <Loading /> :
-          insured.getIResultData && !!insured.getIResultData.responseData ?
-          this.renderContent(insured.getIResultData.responseData) :
+          insured.getInsuredUserSuccess === true ?
+          this.renderContent(insured.getIResultData) :
           "系统异常请稍后重试"
         }
       </div>

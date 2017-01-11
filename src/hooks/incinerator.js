@@ -12,8 +12,20 @@ export default function (name, code, handlers) {
       statusCode: defaultSetting
     },
     {
+      name: 'insuredInfo',
+      statusCode: defaultSetting
+    },
+    {
       name: 'premiumMeasure',
       statusCode: defaultSetting
+    },
+    {
+      name:'orangeAccount',
+      statusCode:{
+        submit:'000001',
+        authenticate:'000002',
+        orange:'000003'
+      }
     }
   ]
   apiMap.forEach(api => {

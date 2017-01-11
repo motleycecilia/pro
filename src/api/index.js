@@ -20,6 +20,35 @@ export function queryDetilInfo(productId) {
 	})
 }
 
+
+//核保
+export function preSubmit(params){
+	return request({
+		url: domain + '/insurance/validatePremium.do',
+		method: 'GET',
+		type: 'jsonp',
+		timeout: timeout,
+		contentType: 'application/json;charset=utf-8',
+		data: {
+			buyPlatform: '1',
+			serialNo: params.serialNo,
+			orderType: '0',
+			productId: params.productId,
+			productCode: params.productCode,
+			orderSpliteFlag: '1',
+			productInsuranceCode: parasm.productInsuranceCode,
+			skuid: params.skuid,
+			insurerInfo: params.insurerInfo,
+			insuranceInfoList:{
+				policyInfo: params.policyInfo,
+				linkManInfo: params.linkManInfo,
+				invoceInfo: params.invoceInfo
+			},
+			in: params.insurantInfoList
+		}
+	})
+}
+/*保费测算*/
 export function premiumMeasure(params){
 	return request({
 		url: domain + '/insurance/premium/calculate',
@@ -29,23 +58,21 @@ export function premiumMeasure(params){
 		contentType: 'application/json;charset=utf-8',
 		data: {
 			serialNo: params.serialNo,
-			from: '',
-			userChannel: '',
+			from: 'wap-chaoshi',
+			userChannel: '0',
 			buyPlatform: '1',
 			orderType: '2',
 			productId: params.productId,
 			productCode: params.productCode,
 			orderSpliteFlag: '1',
-			productInsuranceCode: params.productInsuranceCode,
-			skuid: params.skuid,
-			insurantInfoList: params.insurantInfoList,
-			policyInfo: {
-				insuranceBeginTime: params.insuranceBeginTime,
-				insuranceStartTime: params.insuranceStartTime,
-				insuranceEndTime: params.insuranceEndTime,
-				insurancePeriod: params.insurancePeriod,
-				insurancePriodUnit: params.insurancePriodUnit
-			}
+			insuranceList: [
+				{
+					productInsuranceCode: params.productInsuranceCode,
+					skuid: params.skuid,
+					insurantInfoList: params.insurantInfoList,
+				}
+			],
+			policyInfo: params.policyInfo
 		}
 	})
 }
@@ -152,5 +179,49 @@ export function deleteInsuredUserInfo(insurantId){
 		data: {
 			insurantId: insurantId
 		}
+	})
+}
+/*app 登录*/
+/* 是否需要升级 */
+export function getUpdateInfo(params) {
+	return request({
+		url: domain + '/sso/account/checkOrderPayCondition.do',
+		method: 'GET',
+		type: 'jsonp',
+		timeout: timeout,
+		contentType: 'application/json;charset=utf-8',
+		data: params
+	})
+}
+export function getUpdateUrl(){
+	return {
+		'02':domain+'/customerupgrade/index.shtml#/account/pwd',
+		'01':domain+'/customerupgrade/index.shtml#/account/certify',
+		'03':domain+'/customerupgrade/index.shtml#/account/newCertify',
+	}
+}
+
+export const OXYGEN = `${domain}/payPre/auth/index.shtml`
+export const NEXTLINK = "/welding"
+
+export function checkIfAdult(){//查询是否满足18岁
+	return request({
+		url:domain+'/yanglao/order/checkInfoForPlacingOrder.do',
+		method:'GET',
+		type: 'jsonp',
+		timeout: timeout,
+		contentType: 'application/json;charset=utf-8'
+	})
+}
+
+//判断是否需要橙子账户鉴权和开户
+export function orangeAccount(data){
+	return request({
+		url:`${process.env.ISMORK?'':domain}/scence/orangebank/orangeAccount.jsonp`,
+		method:'GET',
+		type:'jsonp',
+		timeout: timeout,
+		contentType: 'application/json;charset=utf-8',
+		data:data
 	})
 }

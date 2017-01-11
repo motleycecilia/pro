@@ -251,7 +251,6 @@ export default class policyUser extends React.Component {
     if(!errorContents) {
       const birthDay = util.splitbirth(this.state.cardNo),
       sex = util.fillBirAndSex(this.state.cardNo)
-      console.log(true)
       this.props.updatePolicyUserInfo(
         {
           insurerId: this.state.insurerId,

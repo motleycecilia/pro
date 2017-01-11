@@ -3,9 +3,10 @@ import Link from 'valuelink'
 import Header from 'components/Header'
 import {connect} from 'react-redux'
 import { createChecker } from 'utils/checker'
+import { getUrlParam } from 'utils/urlParams.js'
 import Country from 'components/country'
 import { App, YztApp } from 'utils/native_h5'
-import { queryDetilInfo } from 'actions'
+import { queryDetilInfo, premiumMeasure, premiumMeasureReset, getUpdateInfo } from 'actions'
 import util from 'utils/utils'
 import Loading from 'components/loading'
 import Modal from 'components/modal'
@@ -14,10 +15,15 @@ import BtnLoading from 'components/btnLoading'
 
 @connect(
   state => ({
-    detailInfo: state.detailInfo
+    detailInfo: state.detailInfo,
+    premiumInfo: state.premiumInfo,
+    loginInfo: state.loginInfo
   }),
   {
-    queryDetilInfo
+    queryDetilInfo,
+    premiumMeasure,
+    premiumMeasureReset,
+    getUpdateInfo
   }
 )
 
@@ -34,7 +40,9 @@ export default class premium extends React.Component {
     guaranteePeriod: 1,
     insurancePriodUnit: 'Y',
     showModal: false,
-    premiumStatus: 0
+    premiumStatus: 0,
+    serialNo: '',
+    errorContent: ''
   }
 
   componentWillMount() {
@@ -45,7 +53,7 @@ export default class premium extends React.Component {
     YztApp.setTitle(this.props.route.title)
   }
   componentWillReceiveProps(nextProps) {
-    const { detailInfo } = nextProps
+    const { detailInfo, premiumInfo, loginInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
       this.setState({
         name: detailInfo.detail.typelist[0].priceName,
@@ -53,6 +61,42 @@ export default class premium extends React.Component {
         insurancePriodUnit: detailInfo.detail.guaranteePeriod || 'Y',//保险期限单位
         isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类
       })
+    }
+    if(premiumInfo.measurePremiumBegin === true) {
+      this.setState({
+        premiumStatus: 2
+      })
+      return
+    }
+    if(premiumInfo.measurePremiumSuccess === true) {
+      this.setState({
+        premiumStatus: 1,
+        serialNo: premiumInfo.premiumResultData.serialNo
+      })
+      return
+    }
+    if(premiumInfo.measurePremiumError === true) {
+      this.setState({
+        showModal: true,
+        content: premiumInfo.errorMsg
+      })
+    }
+    if(loginInfo.appLoginSuccess === true){
+      this.context.router.push({
+        pathname: '/fillmation',
+        query: {
+          productId: this.props.location.query.productId,
+          productCode: this.props.location.query.productCode
+        }
+      })
+      return
+    }
+    if(loginInfo.appLoginError === true) {
+      if(loginInfo.errorCode === '90002') {//APP未登录
+        YztApp.accessNativeModule('patoa://pingan.com/login', () => {
+        })
+      }
+      return
     }
   }
   goto() {
@@ -94,6 +138,8 @@ export default class premium extends React.Component {
     })
   }
   onClickDeleteBeDate(index) {
+    console.log(index)
+    console.log(this.state.bePeopleDate)
     let bePeopleDates = this.state.bePeopleDate
     bePeopleDates.splice(index, 1)
     this.setState({
@@ -101,7 +147,63 @@ export default class premium extends React.Component {
     })
   }
   onClickMeasurePremium() {
-
+    let checkList = [{
+        checkfnName: "checkEmpty",
+        checkValue: this.state.startDate,
+        errMsg: '请选择开始时间'
+      },
+      {
+        checkfnName: "checkEmpty",
+        checkValue: this.state.endDate,
+        errMsg: '请选择结束时间'
+      }
+    ]
+    if(this.state.countrys.length === 0) {
+      checkList.unshift({
+        checkfnName: "checkValLength",
+        checkValue: this.state.countrys,
+        errMsg: '请选择旅游目的地'
+      })
+    }
+    if(util.maxDate(this.state.startDate, this.state.endDate) === true) {
+      this.setState({
+        errorContent: "开始时间不能晚于结束时间"
+      })
+      return
+    }
+    let errorContents = createChecker(checkList)
+    if(errorContents === false) {
+      let checkBeDate = this.state.bePeopleDate.every(function(val, index) {
+        return !!val.insurantBirth
+      })
+      if(this.state.bePeopleDate.length > 0 && checkBeDate === true) {
+        this.props.premiumMeasure({
+          serialNo: this.state.serialNo,
+          productInsuranceCode: this.state.name,
+          productId: this.props.location.query.productId,
+          productCode: this.props.location.query.productCode,
+          insurantInfoList: this.state.bePeopleDate,
+          policyInfo: {
+            insuranceBeginTime: this.state.startDate,
+            insuranceStartTime: this.state.startDate,
+            insuranceEndTime: this.state.endDate,
+            insurancePeriod: util.DateDiff(this.state.startDate, this.state.endDate),
+            insurancePriodUnit: 'D'
+          }
+        })
+      }else {
+        this.setState({
+          errorContent: "被保险人出生日期不能为空"
+        })
+      }
+      return
+    }
+    this.setState({
+      errorContent: errorContents
+    })
+  }
+  onClickInsure() {
+    this.props.getUpdateInfo()
   }
   addBepoleDate() {
     let bePeopleDates = this.state.bePeopleDate
@@ -125,7 +227,7 @@ export default class premium extends React.Component {
   }
   onChangeBepopleDate(index, e) {
     let bePeopleDates = this.state.bePeopleDate
-    bePeopleDates[index].date = e.target.value
+    bePeopleDates[index].insurantBirth = e.target.value
     this.setState({
       bePeopleDate: bePeopleDates
     })
@@ -208,14 +310,15 @@ export default class premium extends React.Component {
   renderBePopleDate() {
     return(
       this.state.bePeopleDate.map((val, index) => {
+        let i = index
         return(
           <div className="col-line-threeetbd" key={index}>
             <div className="col-line-with">
-              <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, index)}>
+              <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, i)}>
               </span>
-              <input type="date" className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, index)}/>
+              <input type="date" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}/>
             </div>
-            <span>￥100/人</span>
+            <span>￥0/人</span>
           </div>
         )
       })
@@ -231,6 +334,7 @@ export default class premium extends React.Component {
             className="input-style"
             placeholder="结束时间"
             onChange={this.onChangeEndDate.bind(this)}
+            value={this.state.endDate || ""}
           />
         </div>
       </section>
@@ -262,7 +366,7 @@ export default class premium extends React.Component {
     return(
       <div className="pre-btn">
         <span className="pre-btn-left">保费总额：0元</span>
-        <span className="pre-btn-right">
+        <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
           <span className="pre-btn-rbtn">
             立即投保
           </span>
@@ -308,6 +412,7 @@ export default class premium extends React.Component {
                   placeholder="开始时间"
                   maxLength="11"
                   onChange={this.onChageStartDate.bind(this)}
+                  value={this.state.startDate || ''}
                 />
               </div>
             </section>
@@ -326,6 +431,11 @@ export default class premium extends React.Component {
             </div>
             {
               this.renderBePopleDate()
+            }
+          </div>
+          <div className="p-lr-13 errorMsg">
+            {
+              !!this.state.errorContent && this.state.errorContent
             }
           </div>
           <div className="pre-tail">
@@ -367,7 +477,7 @@ export default class premium extends React.Component {
           /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : '加载中...'
         }
         {
-          this.state.showModal && <Modal content={this.state.content} goto={this.goto} />
+          this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />
         }
       </div>
     )

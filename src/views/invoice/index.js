@@ -352,18 +352,20 @@ export default class invoice extends React.Component {
               !!this.state.errorPhone && <span className="remind-icon-error"></span>
             }
           </div>
-          <section className="m-t24">
-            <div className="input-outer">
-              <div className="select-tit">省、市、区</div>
-              <span className="select-icon"></span>
-              <select className="select-cont">
-                <option>1年</option>
-                <option>1年</option>
-                <option>1年</option>
-                <option>1年</option>
-              </select>
-            </div>
-          </section>
+          {
+            false && <section className="m-t24">
+              <div className="input-outer">
+                <div className="select-tit">省、市、区</div>
+                <span className="select-icon"></span>
+                <select className="select-cont">
+                  <option>1年</option>
+                  <option>1年</option>
+                  <option>1年</option>
+                  <option>1年</option>
+                </select>
+              </div>
+            </section>
+          }
           <div className="input-outer m-t24">
             <div className="select-tit">街道地址</div>
             <input

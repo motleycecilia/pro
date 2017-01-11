@@ -40,12 +40,14 @@ export default function policyUserInfo(state = defaultState, action) {
       return Object.assign({}, state, {
         getInsuredUserSuccess: true,
         getInsuredUserBegin: false,
+        getInsuredUserError: false,
         getIResultData: action.getIResultData
       })
     case GET_INSURED_USER_ERROR:
       return Object.assign({}, state, {
         getInsuredUserBegin: false,
-        getInsuredUserError: true
+        getInsuredUserError: true,
+        errorMsg: action.errorMsg
       })
     case ADD_INSURED_USER_BEGIN:
       return Object.assign({}, state, {
@@ -53,12 +55,15 @@ export default function policyUserInfo(state = defaultState, action) {
       })
     case ADD_INSURED_USER_SUCCESS:
       return Object.assign({}, state, {
+        addInsuredUserBegin: false,
         addInsuredUserSuccess: true,
         addIResultData: action.addIResultData
       })
     case ADD_INSURED_USER_ERROR:
       return Object.assign({}, state, {
-        addInsuredUserError: true
+        addInsuredUserBegin: false,
+        addInsuredUserError: true,
+        errorMsg: action.errorMsg
       })
     case UPDATE_INSURED_USER_BEGIN:
       return Object.assign({}, state, {
@@ -66,12 +71,15 @@ export default function policyUserInfo(state = defaultState, action) {
       })
     case UPDATE_INSURED_USER_SUCCESS:
       return Object.assign({}, state, {
+        updateInsuredUserBegin: false,
         updateInsuredUserSuccess: true,
         updateIResultData: action.updateIResultData
       })
     case UPDATE_INSURED_USER_ERROR:
       return Object.assign({}, state, {
-        updateInsuredUserError: true
+        updateInsuredUserBegin: false,
+        updateInsuredUserError: true,
+        errorMsg: action.errorMsg
       })
     case DELETE_INSURED_USER_BEGIN:
       return Object.assign({}, state, {
@@ -79,12 +87,15 @@ export default function policyUserInfo(state = defaultState, action) {
       })
     case DELETE_INSURED_USER_SUCCESS:
       return Object.assign({}, state, {
+        deleteInsuredUserBegin: false,
         deleteInsuredUserSuccess: true,
         deleteIResultData: action.deleteIResultData
       })
     case DELETE_INSURED_USER_ERROR:
       return Object.assign({}, state, {
-        deleteInsuredUserError: true
+        deleteInsuredUserBegin: false,
+        deleteInsuredUserError: true,
+        errorMsg: action.errorMsg
       })
     case RESET_INSURED_USER:
       return defaultState

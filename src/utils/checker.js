@@ -6,11 +6,23 @@ const checkers = {
 		val = !!val ? val.trim() : val
 		return !reg.test(val) ? errMsg : false
 	},
+	checkValLength: function(val, errMsg) {
+		return val.length > 0 ? false : errMsg
+	},
+	checkEmpty: function(val, errMsg) {
+		return this.isEmpty(val) ? false : errMsg
+	},
+	checkTureFalse: function(flag, errMsg) {
+		return flag ? false : errMsg
+	},
 	uName: function(name){
 		return this.regularCheck(name, /^[\u4E00-\u9FA5]{2,20}$/, '请输入正确的姓名')
 	},
 	otherCardNo: function(cardNo) {
 		return this.regularCheck(cardNo, /(^[0-9a-zA-Z]{1,20}$)/, '请输入正确的证件号码')
+	},
+	checkZipCode: function(zipCode) {
+		return zipCode.search(/^[1-9]{1}[0-9]{5}$/) === -1 ? '请输入正确的邮编' : false
 	},
 	idCard: function(id) {
 		var reg= /^\+?[1-9][0-9]*$/;
@@ -59,7 +71,7 @@ const checkers = {
 export function createChecker(checkList){
 	let errorContent = ''
 	checkList.forEach((val, index) => {
-		errorContent = !!errorContent ? errorContent : checkers[val.checkfnName](val.checkValue)
+		errorContent = !!errorContent ? errorContent : checkers[val.checkfnName](val.checkValue, val.errMsg)
 	})
 	return errorContent
 }

@@ -123,6 +123,10 @@ const util = {
     let date1=new Date(dateo),
     date2=new Date(datet)
     return Date.parse(dateo) >= Date.parse(datet)
+  },
+  outputAddOverweight: function(val) {
+    val = "" + val
+    return val.length < 9 ? "****" : (val.substring(0, 4) + "****" + val.substring(val.length - 4, val.length))
   }
 }
 

@@ -20,7 +20,9 @@ export default class detail extends React.Component {
     isShowCharac: true,
     currentIndex: 0,
     guaranteeIndex: -1,
-    productId: ''
+    productId: '',
+    productCode: '',
+    captionDoc: ''
   }
 
   static contextTypes = {
@@ -39,7 +41,9 @@ export default class detail extends React.Component {
     if(detailInfo.getDetailSuccess === true) {
       this.setState({
         title: detailInfo.detail.productName,
-        productId: detailInfo.detail.productId
+        productId: detailInfo.detail.productId,
+        productCode: detailInfo.detail.productCode,
+        captionDoc: detailInfo.detail.captionDoc
       })
     }
   }
@@ -49,6 +53,25 @@ export default class detail extends React.Component {
   onClickisShowCharac() {
     this.setState({
       isShowCharac: !this.state.isShowCharac
+    })
+  }
+  onClickPremium() {
+    if(this.state.captionDoc) {
+      this.context.router.push({
+        pathname: '/healthInform',
+        query: {
+          productId: this.state.productId,
+          productCode: this.state.productCode
+        }
+      })
+      return
+    }
+    this.context.router.push({
+      pathname: '/premium',
+      query: {
+        productId: this.state.productId,
+        productCode: this.state.productCode
+      }
     })
   }
   onClickCurrent(index) {
@@ -196,7 +219,7 @@ export default class detail extends React.Component {
             <div className="bottom-line"></div>
           </div>
         </section>
-        <div className="complete-fill-btn">保费测算</div>
+        <div className="complete-fill-btn" onTouchTap={this.onClickPremium.bind(this)}>保费测算</div>
       </div>
     )
   }
