@@ -39,11 +39,9 @@ export function preSubmit(params){
 			productInsuranceCode: parasm.productInsuranceCode,
 			skuid: params.skuid,
 			insurerInfo: params.insurerInfo,
-			insuranceInfoList:{
-				policyInfo: params.policyInfo,
-				linkManInfo: params.linkManInfo,
-				invoceInfo: params.invoceInfo
-			},
+			insuranceInfoList: params.insuranceInfoList,
+			invoceInfo: params.invoceInfo,
+			linkManInfo: params.linkManInfo,
 			in: params.insurantInfoList
 		}
 	})
@@ -68,7 +66,7 @@ export function premiumMeasure(params){
 			insuranceList: [
 				{
 					productInsuranceCode: params.productInsuranceCode,
-					skuid: params.skuid,
+					skuId: params.skuid,
 					insurantInfoList: params.insurantInfoList,
 				}
 			],
@@ -182,6 +180,18 @@ export function deleteInsuredUserInfo(insurantId){
 	})
 }
 /*app 登录*/
+
+/*同步登录态*/
+export function getAccessTicket(sso) {
+  return request({
+    url: domain + '/sso/account/getAccessTicket.do',
+    method: 'GET',
+    type: 'jsonp',
+    timeout: timeout,
+    contentType: 'application/json;charset=utf-8',
+    data: sso
+  })
+}
 /* 是否需要升级 */
 export function getUpdateInfo(params) {
 	return request({

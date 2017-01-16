@@ -7,10 +7,14 @@ import { App, YztApp } from 'utils/native_h5'
 
 
 export default class confirm extends React.Component {
+  state = {
+    showConfirmPolicy: false,
+    ConfirmBepoleIndex: -1
+  }
+
   static contextTypes = {
       router: React.PropTypes.object.isRequired
   }
-
   componentWillMount() {
     App.goBackAction = function () {
       this.onClickBack()
@@ -20,7 +24,104 @@ export default class confirm extends React.Component {
   onClickBack() {
     history.go(-1)
   }
-
+  onClickConfimPolicy() {
+    this.setState({
+      showConfirmPolicy: !this.state.showConfirmPolicy
+    })
+  }
+  onClickPay() {
+    const sso = sessionStorage.getItem('sso')
+    window.location.href = `http://jkkit-cashier-stg1.pingan.com.cn:20380/cashier-web/main/login.shtml?channel=1982
+    &channelSecond=1982003
+    &platId=999201007
+    &payClassify=13
+    &orderNo=${orderNo}
+    &payOrderNo=${payOrderNo}
+    &ssoTicket=${sso.ssoTicket}
+    &timestamp=${sso.timestamp}
+    &sign=${sso.sign}
+    &digest=
+    &hook=111111
+    &from=wap-chaoshi
+    &productSide=&customid`
+  }
+  onClickConfirmBepole(index) {
+    this.setState({
+      ConfirmBepoleIndex: index === this.state.ConfirmBepoleIndex ? -1 : index
+    })
+  }
+  renderGuarantee(planList) {
+    return(
+      planList.map((val, index) => {
+        return(
+          <li key={index} onTouchTap={this.onClickGuarantee.bind(this, index)}>
+            <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
+              <div className="content-list-title">
+                <span className="project-name">{val.securityProName}</span>
+                <span className="money">{val.minPrice}{val.maxPrice === val.minPrice ? "" : "-"+val.maxPrice}</span>
+              </div>
+            </a>
+            <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>
+              <p>
+                {val.securityProInstruction}
+              </p>
+            </div>
+          </li>
+        )
+      })
+    )
+  }
+  renderConfirmbePeople() {
+    return(
+      [0, 1].map((val, index) => {
+        return(
+          <div className="confirm-center-contents" key={index}>
+            <div className="center-content">
+              <div className="col-line-fillmation" onTouchTap={this.onClickConfirmBepole.bind(this, index)}>
+                <span>left</span>
+                <span className="col-line-cr">left</span>
+                <span className={this.state.ConfirmBepoleIndex === index ? "icon-max-up" : "icon-max-down"}></span>
+              </div>
+              <div className={this.state.ConfirmBepoleIndex === index ? "" : "hide"}>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    身份证号
+                  </span>
+                  <span className="fill-content-txt">
+                    271829328728920937
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    手机号码
+                  </span>
+                  <span className="fill-content-txt">
+                    13212312322
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    生日
+                  </span>
+                  <span className="fill-content-txt">
+                    1990-01-21
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    与投保人关系
+                  </span>
+                  <span className="fill-content-txt">
+                    本人
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
   render() {
     return(
       <div>
@@ -60,44 +161,88 @@ export default class confirm extends React.Component {
           </div>
           <div className="confirm-center-contents">
             <div className="center-content">
-              <div className="col-line-fillmation">
+              <div className="col-line-fillmation" onTouchTap={::this.onClickConfimPolicy}>
                 <span>left</span>
                 <span className="col-line-cr">left</span>
-                <span className="icon-max-right"></span>
+                <span className={this.state.showConfirmPolicy ? "icon-max-up" : "icon-max-down"}></span>
               </div>
-              <div className="p-b-20">
-                <span className="fill-content-tit">
-                  身份证号
-                </span>
-                <span className="fill-content-txt">
-                  271829328728920937
-                </span>
-              </div>
-              <div className="p-b-20">
-                <span className="fill-content-tit">
-                  手机号码
-                </span>
-                <span className="fill-content-txt">
-                  13212312322
-                </span>
-              </div>
-              <div className="p-b-20">
-                <span className="fill-content-tit">
-                  生日
-                </span>
-                <span className="fill-content-txt">
-                  1990-01-21
-                </span>
-              </div>
-              <div className="p-b-20">
-                <span className="fill-content-tit">
-                  与投保人关系
-                </span>
-                <span className="fill-content-txt">
-                  本人
-                </span>
+              <div className={this.state.showConfirmPolicy ? "" : "hide"}>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    身份证号
+                  </span>
+                  <span className="fill-content-txt">
+                    271829328728920937
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    手机号码
+                  </span>
+                  <span className="fill-content-txt">
+                    13212312322
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    电子邮箱
+                  </span>
+                  <span className="fill-content-txt">
+                    298fwf@23.com
+                  </span>
+                </div>
               </div>
             </div>
+          </div>
+
+          <div className="confirm-center-tit">
+            被保人
+          </div>
+            {
+              this.renderConfirmbePeople()
+            }
+          <div className="content white-bg m-t10">
+            <div className="content-title">保障范围</div>
+            <div className="content-list content0">
+              <ul>
+                <li>
+                  <a href="javascript: void(0);" className="arrow-up showInfo">
+                    <div className="content-list-title">
+                      <span className="project-name">文件佛教</span>
+                      <span className="money">我懂你今晚都</span>
+                    </div>
+                  </a>
+                  <div className="content-list-text hide">
+                    <p>
+                      发未分配文件访贫问苦
+                    </p>
+                  </div>
+                </li>
+                <li>
+                  <a href="javascript: void(0);" className="arrow-up showInfo">
+                    <div className="content-list-title">
+                      <span className="project-name">文件佛教</span>
+                      <span className="money">我懂你今晚都</span>
+                    </div>
+                  </a>
+                  <div className="content-list-text hide">
+                    <p>
+                      发未分配文件访贫问苦
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div className="bottom-line"></div>
+          </div>
+          <div className="confirm-pre-money">
+            保单测算金额： <span className="txt-through">￥234234.00</span>
+          </div>
+          <div className="confirm-fill-money">
+            实际保额: ￥3000.00
+          </div>
+          <div className="complete-fill-btn" onTouchTap={::this.onClickPay}>
+            立即支付
           </div>
         </div>
       </div>

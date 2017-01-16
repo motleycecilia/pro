@@ -6,6 +6,7 @@ import Loading from 'components/loading'
 import {getInsuredUserInfo, getPolicyUserInfo, preSubmit, resetPreSubmit} from 'actions'
 import { App, YztApp } from 'utils/native_h5'
 import { createChecker } from 'utils/checker'
+import BtnLoading from 'components/btnLoading'
 
 
 @connect(
@@ -39,6 +40,8 @@ export default class fillmation extends React.Component {
     errorInfo: '',
     policyName: '',
     policyNo: '',
+    policyMobileNo: '',
+    btnLodding: false,
     isConfirm: false,
     isAgreeElement: false
   }
@@ -56,14 +59,14 @@ export default class fillmation extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { insured, policyUser, underwriting} = nextProps
-    if(insured.getIResultData && insured.getIResultData.responseCode === '900002') {
+    if(insured.errorMsg === '90002' || underwriting.errorMsg === '90002') {
       this.context.router.push({
         pathname: '/login'
       })
       return
     }
     if(underwriting.getPreSubmitSuccess === true) {
-      YztApp.setTitle('保单填写')
+      YztApp.setTitle('保单信息确认')
       this.setState({
         isConfirm: true
       })
@@ -72,7 +75,8 @@ export default class fillmation extends React.Component {
     if(policyUser.getPolicyUserSuccess === true) {
       this.setState({
         policyName: policyUser.getResultData.insurerName,
-        policyNo: policyUser.getResultData.id
+        policyNo: policyUser.getResultData.id,
+        policyMobileNo: policyUser.getResultData.insurerMobile
       })
     }
     if(insured.getInsuredUserSuccess === true) {
@@ -224,7 +228,7 @@ export default class fillmation extends React.Component {
     })
   }
   onClickCoseConfirm() {
-    YztApp.setTitle('保单信息确认')
+    YztApp.setTitle('保单填写')
     this.setState({
       isConfirm: false
     })
@@ -289,12 +293,10 @@ export default class fillmation extends React.Component {
     }
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
+      let insurantList = beList.map((val, index) => {
+        return val.id
+      })
       let prePara = localStorage.getItem(prePara)
-			// insuranceInfoList:{
-			// 	policyInfo: params.policyInfo,
-			// 	linkManInfo: params.linkManInfo,
-			// 	invoceInfo: params.invoceInfo
-			// },
       const preParams = {
         preSubmit: prePara.serialNo,
         productId: prePara.productId,
@@ -303,9 +305,21 @@ export default class fillmation extends React.Component {
         skuid: prePara.skuid,
         insurerInfo: {
           insurerNo: this.state.policyNo
+        },
+        insurantInfoList: insurantList,
+        linkManInfo: {
+          linkManName: this.state.policyName,
+          linkManMobileNo: this.state.policyMobileNo
+        },
+        invoceInfo: {
+          invoceName: this.state.policyName,
+          invoceHeading: this.state.ititle,
+          invoceZipCode: this.state.zipCode,
+          invoceMobileNo: this.state.phoneNo,
+          invoceAddress: this.state.address
         }
       }
-      this.props.preSubmit()
+      this.props.preSubmit(preParams)
     }else {
       this.setState({
         errorInfo: errorContents
@@ -499,7 +513,7 @@ export default class fillmation extends React.Component {
       })
     )
   }
-  renderConfirm() {
+  renderConfirm(preResultData) {
     return(
       <div>
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickCoseConfirm.bind(this)} title="保单信息确认"/>
@@ -508,7 +522,7 @@ export default class fillmation extends React.Component {
             <div className="p-l-10">
               <dl>
                 <dt>保险名称</dt>
-                <dd>女性关爱保险</dd>
+                <dd>{preResultData.productName}</dd>
               </dl>
             </div>
             <div className="p-l-10">
@@ -520,7 +534,7 @@ export default class fillmation extends React.Component {
             <div className="p-l-10">
               <dl>
                 <dt>套餐类型</dt>
-                <dd>全面型</dd>
+                <dd></dd>
               </dl>
             </div>
             <div className="confirm-top-date">
@@ -528,8 +542,8 @@ export default class fillmation extends React.Component {
                 保障时间
               </div>
               <div className="confirm-date-dates">
-                <p>2016-12-06零时起</p>
-                <p>2017-12-06二十四时止</p>
+                <p>{preResultData.policyInfo.insuranceStartTime}零时起</p>
+                <p>{preResultData.policyInfo.insuranceEndTime}二十四时止</p>
               </div>
             </div>
           </div>
@@ -541,7 +555,7 @@ export default class fillmation extends React.Component {
               <div className="col-line-fillmation">
                 <span>left</span>
                 <span className="col-line-cr">left</span>
-                <span className="icon-max-right"></span>
+                <span className="icon-max-up"></span>
               </div>
               <div className="p-b-20">
                 <span className="fill-content-tit">
@@ -579,6 +593,20 @@ export default class fillmation extends React.Component {
           </div>
         </div>
       </div>
+    )
+  }
+  renderLoddingBtn() {
+    return (
+      <div>
+        {
+          <BtnLoading />
+        }
+      </div>
+    )
+  }
+  renderSubmitBtn() {
+    return(
+      <div className="complete-fill-btn" onTouchTap={::this.onClickpreSubmit}>确定</div>
     )
   }
   renderContent(policyUser) {
@@ -660,7 +688,11 @@ export default class fillmation extends React.Component {
             {this.state.errorInfo}
           </div>
         </div>
-        <div className="complete-fill-btn" onTouchTap={::this.onClickpreSubmit}>确定</div>
+        {
+          this.state.btnLodding ?
+          this.renderLoddingBtn() :
+          this.renderSubmitBtn()
+        }
       </div>
     )
   }
@@ -676,7 +708,7 @@ export default class fillmation extends React.Component {
           this.renderContent(policyUser) : <Loading />
         }
         {
-          this.state.isConfirm && this.renderConfirm(underwriting)
+          this.state.isConfirm && this.renderConfirm(underwriting.preResultData)
         }
       </div>
     )

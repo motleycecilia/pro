@@ -61,12 +61,12 @@ class Welding extends React.Component {
           content: `${errMessage}，点击确认返回详情页`,
           goto: () => {
               this.setState({isModalVisible: false})
-              let productId = getUrlParam('productId',atob(sessionStorage.getItem('productId')))
+              let preMiumPara = sessionStorage.getItem("preMiumPara")
               this.context.router.push({
                 pathname: '/detail',
                 query: {
-                  productId: productId,
-                  productCode: productId
+                  productId: preMiumPara.productId,
+                  productCode: preMiumPara.productCode
                 }
               })
           }})
@@ -137,18 +137,8 @@ class Welding extends React.Component {
                   submit:() => {
                       //去购买页面
                       //location.href = `${api.GLOBAL_ROUTE}#/product/buy/`
-                      const filmaPara = JSON.parse(sessionStorage.getItem('filmaPara'))
                       this.context.router.push({
-                        pathname: '/fillmation',
-                        query: {
-                          productId: filmaPara.productId,
-                          insurancePriod: filmaPara.insurancePriod,
-                          insurancePriodUnit: filmaPara.insurancePriodUnit,
-                          productCode: filmaPara.productCode,
-                          skuId: filmaPara.skuId,
-                          productInsuranceCode: filmaPara.productInsuranceCode,
-                          annualPremium: filmaPara.annualPremium
-                        }
+                        pathname: '/fillmation'
                       })
                   },
                   orange:()=>{

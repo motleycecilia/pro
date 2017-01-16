@@ -360,7 +360,11 @@ export function preSubmit(params){
     dispatch(getPreSubmitBegin())
     return api.preSubmit(params)
     .then(res => {
-      dispatch(getPreSubmitSuccess(res))
+      incinerator('preSubmit', res.responseCode, {
+        success: dispatch.bind(this, getPreSubmitSuccess(res.responseData)),
+        fail: dispatch.bind(this, getPreSubmitError(res.responseMessage)),
+        unlogin: dispatch.bind(this, getPreSubmitError('90002'))
+      })
     })
     .fail(() => {
       dispatch(getPreSubmitError('系统异常'))

@@ -73,13 +73,13 @@ export default class premium extends React.Component {
         premiumStatus: 1,
         serialNo: premiumInfo.premiumResultData.serialNo
       })
-      return
     }
     if(premiumInfo.measurePremiumError === true) {
       this.setState({
         showModal: true,
         content: premiumInfo.errorMsg
       })
+      return
     }
     if(loginInfo.appLoginSuccess === true){
       this.context.router.push({
@@ -97,6 +97,37 @@ export default class premium extends React.Component {
         })
       }
       return
+    }
+    if (loginInfo.getUpDataInfoSuccess) {
+      const preMiumPara = {
+        productId: this.props.location.query.productId,
+        insurancePriod: detailInfo.detail.insurancePriod,
+        insurancePriodUnit: detailInfo.detail.insurancePriodUnit,
+        productCode: detailInfo.detail.productCode,
+        skuId: this.state.skuId,
+        productInsuranceCode: this.state.productInsuranceCode,
+        serialNo: this.state.serialNo
+      }
+      sessionStorage.setItem('preMiumPara', JSON.stringify(preMiumPara))
+      if(!App.isNative){
+          sessionStorage.setItem('sso',JSON.stringify({ssoTicket:loginInfo.upDataInfo.SSOTicket,
+              timestamp:loginInfo.upDataInfo.timestamp,
+              sign:loginInfo.upDataInfo.signature}))
+      }
+      sessionStorage.setItem('clientNo',loginInfo.upDataInfo.clientNo);
+      let urlMap = api.getUpdateUrl(),
+          symbol = loginInfo.upDataInfo?loginInfo.upDataInfo.targetURLSymbol:'';
+      if(symbol && urlMap[symbol]){//跳转升级
+          let {origin,pathname,hash,href,search} = location;
+          let pre  = encodeURIComponent(`${href}`),
+              next = encodeURIComponent(`${origin}${pathname}${search}&updated=true${hash}`);
+          location.href = urlMap[symbol]+`?preLink=${pre}&nextLink=${encodeURIComponent(next)}`
+      }
+      if(symbol && symbol==='04'){//查询是否满足18岁
+        this.context.router.push({
+          pathname: '/welding'
+        })
+      }
     }
   }
   goto() {

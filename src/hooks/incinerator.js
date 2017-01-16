@@ -12,11 +12,19 @@ export default function (name, code, handlers) {
       statusCode: defaultSetting
     },
     {
+      name:'checkOrderPayCondition',
+      statusCode:defaultSetting
+    },
+    {
       name: 'insuredInfo',
       statusCode: defaultSetting
     },
     {
       name: 'premiumMeasure',
+      statusCode: defaultSetting
+    },
+    {
+      name: 'preSubmit',
       statusCode: defaultSetting
     },
     {
