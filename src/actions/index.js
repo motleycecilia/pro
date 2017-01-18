@@ -5,10 +5,10 @@ import incinerator from 'hooks/incinerator'
 /*
 查询详情页
 */
-export function queryDetilInfo(productId){
+export function queryDetilInfo(productId, productCode){
   return (dispatch, getState) => {
     dispatch(getDetailInfoBegin())
-    return api.queryDetilInfo(productId)
+    return api.queryDetilInfo(productId, productCode)
     .then(res => {
       incinerator('getDetail', res.responseCode, {
         success: dispatch.bind(this, getDetailSuccess(res.responseData)),

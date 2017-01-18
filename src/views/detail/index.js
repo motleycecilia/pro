@@ -3,6 +3,7 @@ import Link from 'valuelink'
 import {connect} from 'react-redux'
 import Header from 'components/Header'
 import { queryDetilInfo } from 'actions'
+import { getUrlParam } from 'utils/urlParams'
 import Loading from 'components/loading'
 
 @connect(
@@ -30,6 +31,8 @@ export default class detail extends React.Component {
   }
 
   componentWillMount() {
+    console.log(getUrlParam('productId'))
+    console.log(getUrlParam('productCode'))
     this.props.queryDetilInfo(10013242)
     App.goBackAction = function () {
       this.onClickBack()
@@ -41,8 +44,8 @@ export default class detail extends React.Component {
     if(detailInfo.getDetailSuccess === true) {
       this.setState({
         title: detailInfo.detail.productName,
-        productId: detailInfo.detail.productId,
-        productCode: detailInfo.detail.productCode,
+        productId: getUrlParam('productId') || detailInfo.detail.productId,
+        productCode: getUrlParam('productCode') || detailInfo.detail.productCode,
         captionDoc: detailInfo.detail.captionDoc
       })
     }

@@ -4,20 +4,43 @@ const domain = process.env.DEV_ENV === 'production' ?
   'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'
 const timeout = 10000
 
-export function queryDetilInfo(productId) {
+export function gpFn(ops) {
+  return request({
+    url: 'test-toa-web-h5-stg1.pingan.com.cn/yizhangtong/api/gp/',
+    method: 'post',
+    type: 'json',
+    data: {'operationType': 'https://toa-gp-dmzstg1.pingan.com.cn:58443/toa-mgw/rest/gateway', 'requestData': ops},
+  })
+}
+
+export function queryDetilInfo(productId, productCode) {
 	return request({
-		///insurance/product/detail
-		url: domain + '/support/insurance/productInfo.do',
-		method: 'GET',
-		type: 'jsonp',
+		url: 'http://toa-server-stg1.paic.com.cn/toa-server/fmall/v1/insurance/product/detail',
+		method: 'POST',
+		type: 'json',
 		timeout: timeout,
 		contentType: 'application/json;charset=utf-8',
 		data: {
 			productId: productId,
+      productCode: '10007603',
       productSide: '20001',
       platformType: '02'
 		}
 	})
+  // return request({
+	// 	url: domain + '/support/insurance/productInfo.do',
+	// 	method: 'get',
+	// 	type: 'jsonp',
+	// 	timeout: timeout,
+	// 	contentType: 'application/json;charset=utf-8',
+	// 	data: {
+	// 		productId: productId,
+  //     productCode: '2342342',
+  //     productSide: '20001',
+  //     platformType: '02'
+	// 	}
+	// })
+
 }
 
 

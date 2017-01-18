@@ -33,12 +33,12 @@ export default class premium extends React.Component {
     endDate: '',
     content: '',
     isShowCountry: false,
-    isShowAddCountry: false,
+    isShowAddCountry: false,//是否旅游类型
     countrys: [],
     name: '',
     bePeopleDate: [],
-    guaranteePeriod: 1,
-    insurancePriodUnit: 'Y',
+    guaranteePeriod: 0,
+    insurancePriodUnit: '',
     showModal: false,
     premiumStatus: 0,
     serialNo: '',
@@ -55,11 +55,12 @@ export default class premium extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { detailInfo, premiumInfo, loginInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
+      let insurantUnit = detailInfo.detail.insurancePriodUnit
       this.setState({
         name: detailInfo.detail.typelist[0].priceName,
-        guaranteePeriod: detailInfo.detail.guaranteePeriod || 1,//保险期限
-        insurancePriodUnit: detailInfo.detail.guaranteePeriod || 'Y',//保险期限单位
-        isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类
+        guaranteePeriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod : detailInfo.detail.insurancePriod,//保险期限
+        insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
+        isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
       })
     }
     if(premiumInfo.measurePremiumBegin === true) {
@@ -218,8 +219,8 @@ export default class premium extends React.Component {
             insuranceBeginTime: this.state.startDate,
             insuranceStartTime: this.state.startDate,
             insuranceEndTime: this.state.endDate,
-            insurancePeriod: util.DateDiff(this.state.startDate, this.state.endDate),
-            insurancePriodUnit: 'D'
+            insurancePeriod: this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.guaranteePeriod,
+            insurancePriodUnit: this.state.isShowAddCountry === true ? 'D' : this.state.insurancePriodUnit
           }
         })
       }else {

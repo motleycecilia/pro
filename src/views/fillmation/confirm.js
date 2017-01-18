@@ -9,7 +9,8 @@ import { App, YztApp } from 'utils/native_h5'
 export default class confirm extends React.Component {
   state = {
     showConfirmPolicy: false,
-    ConfirmBepoleIndex: -1
+    ConfirmBepoleIndex: -1,
+    ConfirmGuaranteeIndex: -1
   }
 
   static contextTypes = {
@@ -50,20 +51,25 @@ export default class confirm extends React.Component {
       ConfirmBepoleIndex: index === this.state.ConfirmBepoleIndex ? -1 : index
     })
   }
+  onClickConfirmGuarantee(index) {
+    this.setState({
+      ConfirmGuaranteeIndex: index === this.state.ConfirmGuaranteeIndex ? -1 : index
+    })
+  }
   renderGuarantee(planList) {
     return(
-      planList.map((val, index) => {
+      [0, 1, 2].map((val, index) => {
         return(
-          <li key={index} onTouchTap={this.onClickGuarantee.bind(this, index)}>
-            <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
+          <li key={index}>
+            <a href="javascript: void(0);" className="arrow-down showInfo" onTouchTap={this.onClickConfirmGuarantee.bind(this, index)}>
               <div className="content-list-title">
-                <span className="project-name">{val.securityProName}</span>
-                <span className="money">{val.minPrice}{val.maxPrice === val.minPrice ? "" : "-"+val.maxPrice}</span>
+                <span className="project-name">文件佛教</span>
+                <span className="money">我懂你今晚都</span>
               </div>
             </a>
-            <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>
+            <div className={index === this.state.ConfirmGuaranteeIndex ? "content-list-text" : "content-list-text hide"}>
               <p>
-                {val.securityProInstruction}
+                发未分配文件访贫问苦
               </p>
             </div>
           </li>
@@ -78,8 +84,8 @@ export default class confirm extends React.Component {
           <div className="confirm-center-contents" key={index}>
             <div className="center-content">
               <div className="col-line-fillmation" onTouchTap={this.onClickConfirmBepole.bind(this, index)}>
-                <span>left</span>
-                <span className="col-line-cr">left</span>
+                <span>为范围</span>
+                <span className="col-line-cr txt-through"></span>
                 <span className={this.state.ConfirmBepoleIndex === index ? "icon-max-up" : "icon-max-down"}></span>
               </div>
               <div className={this.state.ConfirmBepoleIndex === index ? "" : "hide"}>
@@ -162,8 +168,7 @@ export default class confirm extends React.Component {
           <div className="confirm-center-contents">
             <div className="center-content">
               <div className="col-line-fillmation" onTouchTap={::this.onClickConfimPolicy}>
-                <span>left</span>
-                <span className="col-line-cr">left</span>
+                <span>例如风</span>
                 <span className={this.state.showConfirmPolicy ? "icon-max-up" : "icon-max-down"}></span>
               </div>
               <div className={this.state.showConfirmPolicy ? "" : "hide"}>
@@ -205,32 +210,9 @@ export default class confirm extends React.Component {
             <div className="content-title">保障范围</div>
             <div className="content-list content0">
               <ul>
-                <li>
-                  <a href="javascript: void(0);" className="arrow-up showInfo">
-                    <div className="content-list-title">
-                      <span className="project-name">文件佛教</span>
-                      <span className="money">我懂你今晚都</span>
-                    </div>
-                  </a>
-                  <div className="content-list-text hide">
-                    <p>
-                      发未分配文件访贫问苦
-                    </p>
-                  </div>
-                </li>
-                <li>
-                  <a href="javascript: void(0);" className="arrow-up showInfo">
-                    <div className="content-list-title">
-                      <span className="project-name">文件佛教</span>
-                      <span className="money">我懂你今晚都</span>
-                    </div>
-                  </a>
-                  <div className="content-list-text hide">
-                    <p>
-                      发未分配文件访贫问苦
-                    </p>
-                  </div>
-                </li>
+                {
+                  this.renderGuarantee()
+                }
               </ul>
             </div>
             <div className="bottom-line"></div>
