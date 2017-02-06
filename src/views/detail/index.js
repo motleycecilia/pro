@@ -1,3 +1,4 @@
+//测试地址: https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/static/finance/ylx3/index.html#/premium
 import React, { PropTypes } from 'react'
 import Link from 'valuelink'
 import {connect} from 'react-redux'
@@ -5,6 +6,7 @@ import Header from 'components/Header'
 import { queryDetilInfo } from 'actions'
 import { getUrlParam } from 'utils/urlParams'
 import Loading from 'components/loading'
+import detailInfos from 'mock/detail'
 
 @connect(
   state => ({
@@ -34,12 +36,14 @@ export default class detail extends React.Component {
     console.log(getUrlParam('productId'))
     console.log(getUrlParam('productCode'))
     this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(10028680, 10007603)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
     YztApp.setTitle(this.props.route.title)
   }
   componentWillReceiveProps(nextProps) {
+    console.log(detailInfos)
     const { detailInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
       this.setState({
@@ -145,9 +149,9 @@ export default class detail extends React.Component {
           </div>
         </section>
         <section className="pa-b72 ma-t13">
-          <ul className={detail.typelist.length > 2 ? "tabmenu column3" : "tabmenu column2"}>
+          <ul className={detail.priceList.length > 2 ? "tabmenu column3" : "tabmenu column2"}>
             {
-              this.renderTypesList(detail.typelist)
+              this.renderTypesList(detail.priceList)
             }
           </ul>
           <div className="content white-bg">
@@ -178,7 +182,7 @@ export default class detail extends React.Component {
             <div className="content-list content0">
               <ul>
                 {
-                  this.renderGuarantee(detail.typelist[this.state.currentIndex].planList)
+                  this.renderGuarantee(detail.priceList[this.state.currentIndex].planList)
                 }
               </ul>
             </div>
@@ -232,7 +236,8 @@ export default class detail extends React.Component {
       <div>
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={this.state.title}/>
         {
-          detailInfo.getDetailSuccess === true ? this.renderContent(detailInfo.detail) : <Loading />
+          // detailInfo.getDetailSuccess === true ? this.renderContent(detailInfo.detail) : <Loading />
+          detailInfo.getDetailSuccess === true ? this.renderContent(detailInfos) : <Loading />
         }
       </div>
     )

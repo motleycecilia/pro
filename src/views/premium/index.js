@@ -12,6 +12,7 @@ import Loading from 'components/loading'
 import Modal from 'components/modal'
 import TYpes from 'utils/Types'
 import BtnLoading from 'components/btnLoading'
+import preInfo from 'mock/pre'
 
 @connect(
   state => ({
@@ -42,11 +43,15 @@ export default class premium extends React.Component {
     showModal: false,
     premiumStatus: 0,
     serialNo: '',
-    errorContent: ''
+    errorContent: '',
+    premiumInfos: [],
+    totalPayPrem: 0,
+    tourismName: '单次',
+    tourismKey: '0'
   }
 
   componentWillMount() {
-    this.props.queryDetilInfo(10013242)
+    this.props.queryDetilInfo(10000400)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -72,7 +77,10 @@ export default class premium extends React.Component {
     if(premiumInfo.measurePremiumSuccess === true) {
       this.setState({
         premiumStatus: 1,
-        serialNo: premiumInfo.premiumResultData.serialNo
+        serialNo: premiumInfo.premiumResultData.serialNo,
+        errorContent: '',
+        premiumInfos: preInfo.result.payPremList,
+        totalPayPrem: preInfo.result.totalPayPrem
       })
     }
     if(premiumInfo.measurePremiumError === true) {
@@ -148,6 +156,13 @@ export default class premium extends React.Component {
       premiumStatus: 0
     })
   }
+  onClickChoseTourismName(name, key) {
+    this.setState({
+      tourismName: name,
+      tourismKey: key
+    })
+    console.log(this.state.tourismKey)
+  }
   onClickCountry(name) {
     let country = this.state.countrys
     country.indexOf(name)> -1 ? '' : country.push(name)
@@ -190,7 +205,7 @@ export default class premium extends React.Component {
         errMsg: '请选择结束时间'
       }
     ]
-    if(this.state.countrys.length === 0) {
+    if(this.state.countrys.length === 0 && this.state.isShowAddCountry) {
       checkList.unshift({
         checkfnName: "checkValLength",
         checkValue: this.state.countrys,
@@ -314,21 +329,15 @@ export default class premium extends React.Component {
       })
     )
   }
-  renderPackageType(typeList) {
+  renderPackageType(typelist) {
     return(
-      typeList.map((val, index) => {
+      typelist.map((val, index) => {
         return(
           <div className="col-line-for m-t24" key={index}>
             <div>
               {
                 val.priceName
               }
-              <p className="m-t8">
-                ￥
-                {
-                  val.minPrice
-                }起
-              </p>
             </div>
             <div className={this.state.name === val.priceName ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
               <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this, val.priceName)}></span>
@@ -337,6 +346,37 @@ export default class premium extends React.Component {
           </div>
         )
       })
+    )
+  }
+  renderTourism() {
+    return(
+      [{name: '单次', key: '0'}, {name: '多次', key: '1'}].map((val, index) => {
+        return(
+          <div className="col-line-for m-t24" key={index}>
+            <div>
+              {
+                val.name
+              }
+              <p className="m-t8">
+              </p>
+            </div>
+            <div className={this.state.tourismName === val.name ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseTourismName.bind(this, val.name, val.key)}></span>
+              <span className="checbox-chose"></span>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
+  renderTourismContent() {
+    return(
+      <div className="pre-center-package">
+        <p>旅游类型</p>
+        {
+          this.renderTourism()
+        }
+      </div>
     )
   }
   renderBePopleDate() {
@@ -350,7 +390,9 @@ export default class premium extends React.Component {
               </span>
               <input type="date" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}/>
             </div>
-            <span>￥0/人</span>
+            <span>￥
+              {this.state.premiumInfos[index] ? this.state.premiumInfos[index].payPrem : 0}
+              /人</span>
           </div>
         )
       })
@@ -397,7 +439,7 @@ export default class premium extends React.Component {
   renderInsureBtn() {
     return(
       <div className="pre-btn">
-        <span className="pre-btn-left">保费总额：0元</span>
+        <span className="pre-btn-left">保费总额：{this.state.totalPayPrem}元</span>
         <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
           <span className="pre-btn-rbtn">
             立即投保
@@ -428,11 +470,14 @@ export default class premium extends React.Component {
             <div className="clear"></div>
           </div>
           <div className="pre-center-package">
-            <p>旅游类型</p>
+            <p>套餐类型</p>
             {
               this.renderPackageType(detailInfo.typelist)
             }
           </div>
+          {
+            this.state.isShowAddCountry && this.renderTourismContent()
+          }
           <div className="pre-content">
             <p className="pre-date-txt">保障时间</p>
             <section className="pre-date-tr">
@@ -506,7 +551,7 @@ export default class premium extends React.Component {
           <Country
             onClickCountry={this.onClickCountry.bind(this)}
             onClickBacks={this.onClickIsAddCountry.bind(this, false)}
-          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : '加载中...'
+          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : <Loading />
         }
         {
           this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />

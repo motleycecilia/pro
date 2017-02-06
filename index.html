@@ -1,0 +1,541 @@
+<html>
+<head>
+    <title>车抵贷-金融旗舰店</title>
+	<link rel="stylesheet" href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/css/daikuan.css" />
+	<link rel="stylesheet" href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/css/swiper.min.css" />
+	<link rel="stylesheet" type="text/css" href="//css2.pingan.com/app_css/wap/v30/c3/chaoshi/footer.css">
+	<link rel="stylesheet" href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/css/common.css" />
+	<link rel="stylesheet" href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/css/chedidai.css" />
+</head>
+<body>
+   <c:if test="${from eq 'true'}">
+    <header>
+    	<div class="top">
+	        <h1 class="pa_logo"><img src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/common/images/pa_logo.png" /></h1>
+	        <h2 class="banner_title">汽车抵押贷款</h2>
+	        <p>一账通用户专享页</p>
+	        <a class="link"><img src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/common/images/know_detail.png" /></a>
+        </div>
+        <div id="jMask" class="mask"></div>
+		<div class="alert_box" style="margin-top: 180px;">
+			<span class="close_box"><img src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/images/close_btn.png" class="btn"></span>
+			<dl>
+				${productInfo.productLoanDto.applyCondition }
+			</dl>
+        </div>
+    </header>
+   </c:if>
+    <section>
+        <!-- <div class="title">车辆信息</div> -->
+        <div class="info" style="border-top: 1px solid #dadada;">
+            <div class="infoName h-lh-30">姓 名:</div>
+            <div class="infoDesc"><input type="text" class="css_input w100p" name="applicantName" id="name" maxlength="50" value="${applicantName }" /></div>
+        </div>
+        <div class="info">
+            <div class="infoName h-lh-30">车辆登记城市:</div>
+            <div class="infoDesc">
+                <div class="div_select w48p" style="position:absolute;left:30%;top:14px;width:30%;">
+                    <select class="css_select" name="province" id="province"></select>
+                </div>
+                <div class="div_select w48p" style="position:absolute;left:65%;top:14px;width:30%;">
+                    <select class="css_select" name="registerCity" id="city"></select>
+                </div>
+
+            </div>
+        </div>
+        <div class="info">
+            <div class="infoName" style="padding-top: 23px;">购置价格</div>
+            <div class="infoDesc">
+                <div class="fr w50p" style="padding-top:6px;">
+                    <input type="text"  id="carPriceDiv" class="price" pattern="[0-9]*" size="5" maxlength="4" placeholder="请填写" />
+                    <span class="fr w20p" style="padding-top: 15px;">万</span>
+                </div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="infoName" style="padding-top: 23px;">上牌登记日</div>
+            <div class="infoDesc">
+                <div class="fr w50p" data-type="month">
+                    <input type="text" class="select"  id="month" placeholder="请选择" size="5" readonly="true" />
+                    <span class="fr w20p" style="padding-top: 24px;">月</span>
+                </div>
+                <div class="fr w50p" data-type="year">
+                    <input type="text" class="select" id="year" placeholder="请选择" size="5" readonly="true" />
+                    <span class="fr w20p" style="padding-top: 24px;">年</span>
+                </div>
+            </div>
+        </div>
+        <div class="info h_155">
+            <div class="infoName p-tcd" style="padding-top: 68px;">车贷情况</div>
+            <div class="infoDesc" id="pledgeDiv">
+                <div class="button b_all for on" data-type="0">全款购车（含原车贷已结清）</div>
+                <div class="button b_all for" data-type="1">原车贷未结清</div>
+								<div class="button b_all for" data-type="0">原车贷剩余期限<=3个月</div>
+            </div>
+        </div>
+        <div class="info">
+            <div class="infoName" style="padding-top: 25px;">行驶里程</div>
+            <div class="infoDesc" id="mileDiv">
+                <div class="button b_r_r" data-type="1">超过12万公里</div>
+                <div class="button b_l_r on" data-type="0">12万公里以内</div>
+            </div>
+        </div>
+        <div class="info">
+		    <div class="infoName" style="padding-top: 25px;">贷款期限</div>
+		    <div class="infoDesc" id="dkdate">
+		      <div class="button three b_r_r on" data-type="12">12个月</div>
+		      <div class="button three" data-type="24">24个月</div>
+		      <div class="button three b_l_r" data-type="36">36个月</div>
+		    </div>
+		</div>
+        <div class="info">
+		    <div class="infoName" style="padding-top: 25px;">身份证号:</div>
+		    <div class="infoDesc"><input type="text" class="css_input w100p" name="idNumber" id="id_number_must" maxlength="18" value="" placeholder="请如实填写身份证号用于贷款审核"></div>
+		</div>
+		<div class="info">
+		    <div class="infoName" style="
+		padding-top: 25px;
+		">手机号码:</div>
+		    <div class="infoDesc"><input type="text" class="css_input w100p" name="applicantPhone" id="mobile" value="18953261667"></div>
+		</div>
+		<div style="" class="info tuxingyanzhengma bdb">
+		    <div class="infoName" style="
+		padding-top: 25px;
+		">验证码:</div>
+		    <div class="infoDesc">
+		        <input type="text" maxlength="4" class="css_input w47p" name="imgCode" id="imgCode" value="" placeholder="输入验证码">
+		        <img src="" class="imgCode" style="margin: 15px; display: inline; position: absolute;">
+		    </div>
+		</div>
+        <div class="info tip bdb" style="display: none;">
+            <div class="infoName"></div>
+            <div class="check_info_message fz_smaller c_959595" style="padding-top:20px;padding-left: 30%;">*请先输入图形验证码后再尝试获取</div>
+        </div>
+        <div class="info duanxinyanzhengma bdb" <c:if test="${sessionScope.userPrincipal.toaClientNo != null && sessionScope.userPrincipal.toaClientNo !='' }">style="display:none"</c:if>>
+            <div class="infoName">短信验证码:</div>
+            <div class="infoDesc" style="position:relative;">
+				<input type="text" maxlength="7" class="css_input w48p" style="position:absolute;left:0;top:-3px;" name="activeNo" id="activeNo" value="" placeholder="输入短信验证码">
+				<button id="getVerifyCode" class="css_button w48p" style="position:absolute;left:50%;top:8px;" vcodeurl="${oneAppVcodeUrl}" otpurl="${oneAppSendOtpUrl}">获 取</button>
+				<button id="countDown" class="css_button w48p" style="position:absolute;left:50%;top:8px;">120秒</button>
+			</div>
+         </div>
+
+
+        <!-- <div class="errorTip"  id="errorTip" style="display:none"></div> -->
+        <p id="error_msg" class="c_ff6600 warning fz_smaller" style="margin-top:10px;">${errMsg }</p>
+
+        <div class="submit" >
+            <div id="submit">立即申请</div>
+        </div>
+    </section>
+    <form action="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/chedidai.do?pid=${productInfo.id}"  id="sub_form">
+    	<input  id="carPrice" name="carPrice" type="hidden"/>
+    	<input  id="dateRegister"  name="dateRegister"  type="hidden"/>
+    	<input  id="pledgeStatus"  name="pledgeStatus"  type="hidden"/>
+    	<input  id="carMileage"  name="carMileage"  type="hidden"/>
+    	<input name="toa"	id="toa"  type="hidden" value="toa"></input>
+    	<input name="applicantPhone" type="hidden" value="${applicantPhone }"></input>
+    	<input name="applicantPhoneNew"	id="applicantPhone"  type="hidden" value="${applicantPhone }"></input>
+    	<input name="applicantName"	id="applicantName"  type="hidden" value="${applicantName }"></input>
+    	<input type="hidden" name="registerCityName" id="registerCityName" value="${registerCityName }"/>
+    	<input type="hidden" name="registerCity" id="registerCity" value="${cityId}"/>
+    	<input type="hidden" id="activeId" name="activeId" value="" />
+		<input type="hidden" id="appId" name="appId" value="10302" />
+		<input type="hidden" id="activeNoSub" name="activeNo" value="" />
+		<input type="hidden" name="idNumber" id="idNumber" value="" />
+		<input type="hidden" name="loanPeriod" id="loanPeriod" value="" />
+    </form>
+    <aside class="year vh">
+        <div class="swiper-container">
+            <ul class="swiper-wrapper"></ul>
+        </div>
+        <div class="now"></div>
+    </aside>
+    <aside class="month vh">
+        <div class="swiper-container">
+            <ul class="swiper-wrapper"></ul>
+        </div>
+        <div class="now"></div>
+    </aside>
+    <section class="pop dn"></section>
+</body>
+<script type="text/javascript" src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/js/zepto.min.js"></script>
+<script type="text/javascript" src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/js/swiper.min.js"></script>
+<script type="text/javascript" src="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/pages/daikuan/toa/js/common.js"></script>
+<script type="text/javascript">
+
+	$(function(){
+		$('header .link').bind('click', function(){
+			openBox($('.alert_box'));
+		});
+		$('dl .toa-hide').hide();
+	});
+
+
+	/*----------------------------城市选择---------------------------------
+    ----------------------------------------------------------------------*/
+
+	var dataProvince = addressData;
+	var $Province = $('#province'),
+		$City = $('#city');
+
+    //选择省市
+    $Province.on('change', function() {
+    	var htmlCity = '<option code="0" value="">请选择市</option>';
+        var index = $(this).get(0).selectedIndex;
+        var sProv = $(this).children('option').eq(index).text(),
+  		    sProvCode = $(this).children('option').eq(index).attr('code');
+  	  	for (var i = 0; i < dataProvince.length; i++) {
+          if (sProv == dataProvince[i].region_name) {
+              $City.empty();
+              for (var j = 0; j < dataProvince[i].citys.length; j++) {
+                  htmlCity += '<option code="' + dataProvince[i].citys[j].region_id + '" value="' + dataProvince[i].citys[j].region_id + '">' + dataProvince[i].citys[j].region_name + '</option>';
+              }
+              $City.append(htmlCity);
+           }
+      	}
+    });
+    $City.on('change', function() {
+      var index = $(this).get(0).selectedIndex;
+      var sCity = $(this).children('option').eq(index).text();
+      var sCityCode = $(this).children('option').eq(index).attr('code');
+      $('#registerCityName').val(sCity);
+      $('#registerCity').val(sCityCode);
+    });
+
+    //初始化省市
+    var defCityName = $('#registerCityName').val();
+    var defProvinceName = getDefProvinceName(defCityName);
+    function getDefProvinceName(defCityName){
+        for (var i = 0; i < dataProvince.length; i++) {
+       		for (j = 0; j < dataProvince[i].citys.length; j++) {
+       			if(dataProvince[i].citys[j].region_name == defCityName) return dataProvince[i].region_name;
+       		}
+        }
+    }
+    var htmlProvince = '<option code="0" value="">请选择省</option>',
+    	htmlCity = '<option code="0" value="">请选择市</option>';
+    for (var i = 0; i < dataProvince.length; i++) {
+    	htmlProvince += '<option code="' + dataProvince[i].region_id + '" value="' + dataProvince[i].region_name + '">' + dataProvince[i].region_name + '</option>';
+    	if(dataProvince[i].region_name == defProvinceName){
+    		for (j = 0; j < dataProvince[i].citys.length; j++) {
+    			htmlCity += '<option code="' + dataProvince[i].citys[j].region_id + '" value="' + dataProvince[i].citys[j].region_id + '">' + dataProvince[i].citys[j].region_name + '</option>';
+    		}
+    	}
+    }
+    $Province.html(htmlProvince);
+    $City.html(htmlCity);
+	$.each($($Province.html()), function(i){	// 初始省份
+		if($(this).text() == defProvinceName){
+			$('#province').get(0).selectedIndex = i;
+		}
+	});
+	$.each($($City.html()), function(i){	// 初始城市
+		if($(this).text() == defCityName){
+			$('#city').get(0).selectedIndex = i;
+		}
+	});
+
+	/*------------------------------短信验证码-------------------------------
+	----------------------------------------------------------------------*/
+
+	var isTrigger = false;
+	$(".imgCode").click(function(){
+	   $.ajax({
+		url: $("#getVerifyCode").attr("vcodeurl"),
+		type: "POST",
+		cache: false,
+		async: true,//异步
+		timeout: 30000,
+		data: {
+			"callBack": "jsonpcallback",
+			"subsys": "otp",
+			"userId": $("#mobile").val(),
+			"appId": "10302"
+		},
+		dataType: "jsonp",
+		jsonpCallback: "jsonpcallback",
+		success: function(data) {
+			if ("0" == data.type) {
+				if (!isTrigger) {
+					document.getElementById("error_msg").style.display = "none";
+					document.getElementById("error_msg").innerHTML = "";
+				}
+				$(".imgCode").attr("src", data.img);
+				resultId = data.id;
+			} else {
+				document.getElementById("error_msg").style.display = "block";
+				document.getElementById("error_msg").innerHTML="获取图形验证码失败";
+				stopInterval(timeId);
+			}
+			isTrigger = false;
+		},
+		error: function(data) {
+			document.getElementById("error_msg").style.display = "block";
+			document.getElementById("error_msg").innerHTML="获取图形验证码失败";
+			stopInterval(timeId);
+			isTrigger = false;
+		}
+	});
+	});
+
+	function stopInterval(timeId) {
+		clearInterval(timeId);
+		$("#countDown").html("120秒");
+		$("#countDown").hide();
+		$("#getVerifyCode").show();
+	}
+
+	function getVerifyCode(resultId, isCheckImg) {
+		var checkmobile = CheckMobile.checkmobile($('#mobile').val()),
+			data;
+
+		if(typeof checkmobile == 'string'){
+			document.getElementById("error_msg").style.display = "block";
+			document.getElementById("error_msg").innerHTML = checkmobile;
+			stopInterval(timeId);
+			return;
+		}
+
+		if (isCheckImg) {
+			var checkimgcode = CheckImgCode.checkimgcode($('#imgCode').val());
+			if(typeof checkimgcode == 'string'){
+				document.getElementById("error_msg").style.display = "block";
+				document.getElementById("error_msg").innerHTML = checkimgcode;
+				stopInterval(timeId);
+				return;
+			}
+		}
+
+	   	$.ajax({
+			url: $("#getVerifyCode").attr("otpurl"),
+			type: "POST",
+			cache: false,
+			async: true,//异步
+			timeout: 30000,
+			data: {
+				"callBack": "jsonpcallback",
+				"mobileNo": $("#mobile").val(),
+				"validCodeId": resultId,
+				"validCode": $("#imgCode").val(),
+				"appId": "10302",
+				"otpType": "00"
+			},
+			dataType: "jsonp",
+			jsonpCallback: "jsonpcallback",
+			success: function(data) {
+				if ("success" == data.status) {
+					$("#activeId").val(data.data.activeId);
+					document.getElementById("error_msg").style.display = "none";
+					document.getElementById("error_msg").innerHTML = "";
+				} else if ("fail" == data.status) {
+					document.getElementById("error_msg").style.display = "block";
+					document.getElementById("error_msg").innerHTML="发送手机短信验证码失败，"+data.data.errorMessage;
+					stopInterval(timeId);
+				}
+			},
+			error: function(data) {
+				document.getElementById("error_msg").style.display = "block";
+				document.getElementById("error_msg").innerHTML="发送手机短信验证码失败";
+				stopInterval(timeId);
+			}
+		});
+	}
+
+	var resultId = "",
+		val,
+	t,
+	timeId;
+
+	$("#getVerifyCode").bind("click", function() {
+		val = $("#countDown").html(),
+		t = val.substring(0, val.length - 1),
+		timeId = 0;
+
+		document.getElementById("error_msg").style.display = "none";
+		document.getElementById("error_msg").innerHTML = "";
+
+		var checkmobile = CheckMobile.checkmobile($('#mobile').val());
+
+		if(typeof checkmobile == 'string'){
+			document.getElementById("error_msg").style.display = "block";
+			document.getElementById("error_msg").innerHTML = checkmobile;
+			stopInterval(timeId);
+			return;
+		}
+
+		timeId = setInterval(function() {
+			if (t == 1) {
+				clearInterval(timeId);
+				$("#countDown").hide();
+				$("#countDown").html("120秒");
+				$("#getVerifyCode").show();
+				resultId = "";
+			} else {
+				$("#countDown").html(--t + "秒");
+			}
+		}, 1000);
+
+		$("#getVerifyCode").hide();
+		$("#countDown").show();
+
+		if (resultId) {
+			getVerifyCode(resultId, true);
+		} else {
+			$.ajax({
+				url: $("#getVerifyCode").attr("vcodeurl"),
+				type: "POST",
+				cache: false,
+				async: true,//异步
+				timeout: 30000,
+				data: {
+					"callBack": "jsonpcallback",
+					"subsys": "otp",
+					"userId": $("#mobile").val(),
+					"appId": "10302"
+				},
+				dataType: "jsonp",
+				jsonpCallback: "jsonpcallback",
+				success: function(data) {
+					resultId = data.id;
+					if ("0" == data.type) {
+						stopInterval(timeId);
+						$("#imgCode").val("");
+						$(".tuxingyanzhengma").show();
+						$(".tuxingyanzhengma").next().show();
+						$(".imgCode").attr("src", data.img);
+					} else if ("1" == data.type) {
+						getVerifyCode(resultId, false);
+					} else {
+						document.getElementById("error_msg").style.display = "block";
+						document.getElementById("error_msg").innerHTML="获取图形验证码失败";
+						stopInterval(timeId);
+					}
+				},
+				error: function(data) {
+					document.getElementById("error_msg").style.display = "block";
+					document.getElementById("error_msg").innerHTML="获取图形验证码失败";
+					stopInterval(timeId);
+				}
+			});
+		}
+	});
+
+	$("#countDown, #getVerifyCode").bind("click", function() {
+		return false;
+	});
+
+	$("#submit").bind("click",function(){
+		$("#applicantName").val($("#name").val());
+		$("#applicantPhone").val($("#mobile").val());
+		document.getElementById('error_msg').style.display="none";
+		var year = $("#year").val();
+		var month = $("#month").val();
+		if($("#carPriceDiv").val() == null || $("#carPriceDiv").val()==''){
+			document.getElementById("error_msg").style.display="block";
+			$("#error_msg").html("您尚未填写车辆价格，请检查填写。");
+			return;
+		}else if(year == null || year == ""){
+			document.getElementById("error_msg").style.display="block";
+			$("#error_msg").html("上牌登记日年份未填，请检查填写。");
+			return;
+		}else if(month == null || month == ""){
+			document.getElementById("error_msg").style.display="block";
+			$("#error_msg").html("上牌登记日月份未填，请检查填写。");
+			return;
+		}else if($('#id_number_must').val() == null || $('#id_number_must').val() == ''){
+			document.getElementById("error_msg").style.display="block";
+			$("#error_msg").html("身份证号码未填，请检查填写。");
+		}
+
+		var dateRegister = new Date(year,month-1,"01");
+		var date2  = new Date();
+
+		$("#carPrice").val($("#carPriceDiv").val());
+		$("#dateRegister").val(dateRegister);
+		$("#pledgeStatus").val($("#pledgeDiv").find(".on").attr("data-type"));
+		$("#carMileage").val($("#mileDiv").find(".on").attr("data-type"));
+		$("#loanPeriod").val($("#dkdate").find(".on").attr("data-type"));
+		$("#idNumber").val($("#id_number_must").val());
+
+		document.getElementById("error_msg").style.display = "none";
+		document.getElementById("error_msg").innerHTML = "";
+		var flagArr = [];
+		var temp = null;
+
+		if (temp = document.getElementById('name')) {//姓名
+			var name = temp.value;
+			flagArr.push(CheckName.checkname(name));
+		}
+
+		if(temp=document.getElementById('province')){     //省份
+            var province=temp.value;
+            flagArr.push(CheckProvince.checkprovince(province));
+        }
+        if(temp=document.getElementById('city')){        //城市
+            var city=temp.value;
+            flagArr.push(CheckCity.checkcity(city));
+        }
+
+		if(temp = document.getElementById('monthlyIncome')){//月收入
+			var monthlyIncome = temp.value;
+			flagArr.push(CheckIncome.checkincome(monthlyIncome));
+		}
+
+		if(temp = document.getElementById('activeNo')){//短信验证码
+			var activeNo = temp.value;
+			flagArr.push(CheckVerifyCode.checkverifycode(activeNo));
+			$("#activeNoSub").val(activeNo);
+		}
+
+		for ( var i = 0; i < flagArr.length; i++) {
+			if (typeof flagArr[i] == 'string') {
+				document.getElementById('error_msg').style.display="block";
+				document.getElementById('error_msg').innerHTML = flagArr[i];
+				return false;
+			}
+		}
+
+		var form = document.getElementById("sub_form");
+		//form.submit();
+		try{
+		  addGatherCollection(form);
+		}catch(e){
+
+		}
+
+		$.ajax({
+            cache: false,
+            type: "POST",
+            url:"http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/chedidai.do?pid=${productInfo.id}<%=urlParamLast %>",
+            data:$('#sub_form').serialize(),// 你的formid
+            async: true,//异步
+            dataType: "json",
+            error: function(request,a,b){
+			//后台处理失败
+		    //alert($('#sub_form').serialize());
+					window.location.href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/fankui.shtml?result=fail&name=${productInfo.productName }&id=${productInfo.id}<%=urlParamLast%>";
+		       },
+		       success: function(data){
+					if(data.resultCode == "0"){
+						//后台处理成功
+						if(data.resultData!=null && data.resultData!=""){
+							window.location.href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/fankui.shtml?result=perfect&id=${productInfo.id}&name=${productInfo.productName }&toa=toa&clientNo="+data.resultDataMap.wt_seg_1+"&newRegister="+data.resultDataMap.wt_register_name+"&orderId="+data.resultDataMap.wt_tx_i+"<%=urlParamLast%>";
+						}else{
+							window.location.href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/fankui.shtml?result=success&id=${productInfo.id}&name=${productInfo.productName }&toa=toa&clientNo="+data.resultDataMap.wt_seg_1+"&newRegister="+data.resultDataMap.wt_register_name+"&orderId="+data.resultDataMap.wt_tx_i+"<%=urlParamLast%>";
+						}
+					}else if(data.resultCode == "2"){
+						//数据验证不成功
+						document.getElementById("error_msg").style.display = "block";
+						document.getElementById("error_msg").innerHTML = data.resultMsg;
+					}else if(data.resultCode == "1"){
+						//后台处理失败
+						window.location.href="http://pa18-wapmall-dmzstg1.pingan.com.cn:5380/chaoshi/daikuan/yuyue/fankui.shtml?result=fail&id=${productInfo.id}&name=${productInfo.productName }<%=urlParamLast%>";
+						//window.navigate("fail.jsp");
+					}
+            }
+        });
+	});
+</script>
+<script type="text/javascript" src="http://jks.pa18.com/pa18/security/js/gatherCollection_jso.js"></script>
+</html>

@@ -5,6 +5,7 @@ import { queryDetilInfo} from 'actions'
 import Loading from 'components/loading'
 import Header from 'components/Header'
 import { App, YztApp } from 'utils/native_h5'
+import detailInfos from 'mock/detail'
 
 @connect(
   state => ({
@@ -16,14 +17,13 @@ import { App, YztApp } from 'utils/native_h5'
 )
 
 export default class guarantee extends React.Component {
-
   static contextTypes = {
       router: React.PropTypes.object.isRequired
   }
 
   componentWillMount() {
     // this.props.queryDetilInfo(this.props.location.query.productId)//
-    this.props.queryDetilInfo(10018844)
+    this.props.queryDetilInfo(10028680, 10007603)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -122,7 +122,10 @@ export default class guarantee extends React.Component {
       <div className="bg-fff">
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)}
           title={titles}/>
-        { !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfo.detail, this.props.location.query.category) }
+        {
+           !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfo.detail, this.props.location.query.category)
+          // !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfos, this.props.location.query.category)
+         }
       </div>
     )
   }

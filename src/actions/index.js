@@ -5,15 +5,23 @@ import incinerator from 'hooks/incinerator'
 /*
 查询详情页
 */
+const isGp = false
 export function queryDetilInfo(productId, productCode){
   return (dispatch, getState) => {
     dispatch(getDetailInfoBegin())
     return api.queryDetilInfo(productId, productCode)
     .then(res => {
-      incinerator('getDetail', res.responseCode, {
-        success: dispatch.bind(this, getDetailSuccess(res.responseData)),
-        fail: dispatch.bind(this, getDetailInfoError(res.responseCode, res.responseMessage))
-      })
+      if(isGp === true) {
+        incinerator('getDetail', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, getDetailSuccess(res.result)),
+          fail: dispatch.bind(this, getDetailInfoError('1000', res.memo))
+        })
+      }else {
+        incinerator('getDetail', res.responseCode, {
+          success: dispatch.bind(this, getDetailSuccess(res.responseData)),
+          fail: dispatch.bind(this, getDetailInfoError(res.responseCode, res.responseMessage))
+        })
+      }
     })
     .fail(() => {
       dispatch(getDetailInfoError('90012','系统异常'))
@@ -42,18 +50,23 @@ function getDetailInfoError(errorCode, errorMsg) {
   }
 }
 
-/*
-查询详情页
-*/
+/*保费测算*/
 export function premiumMeasure(params){
   return (dispatch, getState) => {
     dispatch(premiumMeasureBegin())
     return api.premiumMeasure(params)
     .then(res => {
-      incinerator('premiumMeasure', res.responseCode, {
-        success: dispatch.bind(this, premiumMeasureSuccess(res.responseData)),
-        fail: dispatch.bind(this, premiumMeasureError(res.responseCode, res.responseMessage))
-      })
+      if(isGp === true) {
+        incinerator('premiumMeasure', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, premiumMeasureSuccess(res.result)),
+          fail: dispatch.bind(this, premiumMeasureError('1000', res.memo))
+        })
+      }else {
+        incinerator('premiumMeasure', res.responseCode, {
+          success: dispatch.bind(this, premiumMeasureSuccess(res.responseData)),
+          fail: dispatch.bind(this, premiumMeasureError(res.responseCode, res.responseMessage))
+        })
+      }
     })
     .fail(() => {
       dispatch(premiumMeasureError('90012','系统异常'))
@@ -135,11 +148,19 @@ export function getPolicyUserInfo(){
     dispatch(getPolicyUserInfoBegin())
     return api.getPolicyUserInfo()
     .then(res => {
-      incinerator('getPolicyUserInfo', res.responseCode, {
-        success: dispatch.bind(this, getPolicyUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, getPolicyUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, getPolicyUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('getPolicyUserInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, getPolicyUserInfoSuccess(res.result[0])),
+          gpUnlogin: dispatch.bind(this, getPolicyUserInfoError('90002')),
+          fail: dispatch.bind(this, getPolicyUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('getPolicyUserInfo', res.responseCode, {
+          success: dispatch.bind(this, getPolicyUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, getPolicyUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, getPolicyUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(getPolicyUserInfoError('系统异常'))
@@ -172,11 +193,19 @@ export function updatePolicyUserInfo(params){
     dispatch(updatePolicyUserInfoBegin())
     return api.updatePolicyUserInfo(params)
     .then(res => {
-      incinerator('getPolicyUserInfo', res.responseCode, {
-        success: dispatch.bind(this, updatePolicyUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, updatePolicyUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, updatePolicyUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('getPolicyUserInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, updatePolicyUserInfoSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, updatePolicyUserInfoError('90002')),
+          fail: dispatch.bind(this, updatePolicyUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('getPolicyUserInfo', res.responseCode, {
+          success: dispatch.bind(this, updatePolicyUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, updatePolicyUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, updatePolicyUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(updatePolicyUserInfoError('系统异常'))
@@ -213,11 +242,19 @@ export function getInsuredUserInfo(id){
     dispatch(getInsuredUserInfoBegin())
     return api.getInsuredUserInfo(id)
     .then(res => {
-      incinerator('insuredInfo', res.responseCode, {
-        success: dispatch.bind(this, getInsuredUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, getInsuredUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, getInsuredUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('insuredInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, getInsuredUserInfoSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, getInsuredUserInfoError('90002')),
+          fail: dispatch.bind(this, getInsuredUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('insuredInfo', res.responseCode, {
+          success: dispatch.bind(this, getInsuredUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, getInsuredUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, getInsuredUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(getInsuredUserInfoError('系统异常'))
@@ -250,11 +287,19 @@ export function updateInsuredUserInfo(params){
     dispatch(updateInsuredUserInfoBegin())
     return api.updateInsuredUserInfo(params)
     .then(res => {
-      incinerator('insuredInfo', res.responseCode, {
-        success: dispatch.bind(this, updateInsuredUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, updateInsuredUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, updateInsuredUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('insuredInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, updateInsuredUserInfoSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, updateInsuredUserInfoError('90002')),
+          fail: dispatch.bind(this, updateInsuredUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('insuredInfo', res.responseCode, {
+          success: dispatch.bind(this, updateInsuredUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, updateInsuredUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, updateInsuredUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(updateInsuredUserInfoError('系统异常'))
@@ -285,11 +330,19 @@ export function addInsuredUserInfo(params){
     dispatch(addInsuredUserInfoBegin())
     return api.addInsuredUserInfo(params)
     .then(res => {
-      incinerator('insuredInfo', res.responseCode, {
-        success: dispatch.bind(this, addInsuredUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, addInsuredUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, addInsuredUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('insuredInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, addInsuredUserInfoSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, addInsuredUserInfoError('90002')),
+          fail: dispatch.bind(this, addInsuredUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('insuredInfo', res.responseCode, {
+          success: dispatch.bind(this, addInsuredUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, addInsuredUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, addInsuredUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(addInsuredUserInfoError('系统异常'))
@@ -320,11 +373,19 @@ export function deleteInsuredUserInfo(params){
     dispatch(deleteInsuredUserInfoBegin())
     return api.deleteInsuredUserInfo(params)
     .then(res => {
-      incinerator('insuredInfo', res.responseCode, {
-        success: dispatch.bind(this, deleteInsuredUserInfoSuccess(res.responseData)),
-        fail: dispatch.bind(this, deleteInsuredUserInfoError(res.responseMessage)),
-        unlogin: dispatch.bind(this, deleteInsuredUserInfoError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('insuredInfo', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, deleteInsuredUserInfoSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, deleteInsuredUserInfoError('90002')),
+          fail: dispatch.bind(this, deleteInsuredUserInfoError(res.memo))
+        })
+      }else {
+        incinerator('insuredInfo', res.responseCode, {
+          success: dispatch.bind(this, deleteInsuredUserInfoSuccess(res.responseData)),
+          fail: dispatch.bind(this, deleteInsuredUserInfoError(res.responseMessage)),
+          unlogin: dispatch.bind(this, deleteInsuredUserInfoError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(deleteInsuredUserInfoError('系统异常'))
@@ -360,11 +421,19 @@ export function preSubmit(params){
     dispatch(getPreSubmitBegin())
     return api.preSubmit(params)
     .then(res => {
-      incinerator('preSubmit', res.responseCode, {
-        success: dispatch.bind(this, getPreSubmitSuccess(res.responseData)),
-        fail: dispatch.bind(this, getPreSubmitError(res.responseMessage)),
-        unlogin: dispatch.bind(this, getPreSubmitError('90002'))
-      })
+      if(isGp === true) {
+        incinerator('preSubmit', res.resultStatus, {
+          gpSuccess: dispatch.bind(this, getPreSubmitSuccess(res.result)),
+          gpUnlogin: dispatch.bind(this, getPreSubmitError('90002')),
+          fail: dispatch.bind(this, getPreSubmitError(res.memo))
+        })
+      }else {
+        incinerator('preSubmit', res.responseCode, {
+          success: dispatch.bind(this, getPreSubmitSuccess(res.responseData)),
+          fail: dispatch.bind(this, getPreSubmitError(res.responseMessage)),
+          unlogin: dispatch.bind(this, getPreSubmitError('90002'))
+        })
+      }
     })
     .fail(() => {
       dispatch(getPreSubmitError('系统异常'))

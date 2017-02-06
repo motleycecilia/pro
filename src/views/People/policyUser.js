@@ -30,7 +30,8 @@ export default class policyUser extends React.Component {
     errorPhone: '',
     errorCardNo: '',
     errorEmail: '',
-    errorInfo: ''
+    errorInfo: '',
+    isbindCard: ''
   }
 
   static contextTypes = {
@@ -73,6 +74,7 @@ export default class policyUser extends React.Component {
     if(policyUser.getResultData) {
       this.setState({
         insurerId: policyUser.getResultData.id,
+        isbindCard: policyUser.getResultData.isBindCard,
         name: policyUser.getResultData.insurerName,
         cardNo: policyUser.getResultData.insurerIdNo,
         phoneNo: policyUser.getResultData.insurerMobile,
@@ -251,6 +253,17 @@ export default class policyUser extends React.Component {
     if(!errorContents) {
       const birthDay = util.splitbirth(this.state.cardNo),
       sex = util.fillBirAndSex(this.state.cardNo)
+      const params = {
+        insurerId: this.state.insurerId,
+        insurerName: this.state.name,
+        insurerIdNo: this.state.cardNo,
+        insurerBirthday: birthDay,
+        insurerMobile: this.state.phoneNo,
+        insurerEmail: this.state.email,
+        insurerSex: sex === 'M' ? 'M' : 'F'
+      }
+      console.log(params)
+      return
       this.props.updatePolicyUserInfo(
         {
           insurerId: this.state.insurerId,
@@ -268,54 +281,115 @@ export default class policyUser extends React.Component {
       errorInfo: !!errorContents ? errorContents : ''
     })
   }
+  renderSureEdit(policyUser) {
+    return (
+      <div>
+        <div className="input-outer m-t24">
+          <div className="select-tit">姓名</div>
+          <input
+            type="text"
+            className={!!this.state.errorName ?
+              'input-style input-style-error' : 'input-style'}
+            placeholder="姓名"
+            defaultValue={policyUser.insurerName || ""}
+            ref="name"
+            maxLength="20"
+            onFocus={::this.onFocusName}
+            onChange={::this.onChangeName}
+            onBlur={::this.onBlurName}
+          />
+          {
+            !!this.state.errorName &&
+            <div className="remind-text">{this.state.errorName}</div>
+          }
+          {
+            !!this.state.errorName && <span className="remind-icon-error"></span>
+          }
+        </div>
+        <div className="input-outer m-t24">
+          <div className="select-tit">证件号码</div>
+          <input
+            type="text"
+            className={!!this.state.errorCardNo ?
+              'input-style input-style-error' : 'input-style'}
+            placeholder="证件号码"
+            maxLength="18"
+            defaultValue={policyUser.insurerIdNo || ""}
+            ref="cardNo"
+            onFocus={::this.onFocusCardNo}
+            onChange={::this.onChangeCardNo}
+            onBlur={::this.onBlurCardNo}
+          />
+          {
+            !!this.state.errorCardNo &&
+            <div className="remind-text">{this.state.errorCardNo}</div>
+          }
+          {
+            !!this.state.errorCardNo && <span className="remind-icon-error"></span>
+          }
+        </div>
+      </div>
+    )
+  }
+  renderNoEdit(policyUser) {
+    return (
+      <div>
+        <div className="input-outer m-t24">
+          <div className="select-tit">姓名</div>
+          <input
+            type="text"
+            className={!!this.state.errorName ?
+              'input-style input-style-error' : 'input-style'}
+            placeholder="姓名"
+            defaultValue={policyUser.insurerName || ""}
+            ref="name"
+            maxLength="20"
+            readOnly
+            onFocus={::this.onFocusName}
+            onChange={::this.onChangeName}
+            onBlur={::this.onBlurName}
+          />
+          {
+            !!this.state.errorName &&
+            <div className="remind-text">{this.state.errorName}</div>
+          }
+          {
+            !!this.state.errorName && <span className="remind-icon-error"></span>
+          }
+        </div>
+        <div className="input-outer m-t24">
+          <div className="select-tit">证件号码</div>
+          <input
+            type="text"
+            className={!!this.state.errorCardNo ?
+              'input-style input-style-error' : 'input-style'}
+            placeholder="证件号码"
+            maxLength="18"
+            readOnly
+            defaultValue={policyUser.insurerIdNo || ""}
+            ref="cardNo"
+            onFocus={::this.onFocusCardNo}
+            onChange={::this.onChangeCardNo}
+            onBlur={::this.onBlurCardNo}
+          />
+          {
+            !!this.state.errorCardNo &&
+            <div className="remind-text">{this.state.errorCardNo}</div>
+          }
+          {
+            !!this.state.errorCardNo && <span className="remind-icon-error"></span>
+          }
+        </div>
+      </div>
+    )
+  }
   renderContent(policyUser) {
     return(
       <div>
         <section className="bePeople-content">
-          <div className="input-outer m-t24">
-            <div className="select-tit">姓名</div>
-            <input
-              type="text"
-              className={!!this.state.errorName ?
-                'input-style input-style-error' : 'input-style'}
-              placeholder="姓名"
-              defaultValue={policyUser.insurerName || ""}
-              ref="name"
-              maxLength="20"
-              onFocus={::this.onFocusName}
-              onChange={::this.onChangeName}
-              onBlur={::this.onBlurName}
-            />
-            {
-              !!this.state.errorName &&
-              <div className="remind-text">{this.state.errorName}</div>
-            }
-            {
-              !!this.state.errorName && <span className="remind-icon-error"></span>
-            }
-          </div>
-          <div className="input-outer m-t24">
-            <div className="select-tit">证件号码</div>
-            <input
-              type="text"
-              className={!!this.state.errorCardNo ?
-                'input-style input-style-error' : 'input-style'}
-              placeholder="证件号码"
-              maxLength="18"
-              defaultValue={policyUser.insurerIdNo || ""}
-              ref="cardNo"
-              onFocus={::this.onFocusCardNo}
-              onChange={::this.onChangeCardNo}
-              onBlur={::this.onBlurCardNo}
-            />
-            {
-              !!this.state.errorCardNo &&
-              <div className="remind-text">{this.state.errorCardNo}</div>
-            }
-            {
-              !!this.state.errorCardNo && <span className="remind-icon-error"></span>
-            }
-          </div>
+          {
+            this.state.isbindCard === "0" ? this.renderSureEdit(policyUser) : this.renderNoEdit(policyUser)
+          }
           <div className="input-outer m-t24">
             <div className="select-tit">手机号</div>
             <input

@@ -6,7 +6,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var TransferWebpackPlugin = require('transfer-webpack-plugin');
 var assetsPath = process.env.DEV_ENV === 'production'
 	? '//m.pingan.com/chaoshi/pages/baoxian/chanxian/'
-	: '//pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/pages/baoxian/chanxian/';
+	: '//i0stg.yztcdn.com/app_js/h5/finance/ylx3/';
 var config = {
 	cache: true,
 	entry: {

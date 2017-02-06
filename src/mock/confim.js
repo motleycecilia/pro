@@ -49,3 +49,5 @@ const confim = {
         }
     }
 }
+
+export default confim
