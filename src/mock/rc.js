@@ -1,3 +1,30 @@
+{
+  "from": "wap-chaoshi",
+  "userChannel": "0",
+  "buyPlatform": "1",
+  "serialNo": "5d34061f-4060-49f1-baf7-ef0d521f5d5c",
+  "orderType": "0",
+  "productId": "10028680",
+  "productCode": "10007603",
+  "orderSpliteFlag": "1",
+  "productInsuranceCode": "P1130B48",
+  "skuid": "10033720",
+  "insurerInfo": {
+    "insurerNo": 1084
+  },
+  "insuranceInfoList": [1],
+  "invoceInfo": {
+    "invoceName": "威风",
+    "invoceHeading": "",
+    "invoceZipCode": "",
+    "invoceMobileNo": "",
+    "invoceAddress": ""
+  },
+  "linkManInfo": {
+    "linkManName": "威风",
+    "linkManMobileNo": "13351222012"
+  }
+}
 //投保入参
 {
     "from": "wap-chaoshi",
@@ -35,6 +62,7 @@
                     "email": "123@123.com",
                     "personType": "2",
                     "type": "1",
+                    relation: '3',
                     "planInfoList": [
                         {
                             "benLevel": "00",
@@ -73,6 +101,7 @@
                     "email": "123@123.com",
                     "personType": "2",
                     "type": "1",
+                    relation: '3',
                     "planInfoList": [
                         {
                             "benLevel": "00",

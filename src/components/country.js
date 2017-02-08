@@ -9,6 +9,7 @@ import countrys from 'mock/countrys'
 
 export default class country extends React.Component {
   static propTypes = {
+    productId: PropTypes.string.isRequired,
     onClickCountry: PropTypes.func.isRequired
   }
 
@@ -16,8 +17,9 @@ export default class country extends React.Component {
     this.props.onClickCountry(name)
   }
   renderCountry() {
+    const productId = this.props.productId
     return(
-      countrys.map((val, index) => {
+      countrys[productId].map((val, index) => {
         return(
           <div className="country-name" key={index} onTouchTap={this.onClickCountry.bind(this,val.name)}>
             {

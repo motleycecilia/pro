@@ -262,19 +262,7 @@ export default class policyUser extends React.Component {
         insurerEmail: this.state.email,
         insurerSex: sex === 'M' ? 'M' : 'F'
       }
-      console.log(params)
-      return
-      this.props.updatePolicyUserInfo(
-        {
-          insurerId: this.state.insurerId,
-          insurerName: this.state.name,
-          insurerIdNo: this.state.cardNo,
-          insurerBirthday: birthDay,
-          insurerMobile: this.state.phoneNo,
-          insurerEmail: this.state.email,
-          insurerSex: sex === 'M' ? 'M' : 'F'
-        }
-      )
+      this.props.updatePolicyUserInfo(params)
       return
     }
     this.setState({

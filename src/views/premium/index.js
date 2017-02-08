@@ -13,6 +13,7 @@ import Modal from 'components/modal'
 import TYpes from 'utils/Types'
 import BtnLoading from 'components/btnLoading'
 import preInfo from 'mock/pre'
+import detsInfo from 'mock/dets'
 
 @connect(
   state => ({
@@ -33,6 +34,7 @@ export default class premium extends React.Component {
     startDate: '',
     endDate: '',
     content: '',
+    productNmae: '',
     isShowCountry: false,
     isShowAddCountry: false,//是否旅游类型
     countrys: [],
@@ -51,7 +53,8 @@ export default class premium extends React.Component {
   }
 
   componentWillMount() {
-    this.props.queryDetilInfo(10000400)
+    this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(10028680, 10007603)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -62,6 +65,9 @@ export default class premium extends React.Component {
     if(detailInfo.getDetailSuccess === true) {
       let insurantUnit = detailInfo.detail.insurancePriodUnit
       this.setState({
+        productNmae: detailInfo.detail.productName,
+        skuId: detailInfo.detail.typelist[0].skuId || '10033720',
+        productInsuranceCode: detailInfo.detail.typelist[0].productInsuranceCode,
         name: detailInfo.detail.typelist[0].priceName,
         guaranteePeriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod : detailInfo.detail.insurancePriod,//保险期限
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
@@ -77,10 +83,10 @@ export default class premium extends React.Component {
     if(premiumInfo.measurePremiumSuccess === true) {
       this.setState({
         premiumStatus: 1,
-        serialNo: premiumInfo.premiumResultData.serialNo,
+        serialNo: preInfo.result.serialNo,//premiumInfo.premiumResultData.serialNo
         errorContent: '',
-        premiumInfos: preInfo.result.payPremList,
-        totalPayPrem: preInfo.result.totalPayPrem
+        premiumInfos: preInfo.result.payPremList,//premiumInfo.premiumResultData.payPremList
+        totalPayPrem: preInfo.result.totalPayPrem//premiumInfo.premiumResultData.totalPayPrem
       })
     }
     if(premiumInfo.measurePremiumError === true) {
@@ -150,10 +156,12 @@ export default class premium extends React.Component {
   onClickRight() {
     console.log(1)
   }
-  onClickChoseOption(name) {
+  onClickChoseOption(val) {
     this.setState({
-      name: name,
-      premiumStatus: 0
+      name: val.priceName,
+      premiumStatus: 0,
+      skuId: val.skuId,
+      productInsuranceCode: val.productInsuranceCode
     })
   }
   onClickChoseTourismName(name, key) {
@@ -224,20 +232,29 @@ export default class premium extends React.Component {
         return !!val.insurantBirth
       })
       if(this.state.bePeopleDate.length > 0 && checkBeDate === true) {
-        this.props.premiumMeasure({
-          serialNo: this.state.serialNo,
-          productInsuranceCode: this.state.name,
-          productId: this.props.location.query.productId,
-          productCode: this.props.location.query.productCode,
-          insurantInfoList: this.state.bePeopleDate,
-          policyInfo: {
-            insuranceBeginTime: this.state.startDate,
-            insuranceStartTime: this.state.startDate,
-            insuranceEndTime: this.state.endDate,
-            insurancePeriod: this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.guaranteePeriod,
-            insurancePriodUnit: this.state.isShowAddCountry === true ? 'D' : this.state.insurancePriodUnit
+        const policyInfos = {
+          insuranceBeginTime: this.state.startDate,
+          insuranceStartTime: this.state.startDate,
+          insuranceEndTime: this.state.endDate,
+          insurancePeriod: this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.guaranteePeriod,
+          insurancePriodUnit: this.state.isShowAddCountry === true ? 'D' : this.state.insurancePriodUnit
+        }
+        const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
+          return {
+            policyInfo: policyInfos,
+            insurantInfoList: [val],
           }
         })
+        console.log(JSON.stringify(insuranceInfoList))
+        const params = {
+          serialNo: this.state.serialNo,
+          skuId: this.state.skuId,
+          productInsuranceCode: this.state.productInsuranceCode,
+          productId: this.props.location.query.productId,
+          productCode: this.props.location.query.productCode,
+          insurantInfoList: insuranceInfoList
+        }
+        this.props.premiumMeasure(params)
       }else {
         this.setState({
           errorContent: "被保险人出生日期不能为空"
@@ -250,15 +267,29 @@ export default class premium extends React.Component {
     })
   }
   onClickInsure() {
+    const fillMationInfo = {
+      productName: this.state.productNmae,
+      name: this.state.name
+    }
+    sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
     this.props.getUpdateInfo()
   }
   addBepoleDate() {
     let bePeopleDates = this.state.bePeopleDate
     bePeopleDates.push({
+      insurantSex:'F',
       insurantBirth: '',
       type: '1',
       personType: '2',
-      insurantCount: '1'
+      relation: '1',
+      insurantCount: '1',
+      "planInfoList": [{
+        "benLevel": "00",
+        "planCode": "P033501",
+        "sumIns": 350000,
+        "premType": 1,
+        "premTerm": 12
+      }],
     })
     this.setState({
       premiumStatus: 0,
@@ -339,8 +370,8 @@ export default class premium extends React.Component {
                 val.priceName
               }
             </div>
-            <div className={this.state.name === val.priceName ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this, val.priceName)}></span>
+            <div className={this.state.skuId == val.skuId ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this, val)}></span>
               <span className="checbox-chose"></span>
             </div>
           </div>
@@ -472,7 +503,7 @@ export default class premium extends React.Component {
           <div className="pre-center-package">
             <p>套餐类型</p>
             {
-              this.renderPackageType(detailInfo.typelist)
+              this.renderPackageType(detailInfo.priceList)
             }
           </div>
           {
@@ -547,11 +578,17 @@ export default class premium extends React.Component {
             title="保费测算"/>
         }
         {
+          // this.state.isShowCountry ?
+          // <Country
+          //   onClickCountry={this.onClickCountry.bind(this)}
+          //   onClickBacks={this.onClickIsAddCountry.bind(this, false)}
+          // /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : <Loading />
           this.state.isShowCountry ?
           <Country
+            productId={this.props.location.query.productId}
             onClickCountry={this.onClickCountry.bind(this)}
             onClickBacks={this.onClickIsAddCountry.bind(this, false)}
-          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : <Loading />
+          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detsInfo.result) : <Loading />
         }
         {
           this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />

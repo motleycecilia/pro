@@ -27,6 +27,7 @@ import confimInfo from 'mock/confim'
 export default class fillmation extends React.Component {
   state = {
     iphoneChoseBtn: false,
+    fillmationInfo: {},
     beList: [],
     name: '',
     phoneNo: '',
@@ -48,7 +49,9 @@ export default class fillmation extends React.Component {
     isAgreeElement: false,
     showConfirmPolicy: false,
     ConfirmBepoleIndex: -1,
-    ConfirmGuaranteeIndex: -1
+    ConfirmGuaranteeIndex: -1,
+    orderNo: '',
+    payOrderNo: ''
   }
 
   static contextTypes = {
@@ -59,6 +62,9 @@ export default class fillmation extends React.Component {
       this.onClickBack()
     }.bind(this)
     YztApp.setTitle(this.props.route.title)
+    this.setState({
+      fillmationInfo: JSON.parse(sessionStorage.getItem("fillMationInfo"))
+    })
     this.props.getPolicyUserInfo();
     this.props.getInsuredUserInfo('')
   }
@@ -300,13 +306,35 @@ export default class fillmation extends React.Component {
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
       let insurantList = this.state.beList.map((val, index) => {
-        return val.id
+        return {insurantId: val.id}
       })
       let prePara = localStorage.getItem(prePara)
-      this.props.preSubmit()
+      const preParams = {
+        serialNo: '5d34061f-4060-49f1-baf7-ef0d521f5d5c',
+        productId: '10028680',
+  			productCode: '10007603',
+  			productInsuranceCode: 'P1130B48',
+        skuid: '10033720',
+        insurerInfo: {
+          insurerNo: this.state.policyNo
+        },
+        insuranceInfoList: [{insurantInfoList: insurantList}],
+        linkManInfo: {
+          linkManName: this.state.policyName,
+          linkManMobileNo: this.state.policyMobileNo
+        },
+        invoceInfo: {
+          invoceName: this.state.policyName,
+          invoceHeading: this.state.ititle,
+          invoceZipCode: this.state.zipCode,
+          invoceMobileNo: this.state.phoneNo,
+          invoceAddress: this.state.address
+        }
+      }
+      this.props.preSubmit(preParams)
       return
       // const preParams = {
-      //   preSubmit: prePara.serialNo,
+      //   serialNo: prePara.serialNo,
       //   productId: prePara.productId,
   		// 	productCode: prePara.productCode,
   		// 	productInsuranceCode: prePara.productInsuranceCode,
@@ -341,6 +369,8 @@ export default class fillmation extends React.Component {
   }
   onClickPay() {
     const sso = sessionStorage.getItem('sso')
+    const orderNo = this.state.orderNo
+    const payOrderNo = this.state.payOrderNo
     window.location.href = `http://jkkit-cashier-stg1.pingan.com.cn:20380/cashier-web/main/login.shtml?channel=1982
     &channelSecond=1982003
     &platId=999201007
@@ -633,7 +663,11 @@ export default class fillmation extends React.Component {
             <div className="p-l-10">
               <dl>
                 <dt>保险名称</dt>
-                <dd>女性关爱保险</dd>
+                <dd>
+                  {
+                    preResultData.productName
+                  }
+                </dd>
               </dl>
             </div>
             <div className="p-l-10">
@@ -645,7 +679,11 @@ export default class fillmation extends React.Component {
             <div className="p-l-10">
               <dl>
                 <dt>套餐类型</dt>
-                <dd>全面型</dd>
+                <dd>
+                  {
+                    this.state.fillmationInfo && this.state.fillmationInfo.name
+                  }
+                </dd>
               </dl>
             </div>
             <div className="confirm-top-date">
@@ -653,8 +691,8 @@ export default class fillmation extends React.Component {
                 保障时间
               </div>
               <div className="confirm-date-dates">
-                <p>2016-12-06零时起</p>
-                <p>2017-12-06二十四时止</p>
+                <p>{preResultData.insuranceInfoList[0].policyInfo.insuranceStartTime}起</p>
+                <p>{preResultData.insuranceInfoList[0].policyInfo.insuranceEndTime}止</p>
               </div>
             </div>
           </div>
@@ -664,7 +702,7 @@ export default class fillmation extends React.Component {
           <div className="confirm-center-contents">
             <div className="center-content">
               <div className="col-line-fillmation" onTouchTap={::this.onClickConfimPolicy}>
-                <span>例如风</span>
+                <span>{preResultData.policyholdersInfo.insurantName}</span>
                 <span className={this.state.showConfirmPolicy ? "icon-max-up" : "icon-max-down"}></span>
               </div>
               <div className={this.state.showConfirmPolicy ? "" : "hide"}>
@@ -673,7 +711,7 @@ export default class fillmation extends React.Component {
                     身份证号
                   </span>
                   <span className="fill-content-txt">
-                    271829328728920937
+                    {preResultData.policyholdersInfo.insurantIdno}
                   </span>
                 </div>
                 <div className="p-b-20">
@@ -681,7 +719,7 @@ export default class fillmation extends React.Component {
                     手机号码
                   </span>
                   <span className="fill-content-txt">
-                    13212312322
+                    {preResultData.policyholdersInfo.mobile}
                   </span>
                 </div>
                 <div className="p-b-20">
@@ -689,7 +727,7 @@ export default class fillmation extends React.Component {
                     电子邮箱
                   </span>
                   <span className="fill-content-txt">
-                    298fwf@23.com
+                    {preResultData.policyholdersInfo.email}
                   </span>
                 </div>
               </div>
@@ -749,13 +787,17 @@ export default class fillmation extends React.Component {
             <div className="p-l-10">
               <dl>
                 <dt>保险名称</dt>
-                <dd>女性关爱保险</dd>
+                <dd>{
+                    this.state.fillmationInfo && this.state.fillmationInfo.productName
+                  }</dd>
               </dl>
             </div>
             <div className="p-l-10">
               <dl>
                 <dt>套餐类型</dt>
-                <dd>全面型</dd>
+                <dd>{
+                    this.state.fillmationInfo && this.state.fillmationInfo.name
+                  }</dd>
               </dl>
             </div>
             <div className="p-l-10">
@@ -774,7 +816,9 @@ export default class fillmation extends React.Component {
             <div className="row-box-list" onTouchTap={this.onClickUpdatePolicy.bind(this)}>
               <div className="row-box-list-title router-action1">
                 <div className="name col-name">
-                  为范围
+                  {
+                    policyUser.insurerName
+                  }
                 </div>
                 <span className="arrowbox arrow-right"></span>
               </div>
@@ -833,14 +877,12 @@ export default class fillmation extends React.Component {
     return(
       <div>
         {
-          // !this.state.isConfirm && insured.getInsuredUserSuccess === true && policyUser.getPolicyUserSuccess === true ?
-          // this.renderContent(policyUser) : <Loading />
-          insured.getPolicyUserBegin === true ? <Loading /> :
-          !this.state.isConfirm && this.renderContent(policyUser)
+          policyUser.getPolicyUserBegin === true ? <Loading /> :
+          !this.state.isConfirm && policyUser.getPolicyUserSuccess === true ?  this.renderContent(policyUser.getResultData) : '系统异常'
         }
         {
           // this.state.isConfirm && this.renderConfirm(underwriting.preResultData)
-          this.state.isConfirm && this.renderConfirm(confimInfo.requestData)
+          this.state.isConfirm && this.renderConfirm(confimInfo.responseData)
         }
       </div>
     )

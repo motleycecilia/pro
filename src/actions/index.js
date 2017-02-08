@@ -416,10 +416,10 @@ export function resetInsuredUserInfo() {
   }
 }
 /*核保*/
-export function preSubmit(params){
+export function preSubmit(parasm){
   return (dispatch, getState) => {
     dispatch(getPreSubmitBegin())
-    return api.preSubmit(params)
+    return api.preSubmit(parasm)
     .then(res => {
       if(isGp === true) {
         incinerator('preSubmit', res.resultStatus, {

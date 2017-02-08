@@ -2,6 +2,7 @@ import request from 'reqwest'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
   'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi
+const isGp = false
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
 const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'
@@ -21,93 +22,91 @@ function gpFn(operationType, paramas) {
 
 export function queryDetilInfo(productId, productCode) {
 	let paramst = {productId: productId, productCode: productCode, productSide: '20001', platformType: '002'}
-	// return gpFn('GetProductDetail', paramst)
-  return request({
-		url: domain + '/support/insurance/productInfo.do',
-		method: 'get',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			productId: productId,
-      productCode: '2342342',
-      productSide: '20001',
-      platformType: '02'
-		}
-	})
-	// return request({
-  //   url: domainGP + '/yizhangtong/api/gp',
-  //   method: 'post',
-	// 	contentType: 'application/x-www-form-urlencoded',
-  //   type: 'json',
-  //   data: {'operationType': 'GetProductDetail', 'requestData': JSON.stringify(paramst)},
-  // })
-
+	if(isGp === true) {
+		return gpFn('GetProductDetail', paramst)
+	}else {
+		return request({
+			url: domain + '/support/insurance/productInfo.do',
+			method: 'get',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				productId: productId,
+	      productCode: '2342342',
+	      productSide: '20001',
+	      platformType: '02'
+			}
+		})
+	}
 }
 
 
 //核保
 export function preSubmit(params){
-	// let paramst = {
-	// 	buyPlatform: '1',
-	// 	serialNo: params.serialNo,
-	// 	orderType: '0',
-	// 	productId: params.productId,
-	// 	productCode: params.productCode,
-	// 	orderSpliteFlag: '1',
-	// 	productInsuranceCode: parasm.productInsuranceCode,
-	// 	skuid: params.skuid,
-	// 	insurerInfo: params.insurerInfo,
-	// 	insuranceInfoList: params.insuranceInfoList,
-	// 	invoceInfo: params.invoceInfo,
-	// 	linkManInfo: params.linkManInfo,
-	// 	in: params.insurantInfoList
-	// }
-	// return gpFn('premiumConfirm', paramst)
-	return request({
-		url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/getNewInsurant.do?insurantId=&callback=reqwest_1486179288247',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			// buyPlatform: '1',
-			// serialNo: params.serialNo,
-			// orderType: '0',
-			// productId: params.productId,
-			// productCode: params.productCode,
-			// orderSpliteFlag: '1',
-			// productInsuranceCode: parasm.productInsuranceCode,
-			// skuid: params.skuid,
-			// insurerInfo: params.insurerInfo,
-			// insuranceInfoList: params.insuranceInfoList,
-			// invoceInfo: params.invoceInfo,
-			// linkManInfo: params.linkManInfo,
-			// in: params.insurantInfoList
-		}
-	})
+	let paramst = {
+		clientNo: '729811450780230322',
+		from: 'wap-chaoshi',
+		userChannel: '0',
+		buyPlatform: '1',
+		serialNo: params.serialNo,
+		orderType: '0',
+		productId: params.productId,
+		productCode: params.productCode,
+		orderSpliteFlag: '1',
+		productInsuranceCode: params.productInsuranceCode,
+		skuId: params.skuid,
+		insurerInfo: params.insurerInfo,
+		insuranceInfoList: params.insuranceInfoList,
+		invoceInfo: params.invoceInfo,
+		linkManInfo: params.linkManInfo,
+		in: params.insurantInfoList
+	}
+	console.log(JSON.stringify(paramst))
+	if(isGp === true) {
+		return gpFn('premiumConfirm', paramst)
+	}else {
+		return request({
+			url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/getNewInsurant.do?insurantId=&callback=reqwest_1486179288247',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				// buyPlatform: '1',
+				// serialNo: params.serialNo,
+				// orderType: '0',
+				// productId: params.productId,
+				// productCode: params.productCode,
+				// orderSpliteFlag: '1',
+				// productInsuranceCode: parasm.productInsuranceCode,
+				// skuid: params.skuid,
+				// insurerInfo: params.insurerInfo,
+				// insuranceInfoList: params.insuranceInfoList,
+				// invoceInfo: params.invoceInfo,
+				// linkManInfo: params.linkManInfo,
+				// in: params.insurantInfoList
+			}
+		})
+	}
 }
 /*保费测算*/
 export function premiumMeasure(params){
-	// 	data: {
-	// 		serialNo: params.serialNo,
-	// 		from: 'wap-chaoshi',
-	// 		userChannel: '0',
-	// 		buyPlatform: '1',
-	// 		orderType: '2',
-	// 		productId: params.productId,
-	// 		productCode: params.productCode,
-	// 		orderSpliteFlag: '1',
-	// 		insuranceList: [
-	// 			{
-	// 				productInsuranceCode: params.productInsuranceCode,
-	// 				skuId: params.skuid,
-	// 				insurantInfoList: params.insurantInfoList,
-	// 			}
-	// 		],
-	// 		policyInfo: params.policyInfo
-	// 	}
-	// })
+	const paramsGp = {
+		serialNo: params.serialNo,
+		from: 'wap-chaoshi',
+		userChannel: '0',
+		quantity: params.insurantInfoList.length,
+		buyPlatform: '1',
+		orderType: '2',
+		productId: params.productId,
+		productCode: params.productCode,
+		orderSpliteFlag: '1',
+		productInsuranceCode: params.productInsuranceCode || "P1130B48",
+		skuId: params.skuId,
+		insuranceInfoList: params.insurantInfoList
+	}
+	console.log(JSON.stringify(paramsGp))
 	let paramst = {
 			"clientNo": "4215114760062584223",
 			"productId": "10028680",
@@ -130,7 +129,6 @@ export function premiumMeasure(params){
 									"insurancePeriod": "40",
 									"insurancePriodUnit": "D",
 									"annualPremium": "1804",
-									"actualPremium": "1804",
 									"paymentType": "1",
 									"discount": "1"
 							},
@@ -198,32 +196,35 @@ export function premiumMeasure(params){
 					}
 			]
 	}
-	// return gpFn('premiumCalculate', paramst)
-	return request({
-		url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/productInfo.do?productId=10013242&productCode=2342342&productSide=20001&platformType=02&callback=reqwest_1486176901757',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			serialNo: params.serialNo,
-			from: 'wap-chaoshi',
-			userChannel: '0',
-			buyPlatform: '1',
-			orderType: '2',
-			productId: params.productId,
-			productCode: params.productCode,
-			orderSpliteFlag: '1',
-			insuranceList: [
-				{
-					productInsuranceCode: params.productInsuranceCode,
-					skuId: params.skuid,
-					insurantInfoList: params.insurantInfoList,
-				}
-			],
-			policyInfo: params.policyInfo
-		}
-	})
+	if(isGp === true) {
+		return gpFn('premiumCalculate', paramst)
+	}else {
+		return request({
+			url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/productInfo.do?productId=10013242&productCode=2342342&productSide=20001&platformType=02&callback=reqwest_1486176901757',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				serialNo: params.serialNo,
+				from: 'wap-chaoshi',
+				userChannel: '0',
+				buyPlatform: '1',
+				orderType: '2',
+				productId: params.productId,
+				productCode: params.productCode,
+				orderSpliteFlag: '1',
+				insuranceList: [
+					{
+						policyInfo: params.policyInfo,
+						productInsuranceCode: params.productInsuranceCode,
+						skuId: params.skuid,
+						insurantInfoList: params.insurantInfoList,
+					}
+				]
+			}
+		})
+	}
 }
 
 export function isLogin() {
@@ -239,20 +240,24 @@ export function isLogin() {
 查询投保人
 */
 export function getPolicyUserInfo() {
-	// return gpFn('GetInsurerInfo', {})
-	return request({
-		url: domain + '/support/insurance/getNewInsurer.do',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8'
-	})
+	if(isGp === true) {
+		return gpFn('GetInsurerInfo', {clientNo: '729811450780230322'})
+	}else {
+		return request({
+			url: domain + '/support/insurance/getNewInsurer.do',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8'
+		})
+	}
 }
 /*
 更新投保人
 */
 export function updatePolicyUserInfo(params){
 	let paramst = {
+		clientNo: '729811450780230322',
 		insurerId: params.insurerId,
 		insurerName: params.insurerName,
 		insurerIdNo: params.insurerIdNo,
@@ -262,42 +267,49 @@ export function updatePolicyUserInfo(params){
 		insurerIdType: '1',
 		insurerSex: params.insurerSex
 	};
-	// return gpFn('SetInsurerInfo', paramst)
-	return request({
-		url: domain + '/support/insurance/addNewInsurer.do',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			insurerId: params.insurerId,
-      insurerName: params.insurerName,
-      insurerIdNo: params.insurerIdNo,
-      insurerBirthday: params.insurerBirthday,
-      insurerMobile: params.insurerMobile,
-      insurerEmail: params.insurerEmail,
-      insurerIdType: '1',
-      insurerSex: params.insurerSex
-		}
-	})
+	if(isGp === true) {
+		return gpFn('SetInsurerInfo', paramst)
+	}else {
+		return request({
+			url: domain + '/support/insurance/addNewInsurer.do',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				insurerId: params.insurerId,
+	      insurerName: params.insurerName,
+	      insurerIdNo: params.insurerIdNo,
+	      insurerBirthday: params.insurerBirthday,
+	      insurerMobile: params.insurerMobile,
+	      insurerEmail: params.insurerEmail,
+	      insurerIdType: '1',
+	      insurerSex: params.insurerSex
+			}
+		})
+	}
 }
 
 export function getInsuredUserInfo(id){
-	// return gpFn('GetInsurantInfo', {})
-	return request({
-		url: domain + '/support/insurance/getNewInsurant.do',///support/insurance/getNewInsurant.do
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			insurantId: id
-		}
-	})
+	if(isGp === true) {
+		return gpFn('GetInsurantInfo', {clientNo: '729811450780230322'})
+	}else {
+		return request({
+			url: domain + '/support/insurance/getNewInsurant.do',///support/insurance/getNewInsurant.do
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				insurantId: id
+			}
+		})
+	}
 }
 
 export function updateInsuredUserInfo(params){
 	let paramst = {
+		clientNo: '729811450780230322',
 		insurantId: params.insurerId,
 		insurantName: params.insurantName,
 		insurantIdNo: params.insurantIdNo,
@@ -307,56 +319,69 @@ export function updateInsuredUserInfo(params){
 		insurantSex: params.insurantSex,
 		insurantBirthday: params.insurantBirthday
 	}
-	// return gpFn('GetInsurantInfo', paramst)
-	return request({
-		url: domain + '/support/insurance/updateNewInsurant.do',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			insurantId: params.insurerId,
-			insurantName: params.insurantName,
-			insurantIdNo: params.insurantIdNo,
-			insurantIdType: params.insurantIdType,
-			insurantMobile: params.insurantMobile,
-			insurantRelation: params.insurantRelation,
-			insurantSex: params.insurantSex,
-			insurantBirthday: params.insurantBirthday
-		}
-	})
+	if(isGp === true) {
+		return gpFn('SetInsurantInfo', paramst)
+	}else {
+		return request({
+			url: domain + '/support/insurance/updateNewInsurant.do',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				insurantId: params.insurerId,
+				insurantName: params.insurantName,
+				insurantIdNo: params.insurantIdNo,
+				insurantIdType: params.insurantIdType,
+				insurantMobile: params.insurantMobile,
+				insurantRelation: params.insurantRelation,
+				insurantSex: params.insurantSex,
+				insurantBirthday: params.insurantBirthday
+			}
+		})
+	}
 }
 
 export function addInsuredUserInfo(params){
-	return request({
-		url: domain + '/support/insurance/addNewInsurant.do',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			insurantName: params.insurantName,
-			insurantIdNo: params.insurantIdNo,
-			insurantIdType: params.insurantIdType,
-			insurantMobile: params.insurantMobile,
-			insurantRelation: params.insurantRelation,
-			insurantSex: params.insurantSex,
-			insurantBirthday: params.insurantBirthday
-		}
-	})
+	const paramst = {
+		clientNo: '729811450780230322',
+		insurantName: params.insurantName,
+		insurantIdNo: params.insurantIdNo,
+		insurantIdType: params.insurantIdType,
+		insurantMobile: params.insurantMobile,
+		insurantRelation: params.insurantRelation,
+		insurantSex: params.insurantSex,
+		insurantBirthday: params.insurantBirthday
+	}
+	if(isGp === true) {
+		return gpFn('NewInsurantInfo', paramst)
+	}else {
+		return request({
+			url: domain + '/support/insurance/addNewInsurant.do',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: paramst
+		})
+	}
 }
 //
 export function deleteInsuredUserInfo(insurantId){
-	return request({
-		url: domain + '/support/insurance/deleteNewInsurant.do',
-		method: 'GET',
-		type: 'jsonp',
-		timeout: timeout,
-		contentType: 'application/json;charset=utf-8',
-		data: {
-			insurantId: insurantId
-		}
-	})
+	if(isGp === true) {
+		return gpFn('RemoveInsurantInfo', {clientNo: '729811450780230322', insurantId: insurantId})
+	}else {
+		return request({
+			url: domain + '/support/insurance/deleteNewInsurant.do',
+			method: 'GET',
+			type: 'jsonp',
+			timeout: timeout,
+			contentType: 'application/json;charset=utf-8',
+			data: {
+				insurantId: insurantId
+			}
+		})
+	}
 }
 /*app 登录*/
 

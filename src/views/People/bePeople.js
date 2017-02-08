@@ -287,7 +287,7 @@ export default class bePeople extends React.Component {
       sessionStorage.setItem('ageSection', '1-30')
       let ageSection = sessionStorage.getItem('ageSection').split('-')
       // if(beInsureAge > +ageSection[1] || beInsureAge < +ageSection[0]) {
-      if(beInsureAge > 80 || new Date(getEle('#sysDate').value).getTime() < new Date(this.state.birthDay).getTime()) {
+      if(beInsureAge > 150 || new Date(getEle('#sysDate').value).getTime() < new Date(this.state.birthDay).getTime()) {
         this.setState({
           errorInfo: `您选择的出生日期不符合规范`
         })
