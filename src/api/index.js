@@ -56,7 +56,7 @@ export function preSubmit(params){
 		orderSpliteFlag: '1',
 		productInsuranceCode: params.productInsuranceCode,
 		skuId: params.skuid,
-		insurerInfo: params.insurerInfo,
+		policyholdersInfo: params.insurerInfo,
 		insuranceInfoList: params.insuranceInfoList,
 		invoceInfo: params.invoceInfo,
 		linkManInfo: params.linkManInfo,
@@ -103,7 +103,6 @@ export function premiumMeasure(params){
 		productCode: params.productCode,
 		orderSpliteFlag: '1',
 		productInsuranceCode: params.productInsuranceCode || "P1130B48",
-		skuId: params.skuId,
 		insuranceInfoList: params.insurantInfoList
 	}
 	console.log(JSON.stringify(paramsGp))
@@ -197,7 +196,7 @@ export function premiumMeasure(params){
 			]
 	}
 	if(isGp === true) {
-		return gpFn('premiumCalculate', paramst)
+		return gpFn('premiumCalculate', paramsGp)
 	}else {
 		return request({
 			url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/productInfo.do?productId=10013242&productCode=2342342&productSide=20001&platformType=02&callback=reqwest_1486176901757',

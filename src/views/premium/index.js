@@ -6,7 +6,7 @@ import { createChecker } from 'utils/checker'
 import { getUrlParam } from 'utils/urlParams.js'
 import Country from 'components/country'
 import { App, YztApp } from 'utils/native_h5'
-import { queryDetilInfo, premiumMeasure, premiumMeasureReset, getUpdateInfo } from 'actions'
+import { queryDetilInfo, premiumMeasure, premiumMeasureReset, getUpdateInfo, resetUpdataInfo } from 'actions'
 import util from 'utils/utils'
 import Loading from 'components/loading'
 import Modal from 'components/modal'
@@ -25,7 +25,8 @@ import detsInfo from 'mock/dets'
     queryDetilInfo,
     premiumMeasure,
     premiumMeasureReset,
-    getUpdateInfo
+    getUpdateInfo,
+    resetUpdataInfo
   }
 )
 
@@ -48,8 +49,8 @@ export default class premium extends React.Component {
     errorContent: '',
     premiumInfos: [],
     totalPayPrem: 0,
-    tourismName: '单次',
-    tourismKey: '0'
+    tourismKey: '0',
+    currentTime: ''
   }
 
   componentWillMount() {
@@ -64,14 +65,24 @@ export default class premium extends React.Component {
     const { detailInfo, premiumInfo, loginInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
       let insurantUnit = detailInfo.detail.insurancePriodUnit
+      const getEle = document.querySelector.bind(document)
+      getEle('#sysDate').value = detsInfo.result.currentTime.substring(0, 10)
       this.setState({
-        productNmae: detailInfo.detail.productName,
-        skuId: detailInfo.detail.typelist[0].skuId || '10033720',
-        productInsuranceCode: detailInfo.detail.typelist[0].productInsuranceCode,
-        name: detailInfo.detail.typelist[0].priceName,
-        guaranteePeriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod : detailInfo.detail.insurancePriod,//保险期限
+        productNmae: detsInfo.result.productName,
+        skuId: detsInfo.result.priceList[0].skuId || '10033720',
+        productInsuranceCode: detsInfo.result.priceList[0].productInsuranceCode,
+        name: detsInfo.result.priceList[0].priceName,
+        guaranteePeriod: insurantUnit === 'Y' ? 12 * detsInfo.result.insurancePriod.split("-")[0] : detsInfo.result.insurancePriod,//保险期限
+        currentTime: detsInfo.result.currentTime,
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
-        isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
+        isShowAddCountry: TYpes.tourism.indexOf("" + detsInfo.result.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
+        // productNmae: detailInfo.detail.productName,
+        // skuId: detailInfo.detail.priceList[0].skuId || '10033720',
+        // productInsuranceCode: detailInfo.detail.priceList[0].productInsuranceCode,
+        // name: detailInfo.detail.priceList[0].priceName,
+        // guaranteePeriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod,//保险期限
+        // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
+        // isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
       })
     }
     if(premiumInfo.measurePremiumBegin === true) {
@@ -83,10 +94,13 @@ export default class premium extends React.Component {
     if(premiumInfo.measurePremiumSuccess === true) {
       this.setState({
         premiumStatus: 1,
-        serialNo: preInfo.result.serialNo,//premiumInfo.premiumResultData.serialNo
         errorContent: '',
-        premiumInfos: preInfo.result.payPremList,//premiumInfo.premiumResultData.payPremList
-        totalPayPrem: preInfo.result.totalPayPrem//premiumInfo.premiumResultData.totalPayPrem
+        serialNo: preInfo.result.serialNo,
+        premiumInfos: preInfo.result.payPremList,
+        totalPayPrem: preInfo.result.totalPayPrem
+        // serialNo: premiumInfo.premiumResultData.serialNo,
+        // premiumInfos: premiumInfo.premiumResultData.payPremList,
+        // totalPayPrem: premiumInfo.premiumResultData.totalPayPrem
       })
     }
     if(premiumInfo.measurePremiumError === true) {
@@ -114,10 +128,11 @@ export default class premium extends React.Component {
       return
     }
     if (loginInfo.getUpDataInfoSuccess) {
+      const insurantUnits = detailInfo.detail.insurancePriodUnit
       const preMiumPara = {
         productId: this.props.location.query.productId,
-        insurancePriod: detailInfo.detail.insurancePriod,
-        insurancePriodUnit: detailInfo.detail.insurancePriodUnit,
+        insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod,
+        insurancePriodUnit: insurantUnits === 'Y' ? 'M' : insurantUnits,
         productCode: detailInfo.detail.productCode,
         skuId: this.state.skuId,
         productInsuranceCode: this.state.productInsuranceCode,
@@ -145,6 +160,10 @@ export default class premium extends React.Component {
       }
     }
   }
+  componentWillUnmount() {
+    this.props.premiumMeasureReset()
+    this.props.resetUpdataInfo()
+  }
   goto() {
     this.setState({
       showModal: false
@@ -164,12 +183,10 @@ export default class premium extends React.Component {
       productInsuranceCode: val.productInsuranceCode
     })
   }
-  onClickChoseTourismName(name, key) {
+  onClickChoseTourismName(key) {
     this.setState({
-      tourismName: name,
       tourismKey: key
     })
-    console.log(this.state.tourismKey)
   }
   onClickCountry(name) {
     let country = this.state.countrys
@@ -213,19 +230,19 @@ export default class premium extends React.Component {
         errMsg: '请选择结束时间'
       }
     ]
-    if(this.state.countrys.length === 0 && this.state.isShowAddCountry) {
-      checkList.unshift({
-        checkfnName: "checkValLength",
-        checkValue: this.state.countrys,
-        errMsg: '请选择旅游目的地'
-      })
-    }
-    if(util.maxDate(this.state.startDate, this.state.endDate) === true) {
-      this.setState({
-        errorContent: "开始时间不能晚于结束时间"
-      })
-      return
-    }
+    // if(this.state.countrys.length === 0 && this.state.isShowAddCountry) {
+    //   checkList.unshift({
+    //     checkfnName: "checkValLength",
+    //     checkValue: this.state.countrys,
+    //     errMsg: '请选择旅游目的地'
+    //   })
+    // }
+    // if(util.maxDate(this.state.startDate, this.state.endDate) === true) {
+    //   this.setState({
+    //     errorContent: "开始时间不能晚于结束时间"
+    //   })
+    //   return
+    // }
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
       let checkBeDate = this.state.bePeopleDate.every(function(val, index) {
@@ -241,6 +258,7 @@ export default class premium extends React.Component {
         }
         const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
           return {
+            skuId: this.state.skuId,
             policyInfo: policyInfos,
             insurantInfoList: [val],
           }
@@ -248,7 +266,6 @@ export default class premium extends React.Component {
         console.log(JSON.stringify(insuranceInfoList))
         const params = {
           serialNo: this.state.serialNo,
-          skuId: this.state.skuId,
           productInsuranceCode: this.state.productInsuranceCode,
           productId: this.props.location.query.productId,
           productCode: this.props.location.query.productCode,
@@ -271,6 +288,14 @@ export default class premium extends React.Component {
       productName: this.state.productNmae,
       name: this.state.name
     }
+    const prePara = {
+      serialNo: this.state.serialNo,
+      productId: this.props.location.query.productId,
+      productCode: this.props.location.query.productCode,
+      productInsuranceCode: this.state.productInsuranceCode,
+      skuid: this.state.skuid,
+    }
+    sessionStorage.setItem("prePara",JSON.stringify(prePara))
     sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
     this.props.getUpdateInfo()
   }
@@ -282,14 +307,14 @@ export default class premium extends React.Component {
       type: '1',
       personType: '2',
       relation: '1',
-      insurantCount: '1',
-      "planInfoList": [{
-        "benLevel": "00",
-        "planCode": "P033501",
-        "sumIns": 350000,
-        "premType": 1,
-        "premTerm": 12
-      }],
+      insurantCount: '1'//,
+      // "planInfoList": [{
+      //   "benLevel": "00",
+      //   "planCode": "P033501",
+      //   "sumIns": 350000,
+      //   "premType": 1,
+      //   "premTerm": 12
+      // }],
     })
     this.setState({
       premiumStatus: 0,
@@ -318,7 +343,7 @@ export default class premium extends React.Component {
     })
     if(this.state.isShowAddCountry === false) {
       this.setState({
-        endDate: util.getEndDatet(e.target.value, this.state.guaranteePeriod, this.state.insurancePriodUnit)
+        endDate: util.getEndDatet(util.getEndDatet(e.target.value, this.state.guaranteePeriod, this.state.insurancePriodUnit),-1 , 'D')
       })
     }
   }
@@ -391,8 +416,8 @@ export default class premium extends React.Component {
               <p className="m-t8">
               </p>
             </div>
-            <div className={this.state.tourismName === val.name ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseTourismName.bind(this, val.name, val.key)}></span>
+            <div className={this.state.tourismKey === val.key ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseTourismName.bind(this, val.key)}></span>
               <span className="checbox-chose"></span>
             </div>
           </div>
@@ -422,7 +447,7 @@ export default class premium extends React.Component {
               <input type="date" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}/>
             </div>
             <span>￥
-              {this.state.premiumInfos[index] ? this.state.premiumInfos[index].payPrem : 0}
+              {this.state.premiumInfos.length > 0 ? this.state.premiumInfos[index].payPrem : 0}
               /人</span>
           </div>
         )
@@ -479,7 +504,7 @@ export default class premium extends React.Component {
       </div>
     )
   }
-  renderPremium(detailInfo) {
+  renderPremium(detail) {
     return(
       <div>
         <div className="premium-waner">
@@ -503,7 +528,7 @@ export default class premium extends React.Component {
           <div className="pre-center-package">
             <p>套餐类型</p>
             {
-              this.renderPackageType(detailInfo.priceList)
+              this.renderPackageType(detail.priceList)
             }
           </div>
           {
@@ -525,7 +550,7 @@ export default class premium extends React.Component {
               </div>
             </section>
             {
-              this.state.isShowAddCountry ? this.renderEndDate() : this.renderEndDateText()
+              !this.state.isShowAddCountry || this.state.tourismKey === '1'  ? this.renderEndDateText() : this.renderEndDate()
             }
             <p className="pre-decribes">
               *如果用于办理签证，建议选择旅行日期时间前后各延长2天，详询使馆

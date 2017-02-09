@@ -79,7 +79,9 @@ export default class fillmation extends React.Component {
     if(underwriting.getPreSubmitSuccess === true) {
       YztApp.setTitle('保单信息确认')
       this.setState({
-        isConfirm: true
+        isConfirm: true,
+        orderNo: underwriting.preResultData.orderNo,
+        payOrderNo: underwriting.preResultData.payOrderNo
       })
       return
     }
@@ -308,15 +310,15 @@ export default class fillmation extends React.Component {
       let insurantList = this.state.beList.map((val, index) => {
         return {insurantId: val.id}
       })
-      let prePara = localStorage.getItem(prePara)
+      let prePara = JSON.parse(sessionStorage.getItem("prePara"))
       const preParams = {
-        serialNo: '5d34061f-4060-49f1-baf7-ef0d521f5d5c',
+        serialNo: '1801ca94-1b09-4fca-a3f8-d6be5cde004f',
         productId: '10028680',
   			productCode: '10007603',
-  			productInsuranceCode: 'P1130B48',
+  			productInsuranceCode: 'P1130B47',
         skuid: '10033720',
         insurerInfo: {
-          insurerNo: this.state.policyNo
+          insurantId: this.state.policyNo
         },
         insuranceInfoList: [{insurantInfoList: insurantList}],
         linkManInfo: {
@@ -369,21 +371,9 @@ export default class fillmation extends React.Component {
   }
   onClickPay() {
     const sso = sessionStorage.getItem('sso')
-    const orderNo = this.state.orderNo
-    const payOrderNo = this.state.payOrderNo
-    window.location.href = `http://jkkit-cashier-stg1.pingan.com.cn:20380/cashier-web/main/login.shtml?channel=1982
-    &channelSecond=1982003
-    &platId=999201007
-    &payClassify=13
-    &orderNo=${orderNo}
-    &payOrderNo=${payOrderNo}
-    &ssoTicket=${sso.ssoTicket}
-    &timestamp=${sso.timestamp}
-    &sign=${sso.sign}
-    &digest=
-    &hook=111111
-    &from=wap-chaoshi
-    &productSide=&customid`
+    const orderNo = '20170208017363391'//this.state.orderNo//
+    const payOrderNo ='2017020801664619'//this.state.payOrderNo//
+    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&hook=111111&from=wap-chaoshi&productSide=&customid&hook=/baoxian/liebiao.shtml`//&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}
   }
   onClickConfirmBepole(index) {
     this.setState({
@@ -878,7 +868,7 @@ export default class fillmation extends React.Component {
       <div>
         {
           policyUser.getPolicyUserBegin === true ? <Loading /> :
-          !this.state.isConfirm && policyUser.getPolicyUserSuccess === true ?  this.renderContent(policyUser.getResultData) : '系统异常'
+          !this.state.isConfirm && policyUser.getPolicyUserSuccess === true ?  this.renderContent(policyUser.getResultData) : ''
         }
         {
           // this.state.isConfirm && this.renderConfirm(underwriting.preResultData)

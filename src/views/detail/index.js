@@ -33,8 +33,6 @@ export default class detail extends React.Component {
   }
 
   componentWillMount() {
-    console.log(getUrlParam('productId'))
-    console.log(getUrlParam('productCode'))
     // this.props.queryDetilInfo(10013242)
     this.props.queryDetilInfo(10028680, 10007603)
     App.goBackAction = function () {
@@ -43,11 +41,26 @@ export default class detail extends React.Component {
     YztApp.setTitle(this.props.route.title)
   }
   componentWillReceiveProps(nextProps) {
-    console.log(detailInfos)
     const { detailInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
+      const detailInfosa = {
+        priceList: detailInfo.detail.priceList,
+        currentTime: detailInfo.detail.currentTime,
+        insurancePriodUnit: detailInfo.detail.insurancePriodUnit,
+        productName: detailInfo.detail.productName,
+        insurancePriod: detailInfo.detail.insurancePriod,
+        secondLevelType: detailInfo.detail.secondLevelType
+        // priceList: detailInfos.result.priceList,
+        // currentTime: detailInfos.result.currentTime,
+        // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
+        // productName: detailInfos.result.productName,
+        // insurancePriod: detailInfos.result.insurancePriod,
+        // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
+        // secondLevelType: detailInfos.result.secondLevelType
+      }
+      sessionStorage.setItem("detailInfos",JSON.stringify(detailInfosa))
       this.setState({
-        title: detailInfo.detail.productName,
+        // title: detailInfo.detail.productName,
         productId: getUrlParam('productId') || detailInfo.detail.productId,
         productCode: getUrlParam('productCode') || detailInfo.detail.productCode,
         captionDoc: detailInfo.detail.captionDoc
@@ -238,7 +251,7 @@ export default class detail extends React.Component {
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={this.state.title}/>
         {
           detailInfo.getDetailSuccess === true ? this.renderContent(detailInfo.detail) : <Loading />
-          // detailInfo.getDetailSuccess === true ? this.renderContent(detailInfos) : <Loading />
+          // detailInfo.getDetailSuccess === true ? this.renderContent(detailInfos.result) : <Loading />
         }
       </div>
     )
