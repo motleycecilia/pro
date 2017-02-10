@@ -93,7 +93,7 @@ function premiumMeasureError(errorCode, errorMsg) {
     errorMsg: errorMsg
   }
 }
-export default function premiumMeasureReset() {
+export function premiumMeasureReset() {
   return {
     type: types.RESET_MEASURE_PREMIUM
   }

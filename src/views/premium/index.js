@@ -32,6 +32,7 @@ import detsInfo from 'mock/dets'
 
 export default class premium extends React.Component {
   state = {
+    loodNum: 0,
     startDate: '',
     endDate: '',
     content: '',
@@ -41,7 +42,11 @@ export default class premium extends React.Component {
     countrys: [],
     name: '',
     bePeopleDate: [],
-    guaranteePeriod: 0,
+    productPriod: false,//保障期限是否为年
+    insurancePriod: 0,//保障期限
+    minPeriod: '',
+    maxPeriod: '',
+    periodValueUnit: '',
     insurancePriodUnit: '',
     showModal: false,
     premiumStatus: 0,
@@ -50,12 +55,14 @@ export default class premium extends React.Component {
     premiumInfos: [],
     totalPayPrem: 0,
     tourismKey: '0',
-    currentTime: ''
+    currentTime: '',
+    skuId: ''
   }
 
   componentWillMount() {
-    this.props.queryDetilInfo(10013242)
+    this.props.queryDetilInfo(10000400)
     // this.props.queryDetilInfo(10028680, 10007603)
+    // this.props.queryDetilInfo(this.props.location.query.productId, this.props.location.query.productCode)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -63,16 +70,21 @@ export default class premium extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { detailInfo, premiumInfo, loginInfo } = nextProps
-    if(detailInfo.getDetailSuccess === true) {
+    if(detailInfo.getDetailSuccess === true && this.state.loodNum === 0) {
       let insurantUnit = detailInfo.detail.insurancePriodUnit
       const getEle = document.querySelector.bind(document)
       getEle('#sysDate').value = detsInfo.result.currentTime.substring(0, 10)
       this.setState({
+        loodNum: 1,
         productNmae: detsInfo.result.productName,
         skuId: detsInfo.result.priceList[0].skuId || '10033720',
         productInsuranceCode: detsInfo.result.priceList[0].productInsuranceCode,
         name: detsInfo.result.priceList[0].priceName,
-        guaranteePeriod: insurantUnit === 'Y' ? 12 * detsInfo.result.insurancePriod.split("-")[0] : detsInfo.result.insurancePriod,//保险期限
+        minPeriod: detsInfo.result.insuranceProductTerms[0].minValue,
+        maxPeriod: detsInfo.result.insuranceProductTerms[0].maxValue,
+        periodValueUnit: detsInfo.result.insuranceProductTerms[0].maxValueUnit,
+        insurancePriod: insurantUnit === 'Y' ? "" + (12 * detsInfo.result.insurancePriod.split("-")[0]) : detsInfo.result.insurancePriod.split("-")[0],//保险期限
+        productPriod: insurantUnit === 'Y' ? true : false,
         currentTime: detsInfo.result.currentTime,
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
         isShowAddCountry: TYpes.tourism.indexOf("" + detsInfo.result.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
@@ -80,7 +92,11 @@ export default class premium extends React.Component {
         // skuId: detailInfo.detail.priceList[0].skuId || '10033720',
         // productInsuranceCode: detailInfo.detail.priceList[0].productInsuranceCode,
         // name: detailInfo.detail.priceList[0].priceName,
-        // guaranteePeriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod,//保险期限
+        // minPeriod: detailInfo.detail.insuranceProductTerms[0].minValue,
+        // maxPeriod: detailInfo.detail.insuranceProductTerms[0].maxValue,
+        // periodValueUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit,
+        // insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod[0],//保险期限
+        //productPriod: insurantUnit === 'Y' ? true : false,
         // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
         // isShowAddCountry: TYpes.tourism.indexOf("" + detailInfo.detail.secondLevelType) > -1 ? true : false// 产品分类是否旅游类型
       })
@@ -131,8 +147,8 @@ export default class premium extends React.Component {
       const insurantUnits = detailInfo.detail.insurancePriodUnit
       const preMiumPara = {
         productId: this.props.location.query.productId,
-        insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod,
-        insurancePriodUnit: insurantUnits === 'Y' ? 'M' : insurantUnits,
+        insurancePriod: detailInfo.detail.insurancePriod[0],
+        insurancePriodUnit: insurantUnits,
         productCode: detailInfo.detail.productCode,
         skuId: this.state.skuId,
         productInsuranceCode: this.state.productInsuranceCode,
@@ -187,6 +203,7 @@ export default class premium extends React.Component {
     this.setState({
       tourismKey: key
     })
+    console.log(this.state.tourismKey)
   }
   onClickCountry(name) {
     let country = this.state.countrys
@@ -253,8 +270,8 @@ export default class premium extends React.Component {
           insuranceBeginTime: this.state.startDate,
           insuranceStartTime: this.state.startDate,
           insuranceEndTime: this.state.endDate,
-          insurancePeriod: this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.guaranteePeriod,
-          insurancePriodUnit: this.state.isShowAddCountry === true ? 'D' : this.state.insurancePriodUnit
+          insurancePeriod: this.state.insurancePriod,//this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.insurancePriod,
+          insurancePriodUnit: this.state.insurancePriodUnit
         }
         const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
           return {
@@ -293,8 +310,9 @@ export default class premium extends React.Component {
       productId: this.props.location.query.productId,
       productCode: this.props.location.query.productCode,
       productInsuranceCode: this.state.productInsuranceCode,
-      skuid: this.state.skuid,
+      skuid: this.state.skuId,
     }
+    console.log(this.state.skuId)
     sessionStorage.setItem("prePara",JSON.stringify(prePara))
     sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
     this.props.getUpdateInfo()
@@ -307,14 +325,7 @@ export default class premium extends React.Component {
       type: '1',
       personType: '2',
       relation: '1',
-      insurantCount: '1'//,
-      // "planInfoList": [{
-      //   "benLevel": "00",
-      //   "planCode": "P033501",
-      //   "sumIns": 350000,
-      //   "premType": 1,
-      //   "premTerm": 12
-      // }],
+      insurantCount: '1'
     })
     this.setState({
       premiumStatus: 0,
@@ -341,9 +352,9 @@ export default class premium extends React.Component {
       startDate: e.target.value,
       premiumStatus: 0
     })
-    if(this.state.isShowAddCountry === false) {
+    if(this.state.insurancePriod.indexOf("-") === -1 || this.state.tourismKey === '1'){
       this.setState({
-        endDate: util.getEndDatet(util.getEndDatet(e.target.value, this.state.guaranteePeriod, this.state.insurancePriodUnit),-1 , 'D')
+        endDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D')
       })
     }
   }
@@ -550,13 +561,13 @@ export default class premium extends React.Component {
               </div>
             </section>
             {
-              !this.state.isShowAddCountry || this.state.tourismKey === '1'  ? this.renderEndDateText() : this.renderEndDate()
+              detail.insurancePriod.indexOf("-") === -1 || this.state.tourismKey === '1' ? this.renderEndDateText() : this.renderEndDate()
             }
             <p className="pre-decribes">
               *如果用于办理签证，建议选择旅行日期时间前后各延长2天，详询使馆
             </p>
             <div className="col-line-threee col-no-bd">
-              <span>被保险人</span>
+              <span>被保险人出生日期</span>
               <div className="btn-add-icon" onTouchTap={this.addBepoleDate.bind(this)}>
                   <span className="add-icon-imgs"></span>
                   <span className="add-icon-txt">添加</span>

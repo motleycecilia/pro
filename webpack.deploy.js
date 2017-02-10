@@ -23,7 +23,7 @@ var config = {
 	output: {
 		path: path.join(__dirname, '/dist/'),
 		filename: assetsPath + 'js/app.js',
-		chunkFilename: assetsPath + 'js/chunk.[id].js',
+		chunkFilename: assetsPath + 'js/chunk.[id].[hash:4].js',
 		//cdn host
 		publicPath: ''
 	},

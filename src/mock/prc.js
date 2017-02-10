@@ -45,3 +45,36 @@
     }]
   }]
 }]
+
+
+
+[ {
+  "serialNo": "",
+  "from": "wap-chaoshi",
+  "userChannel": "0",
+  "quantity": 1,
+  "buyPlatform": "1",
+  "orderType": "2",
+  "productId": "10028680",
+  "productCode": "10007603",
+  "orderSpliteFlag": "1",
+  "productInsuranceCode": "P1130B47",
+  "insuranceInfoList": [{
+    "skuId": 10033720,
+    "policyInfo": {
+      "insuranceBeginTime": "2017-02-16",
+      "insuranceStartTime": "2017-02-16",
+      "insuranceEndTime": "2017-02-23",
+      "insurancePeriod": "1",
+      "insurancePriodUnit": "D"
+    },
+    "insurantInfoList": [{
+      "insurantSex": "F",
+      "insurantBirth": "1991-02-05",
+      "type": "1",
+      "personType": "2",
+      "relation": "1",
+      "insurantCount": "1"
+    }]
+  }]
+}]

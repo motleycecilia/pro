@@ -1,7 +1,7 @@
 import request from 'reqwest'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
-  'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi
+  'https://m.pingan.com/chaoshi'//https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi
 const isGp = false
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
@@ -45,7 +45,7 @@ export function queryDetilInfo(productId, productCode) {
 //核保
 export function preSubmit(params){
 	let paramst = {
-		clientNo: '729811450780230322',
+		clientNo: '613591470048742560',
 		from: 'wap-chaoshi',
 		userChannel: '0',
 		buyPlatform: '1',
@@ -67,7 +67,7 @@ export function preSubmit(params){
 		return gpFn('premiumConfirm', paramst)
 	}else {
 		return request({
-			url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/getNewInsurant.do?insurantId=&callback=reqwest_1486179288247',
+			url: 'https://m.pingan.com/chaoshi/support/insurance/getNewInsurant.do?insurantId=&callback=reqwest_1486179288247',
 			method: 'GET',
 			type: 'jsonp',
 			timeout: timeout,
@@ -199,7 +199,7 @@ export function premiumMeasure(params){
 		return gpFn('premiumCalculate', paramsGp)
 	}else {
 		return request({
-			url: 'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/support/insurance/productInfo.do?productId=10013242&productCode=2342342&productSide=20001&platformType=02&callback=reqwest_1486176901757',
+			url: 'https://m.pingan.com/chaoshi//support/insurance/productInfo.do?productId=10000400&productSide=20001&platformType=02&callback=reqwest_1486711510630',
 			method: 'GET',
 			type: 'jsonp',
 			timeout: timeout,
@@ -240,7 +240,7 @@ export function isLogin() {
 */
 export function getPolicyUserInfo() {
 	if(isGp === true) {
-		return gpFn('GetInsurerInfo', {clientNo: '729811450780230322'})
+		return gpFn('GetInsurerInfo', {clientNo: '613591470048742560'})
 	}else {
 		return request({
 			url: domain + '/support/insurance/getNewInsurer.do',
@@ -256,7 +256,7 @@ export function getPolicyUserInfo() {
 */
 export function updatePolicyUserInfo(params){
 	let paramst = {
-		clientNo: '729811450780230322',
+		clientNo: '613591470048742560',
 		insurerId: params.insurerId,
 		insurerName: params.insurerName,
 		insurerIdNo: params.insurerIdNo,
@@ -291,7 +291,7 @@ export function updatePolicyUserInfo(params){
 
 export function getInsuredUserInfo(id){
 	if(isGp === true) {
-		return gpFn('GetInsurantInfo', {clientNo: '729811450780230322'})
+		return gpFn('GetInsurantInfo', {clientNo: '613591470048742560'})
 	}else {
 		return request({
 			url: domain + '/support/insurance/getNewInsurant.do',///support/insurance/getNewInsurant.do
@@ -308,7 +308,7 @@ export function getInsuredUserInfo(id){
 
 export function updateInsuredUserInfo(params){
 	let paramst = {
-		clientNo: '729811450780230322',
+		clientNo: '613591470048742560',
 		insurantId: params.insurerId,
 		insurantName: params.insurantName,
 		insurantIdNo: params.insurantIdNo,
@@ -343,7 +343,7 @@ export function updateInsuredUserInfo(params){
 
 export function addInsuredUserInfo(params){
 	const paramst = {
-		clientNo: '729811450780230322',
+		clientNo: '613591470048742560',
 		insurantName: params.insurantName,
 		insurantIdNo: params.insurantIdNo,
 		insurantIdType: params.insurantIdType,
@@ -368,7 +368,7 @@ export function addInsuredUserInfo(params){
 //
 export function deleteInsuredUserInfo(insurantId){
 	if(isGp === true) {
-		return gpFn('RemoveInsurantInfo', {clientNo: '729811450780230322', insurantId: insurantId})
+		return gpFn('RemoveInsurantInfo', {clientNo: '613591470048742560', insurantId: insurantId})
 	}else {
 		return request({
 			url: domain + '/support/insurance/deleteNewInsurant.do',

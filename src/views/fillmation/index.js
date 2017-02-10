@@ -311,12 +311,36 @@ export default class fillmation extends React.Component {
         return {insurantId: val.id}
       })
       let prePara = JSON.parse(sessionStorage.getItem("prePara"))
+      // const preParams = {
+      //   serialNo: '1801ca94-1b09-4fca-a3f8-d6be5cde004f',
+      //   productId: '10028680',
+  		// 	productCode: '10007603',
+  		// 	productInsuranceCode: 'P1130B47',
+      //   skuid: '10033720',
+      //   insurerInfo: {
+      //     insurantId: this.state.policyNo
+      //   },
+      //   insuranceInfoList: [{insurantInfoList: insurantList}],
+      //   linkManInfo: {
+      //     linkManName: this.state.policyName,
+      //     linkManMobileNo: this.state.policyMobileNo
+      //   },
+      //   invoceInfo: {
+      //     invoceName: this.state.policyName,
+      //     invoceHeading: this.state.ititle,
+      //     invoceZipCode: this.state.zipCode,
+      //     invoceMobileNo: this.state.phoneNo,
+      //     invoceAddress: this.state.address
+      //   }
+      // }
+      // this.props.preSubmit(preParams)
+      // return
       const preParams = {
-        serialNo: '1801ca94-1b09-4fca-a3f8-d6be5cde004f',
-        productId: '10028680',
-  			productCode: '10007603',
-  			productInsuranceCode: 'P1130B47',
-        skuid: '10033720',
+        serialNo: prePara.serialNo,
+        productId: prePara.productId,
+  			productCode: prePara.productCode,
+  			productInsuranceCode: prePara.productInsuranceCode,
+        skuid: prePara.skuid,
         insurerInfo: {
           insurantId: this.state.policyNo
         },
@@ -333,31 +357,8 @@ export default class fillmation extends React.Component {
           invoceAddress: this.state.address
         }
       }
+      console.log(preParams)
       this.props.preSubmit(preParams)
-      return
-      // const preParams = {
-      //   serialNo: prePara.serialNo,
-      //   productId: prePara.productId,
-  		// 	productCode: prePara.productCode,
-  		// 	productInsuranceCode: prePara.productInsuranceCode,
-      //   skuid: prePara.skuid,
-      //   insurerInfo: {
-      //     insurerNo: this.state.policyNo
-      //   },
-      //   insurantInfoList: insurantList,
-      //   linkManInfo: {
-      //     linkManName: this.state.policyName,
-      //     linkManMobileNo: this.state.policyMobileNo
-      //   },
-      //   invoceInfo: {
-      //     invoceName: this.state.policyName,
-      //     invoceHeading: this.state.ititle,
-      //     invoceZipCode: this.state.zipCode,
-      //     invoceMobileNo: this.state.phoneNo,
-      //     invoceAddress: this.state.address
-      //   }
-      // }
-      // this.props.preSubmit(preParams)
     }else {
       this.setState({
         errorInfo: errorContents
@@ -371,8 +372,8 @@ export default class fillmation extends React.Component {
   }
   onClickPay() {
     const sso = sessionStorage.getItem('sso')
-    const orderNo = '20170208017363391'//this.state.orderNo//
-    const payOrderNo ='2017020801664619'//this.state.payOrderNo//
+    const orderNo = this.state.orderNo//'20170208017363391'//
+    const payOrderNo = this.state.payOrderNo//'2017020801664619'//
     window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&hook=111111&from=wap-chaoshi&productSide=&customid&hook=/baoxian/liebiao.shtml`//&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}
   }
   onClickConfirmBepole(index) {
