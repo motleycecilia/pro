@@ -8,7 +8,7 @@ import { App, YztApp } from 'utils/native_h5'
 import { createChecker } from 'utils/checker'
 import BtnLoading from 'components/btnLoading'
 import confimInfo from 'mock/confim'
-
+import util from 'utils/utils'
 
 @connect(
   state => ({
@@ -70,18 +70,32 @@ export default class fillmation extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     const { insured, policyUser, underwriting} = nextProps
-    if(insured.errorMsg === '90002' || underwriting.errorMsg === '90002') {
+    if(insured.errorMsg === '90002' || underwriting.errorCode === '9002') {
       this.context.router.push({
         pathname: '/login'
+      })
+      return
+    }
+    if(underwriting.getPreSubmitBegin === true) {
+      this.setState({
+        btnLodding: true
       })
       return
     }
     if(underwriting.getPreSubmitSuccess === true) {
       YztApp.setTitle('保单信息确认')
       this.setState({
+        btnLodding: false,
         isConfirm: true,
         orderNo: underwriting.preResultData.orderNo,
         payOrderNo: underwriting.preResultData.payOrderNo
+      })
+      return
+    }
+    if(underwriting.getPreSubmitError === true) {
+      this.setState({
+        btnLodding: false,
+        errorInfo: underwriting.errorMsg
       })
       return
     }
@@ -307,10 +321,13 @@ export default class fillmation extends React.Component {
     }
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
+      let prePara = JSON.parse(sessionStorage.getItem("prePara"))
+      // let checkBeDate = this.state.beList.every(function(val, index) {
+      //   return util.maxDate(minDate, val.insurantBirth) && util.maxDate(val.insurantBirth, maxDate)
+      // })
       let insurantList = this.state.beList.map((val, index) => {
         return {insurantId: val.id}
       })
-      let prePara = JSON.parse(sessionStorage.getItem("prePara"))
       // const preParams = {
       //   serialNo: '1801ca94-1b09-4fca-a3f8-d6be5cde004f',
       //   productId: '10028680',
@@ -371,10 +388,13 @@ export default class fillmation extends React.Component {
     })
   }
   onClickPay() {
-    const sso = sessionStorage.getItem('sso')
+    const sso = JSON.parse(sessionStorage.getItem('sso'))
     const orderNo = this.state.orderNo//'20170208017363391'//
     const payOrderNo = this.state.payOrderNo//'2017020801664619'//
-    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&hook=111111&from=wap-chaoshi&productSide=&customid&hook=/baoxian/liebiao.shtml`//&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}
+    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=/baoxian/liebiao.shtml&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
+    //hook: 出现异常页面
+    //订单页面 收银台固定
+    //
   }
   onClickConfirmBepole(index) {
     this.setState({
@@ -573,24 +593,28 @@ export default class fillmation extends React.Component {
       })
     )
   }
-  renderConfirmbePeople() {
+  renderConfirmbePeople(insuranceInfoList) {
     return(
-      [0, 1].map((val, index) => {
+      insuranceInfoList.map((val, index) => {
         return(
           <div className="confirm-center-contents" key={index}>
             <div className="center-content">
               <div className="col-line-fillmation" onTouchTap={this.onClickConfirmBepole.bind(this, index)}>
-                <span>为范围</span>
-                <span className="col-line-cr txt-through"></span>
+                <span>{val.insurantInfoList[0].insurantName}</span>
+                <span className={val.policyInfo.detailOrderMemo === "OK" ? "col-line-cr" : "col-line-cr color-red"}>
+                  {
+                    val.policyInfo.detailOrderMemo === "OK" ? "保费  " + val.policyInfo.actualPremium : "未通过核保"
+                  }
+                </span>
                 <span className={this.state.ConfirmBepoleIndex === index ? "icon-max-up" : "icon-max-down"}></span>
               </div>
               <div className={this.state.ConfirmBepoleIndex === index ? "" : "hide"}>
                 <div className="p-b-20">
                   <span className="fill-content-tit">
-                    身份证号
+                    证件号码
                   </span>
                   <span className="fill-content-txt">
-                    271829328728920937
+                    {val.insurantInfoList[0].insurantIdno}
                   </span>
                 </div>
                 <div className="p-b-20">
@@ -598,7 +622,7 @@ export default class fillmation extends React.Component {
                     手机号码
                   </span>
                   <span className="fill-content-txt">
-                    13212312322
+                    {val.insurantInfoList[0].mobile}
                   </span>
                 </div>
                 <div className="p-b-20">
@@ -606,7 +630,7 @@ export default class fillmation extends React.Component {
                     生日
                   </span>
                   <span className="fill-content-txt">
-                    1990-01-21
+                    {val.insurantInfoList[0].insurantBirth}
                   </span>
                 </div>
                 <div className="p-b-20">
@@ -614,7 +638,7 @@ export default class fillmation extends React.Component {
                     与投保人关系
                   </span>
                   <span className="fill-content-txt">
-                    本人
+                    {val.insurantInfoList[0].relation}
                   </span>
                 </div>
               </div>
@@ -724,12 +748,11 @@ export default class fillmation extends React.Component {
               </div>
             </div>
           </div>
-
           <div className="confirm-center-tit">
             被保人
           </div>
             {
-              this.renderConfirmbePeople()
+              this.renderConfirmbePeople(preResultData.insuranceInfoList)
             }
           <div className="content white-bg m-t10">
             <div className="content-title">保障范围</div>
@@ -746,7 +769,7 @@ export default class fillmation extends React.Component {
             保单测算金额： <span className="txt-through">￥234234.00</span>
           </div>
           <div className="confirm-fill-money">
-            实际保额: ￥3000.00
+            实际保额: ￥{preResultData.payPrem}
           </div>
           <div className="complete-fill-btn" onTouchTap={::this.onClickPay}>
             立即支付
@@ -850,9 +873,12 @@ export default class fillmation extends React.Component {
             </div>
             同意授权声明并通过用户投保
           </div>
-          <div className="policy-error fill-error">
-            {this.state.errorInfo}
-          </div>
+          {
+            !this.state.btnLodding && <div className="policy-error fill-error">
+              {this.state.errorInfo}
+            </div>
+          }
+
         </div>
         {
           this.state.btnLodding ?
@@ -872,8 +898,8 @@ export default class fillmation extends React.Component {
           !this.state.isConfirm && policyUser.getPolicyUserSuccess === true ?  this.renderContent(policyUser.getResultData) : ''
         }
         {
-          // this.state.isConfirm && this.renderConfirm(underwriting.preResultData)
-          this.state.isConfirm && this.renderConfirm(confimInfo.responseData)
+          this.state.isConfirm && this.renderConfirm(underwriting.preResultData)
+          // this.state.isConfirm && this.renderConfirm(confimInfo.responseData)
         }
       </div>
     )

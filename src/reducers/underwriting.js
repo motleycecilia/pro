@@ -27,7 +27,9 @@ export default function underwriting(state = defaultState, action) {
     case GET_PRESUBMIT_ERROR:
       return Object.assign({}, state, {
         getPreSubmitBegin: false,
-        getPreSubmitError: true
+        getPreSubmitError: true,
+        errorCode: action.errorCode,
+        errorMsg: action.errorMsg
       })
     case RESET_PRESUBMIT:
       return defaultState

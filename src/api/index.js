@@ -1,8 +1,8 @@
 import request from 'reqwest'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
-  'https://m.pingan.com/chaoshi'//https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi
-const isGp = false
+  'https://m.pingan.com/chaoshi'//
+const isGp = true
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
 const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'

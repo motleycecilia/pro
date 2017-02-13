@@ -5,7 +5,7 @@ import incinerator from 'hooks/incinerator'
 /*
 查询详情页
 */
-const isGp = false
+const isGp = true
 export function queryDetilInfo(productId, productCode){
   return (dispatch, getState) => {
     dispatch(getDetailInfoBegin())
@@ -424,19 +424,19 @@ export function preSubmit(parasm){
       if(isGp === true) {
         incinerator('preSubmit', res.resultStatus, {
           gpSuccess: dispatch.bind(this, getPreSubmitSuccess(res.result)),
-          gpUnlogin: dispatch.bind(this, getPreSubmitError('90002')),
-          fail: dispatch.bind(this, getPreSubmitError(res.memo))
+          gpUnlogin: dispatch.bind(this, getPreSubmitError(res.memo, '90002')),
+          fail: dispatch.bind(this, getPreSubmitError(res.memo, '3000'))
         })
       }else {
         incinerator('preSubmit', res.responseCode, {
           success: dispatch.bind(this, getPreSubmitSuccess(res.responseData)),
-          fail: dispatch.bind(this, getPreSubmitError(res.responseMessage)),
-          unlogin: dispatch.bind(this, getPreSubmitError('90002'))
+          fail: dispatch.bind(this, getPreSubmitError(res.responseMessage, '3000')),
+          unlogin: dispatch.bind(this, getPreSubmitError(res.responseMessage, '90002'))
         })
       }
     })
     .fail(() => {
-      dispatch(getPreSubmitError('系统异常'))
+      dispatch(getPreSubmitError('系统异常'), '4000')
     })
   }
 }
@@ -453,10 +453,11 @@ function getPreSubmitSuccess(resultData) {
   }
 }
 
-function getPreSubmitError(errorMsg) {
+function getPreSubmitError(errorMsg, errorCode) {
   return {
     type: types.GET_PRESUBMIT_ERROR,
-    errorMsg: errorMsg
+    errorMsg: errorMsg,
+    errorCode: errorCode
   }
 }
 
@@ -550,7 +551,7 @@ function getUpdataInfoBegin(){
 
 function getUpdataInfoSuccess(upDataInfos){
 	return {
-		type:types.GET_UPDATREINFO_SUCCESS,
+		type: types.GET_UPDATREINFO_SUCCESS,
 		upDataInfo: upDataInfos
 	}
 }
@@ -573,11 +574,13 @@ export function getUpdateInfo(params){
 		dispatch(getUpdataInfoBegin())
 		return api.getUpdateInfo(params)
 			.then(res => {
+        console.log(res)
 				incinerator('checkOrderPayCondition', res.responseCode, {
 					success: dispatch.bind(this, getUpdataInfoSuccess(res.responseData)),
 					fail: dispatch.bind(this, getUpdataInfoFail(res.responseCode, res.responseMessage)),
 					unlogin: ()=>{
-            YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
+              dispatch(getUpdataInfoFail("900002", "未登录"))
+              YztApp.accessNativeModule('patoa://pingan.com/login', ()=> {
             })
           }
 				})

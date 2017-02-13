@@ -94,7 +94,6 @@ const util = {
   @params date :系统时间
   @params edate : n日期
   @params unit : 单位 (M为月Y为年 默认或其它为天)
-  @params yearAdd : +yearAdd年
   **/
   getEndDatet: function(date, edate, unit){
     if(new Date(date) == "Invalid Date"){
@@ -117,7 +116,7 @@ const util = {
   比较两个日期大小
   @params dateo:第一个日期
   @params datet:第二个日期
-  return 返回true 则第一个日期大
+  return 返回true 则第二个日期在第一个日期之前
   */
   maxDate : function(dateo, datet) {
     let date1=new Date(dateo),
@@ -127,6 +126,10 @@ const util = {
   outputAddOverweight: function(val) {
     val = "" + val
     return val.length < 9 ? "****" : (val.substring(0, 4) + "****" + val.substring(val.length - 4, val.length))
+  },
+  replaceAll : function(val, info, reInfo) {
+    val = val.replace(info,reInfo)
+    return val.indexOf(info) > -1 ? this.replaceAll(val, info, reInfo) : val
   }
 }
 

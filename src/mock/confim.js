@@ -32,7 +32,7 @@ const confim = {
 
         "policyInfo": {
 
-          "detailOrderMemo": "OK",
+          "detailOrderMemo": "NO",
 
           "insurancePeriod": 40,
 

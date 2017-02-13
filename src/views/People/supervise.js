@@ -139,7 +139,7 @@ export default class supervise extends React.Component {
     const { insured } = this.props
     return(
       <div>
-        <Header isVisibility={!App.IS_YZT} rightTxt="完成" onClickRight={this.onClickRight.bind(this)} onClickBack={this.onClickBack.bind(this)} title={title}/>
+        <Header isVisibility={true} rightTxt="完成" onClickRight={this.onClickRight.bind(this)} onClickBack={this.onClickBack.bind(this)} title={title}/>
         {
           insured.getInsuredUserBegin ?
           <Loading /> :

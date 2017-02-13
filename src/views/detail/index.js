@@ -33,7 +33,7 @@ export default class detail extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(10000400)
     // this.props.queryDetilInfo(10028680, 10007603)
     this.props.queryDetilInfo(getUrlParam('productId'), getUrlParam('productCode'))
     App.goBackAction = function () {
@@ -44,22 +44,22 @@ export default class detail extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { detailInfo } = nextProps
     if(detailInfo.getDetailSuccess === true) {
-      const detailInfosa = {
-        priceList: detailInfo.detail.priceList,
-        currentTime: detailInfo.detail.currentTime,
-        insurancePriodUnit: detailInfo.detail.insurancePriodUnit,
-        productName: detailInfo.detail.productName,
-        insurancePriod: detailInfo.detail.insurancePriod,
-        secondLevelType: detailInfo.detail.secondLevelType
-        // priceList: detailInfos.result.priceList,
-        // currentTime: detailInfos.result.currentTime,
-        // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
-        // productName: detailInfos.result.productName,
-        // insurancePriod: detailInfos.result.insurancePriod,
-        // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
-        // secondLevelType: detailInfos.result.secondLevelType
-      }
-      sessionStorage.setItem("detailInfos",JSON.stringify(detailInfosa))
+      // const detailInfosa = {
+      //   priceList: detailInfo.detail.priceList,
+      //   currentTime: detailInfo.detail.currentTime,
+      //   insurancePriodUnit: detailInfo.detail.insurancePriodUnit,
+      //   productName: detailInfo.detail.productName,
+      //   insurancePriod: detailInfo.detail.insurancePriod,
+      //   secondLevelType: detailInfo.detail.secondLevelType
+      //   // priceList: detailInfos.result.priceList,
+      //   // currentTime: detailInfos.result.currentTime,
+      //   // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
+      //   // productName: detailInfos.result.productName,
+      //   // insurancePriod: detailInfos.result.insurancePriod,
+      //   // insurancePriodUnit: detailInfos.result.insurancePriodUnit,
+      //   // secondLevelType: detailInfos.result.secondLevelType
+      // }
+      // sessionStorage.setItem("detailInfos",JSON.stringify(detailInfosa))
       this.setState({
         // title: detailInfo.detail.productName,
         productId: getUrlParam('productId') || detailInfo.detail.productId,
@@ -137,7 +137,7 @@ export default class detail extends React.Component {
             <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
               <div className="content-list-title">
                 <span className="project-name">{val.securityProName}</span>
-                <span className="money">{val.minPrice}{val.maxPrice === val.minPrice ? "" : "-"+val.maxPrice}</span>
+                <span className="money">{val.securityProAssuredSum/10000}万元</span>
               </div>
             </a>
             <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>

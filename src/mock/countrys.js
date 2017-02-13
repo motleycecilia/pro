@@ -1,4 +1,4 @@
-const countrys = {
+const countrysData = {
   "10028680": [
     {
       name: 'AFG 阿富汗 Afghanistan'
@@ -546,4 +546,4 @@ const countrys = {
     }
   ],
 }
-export default countrys
+export default countrysData
