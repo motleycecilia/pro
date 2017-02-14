@@ -1,12 +1,14 @@
 import request from 'reqwest'
+import { App, YztApp } from 'utils/native_h5'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
-  'https://m.pingan.com/chaoshi'//
+  'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//
 const isGp = true
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
 const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'
-const publicParam = {"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"};
+const osTypes = App.IS_IOS === true ? "1" : "2"
+const publicParam = {"osType": osTypes, "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"};
 const detailParams = [{"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"},{productId:'10028680',
 productCode:'10007603', productSide: '20001', platformType: '002'}]
 
@@ -396,7 +398,7 @@ export function getAccessTicket(sso) {
   })
 }
 /* 是否需要升级 */
-export function getUpdateInfo(params) {
+export function checkOrderPayCondition(params) {
 	return request({
 		url: domain + '/sso/account/checkOrderPayCondition.do',
 		method: 'GET',

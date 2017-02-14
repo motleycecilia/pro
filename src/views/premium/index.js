@@ -5,6 +5,8 @@ import {connect} from 'react-redux'
 import { createChecker } from 'utils/checker'
 import { getUrlParam } from 'utils/urlParams.js'
 import Country from 'components/country'
+import * as api from 'api/index'
+import incinerator from 'hooks/incinerator'
 import { App, YztApp } from 'utils/native_h5'
 import { queryDetilInfo, premiumMeasure, premiumMeasureReset, AppUserLogin, getUpdateInfo, resetUpdataInfo } from 'actions'
 import util from 'utils/utils'
@@ -45,12 +47,10 @@ export default class premium extends React.Component {
     bePeopleDate: [],
     productPriod: false,//保障期限是否为年
     insurancePriod: 0,//保障期限
-    endPriod: 0,
+    minEndDate: '',
+    maxEndDate: '',
+    endPriod: 2,
     endPriodUnit: 'D',
-    minPeriod: '',
-    maxPeriod: '',
-    periodMinUnit: '',
-    periodMaxUnit: '',
     insurancePriodUnit: '',
     showModal: false,
     premiumStatus: 0,
@@ -65,6 +65,12 @@ export default class premium extends React.Component {
     maxInsureAge: 2,
     maxInsureAgeUnit: 'Y',
     minInsureAgeUnit: 'D',
+    minPeriod: '',
+    maxPeriod: '',
+    periodMinUnit: '',
+    periodMaxUnit: '',
+    minStartDate: '',
+    maxStartDate: '',
     minBirthDay: '',
     maxBirthDay: ''
   }
@@ -107,6 +113,9 @@ export default class premium extends React.Component {
         // maxInsureAge: detsInfo.result.maxInsureAge,
         // maxInsureAgeUnit: detsInfo.result.maxInsureAgeUnit,
         // minInsureAgeUnit: detsInfo.result.minInsureAgeUnit,
+        // startDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
+        // minStartDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
+        // maxStartDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].maxValue, detsInfo.result.insuranceProductTerms[0].maxValueUnit),
         // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
         // isShowAddCountry: TYpes.productS.indexOf("" + detsInfo.result.productId) > -1 ? true : false//根据产品ID判断旅游型
         productNmae: detailInfo.detail.productName,
@@ -115,16 +124,20 @@ export default class premium extends React.Component {
         name: detailInfo.detail.priceList[0].priceName,
         minPeriod: detailInfo.detail.insuranceProductTerms[0].minValue,
         maxPeriod: detailInfo.detail.insuranceProductTerms[0].maxValue,
-        periodValueUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit,
+        periodMinUnit: detailInfo.detail.insuranceProductTerms[0].minValueUnit,
+        periodMaxUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit,
         insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod[0],//保险期限
         productPriod: insurantUnit === 'Y' ? true : false,
+        endPriod: insurantUnit === 'Y' ? "12" : detailInfo.detail.insurancePriod.split("-")[1],
+        endPriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,
         currentTime: detailInfo.detail.currentTime.substring(0, 10),
         minInsureAge: detailInfo.detail.minInsureAge,
         maxInsureAge: detailInfo.detail.maxInsureAge,
-        periodMinUnit: detailInfo.detail.insuranceProductTerms[0].minValueUnit,
-        periodMaxUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit,
         minInsureAgeUnit: detailInfo.detail.minInsureAgeUnit,
         maxInsureAgeUnit: detailInfo.detail.maxInsureAgeUnit,
+        startDate: util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].minValue-1, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
+        minStartDate: util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].minValue-1, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
+        maxStartDate: util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].maxValue-1, detailInfo.detail.insuranceProductTerms[0].maxValueUnit),
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
         isShowAddCountry: TYpes.productS.indexOf("" + detailInfo.detail.productId) > -1 ? true : false// 产品分类是否旅游类型
       })
@@ -149,6 +162,7 @@ export default class premium extends React.Component {
     }
     if(premiumInfo.measurePremiumError === true) {
       this.setState({
+        premiumStatus: 1,
         showModal: true,
         content: premiumInfo.errorMsg
       })
@@ -263,6 +277,7 @@ export default class premium extends React.Component {
     let bePeopleDates = this.state.bePeopleDate
     bePeopleDates.splice(index, 1)
     this.setState({
+      premiumStatus: 0,
       bePeopleDate: bePeopleDates
     })
   }
@@ -326,7 +341,7 @@ export default class premium extends React.Component {
           insuranceBeginTime: this.state.startDate,
           insuranceStartTime: this.state.startDate,
           insuranceEndTime: this.state.endDate,
-          insurancePeriod: this.state.insurancePriod,//this.state.isShowAddCountry === true ? util.DateDiff(this.state.startDate, this.state.endDate) : this.state.insurancePriod,
+          insurancePeriod: this.state.insurancePriod,
           insurancePriodUnit: this.state.insurancePriodUnit
         }
         const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
@@ -355,6 +370,57 @@ export default class premium extends React.Component {
       errorContent: errorContents
     })
   }
+  goSubmit(){
+    this.context.router.push({
+      pathname: '/fillmation',
+      query: {
+        productId: this.props.location.query.productId,
+        productCode: this.props.location.query.productCode
+      }
+    })
+  }
+  goUpdate(data){
+      let urlMap = api.getUpdateUrl(),
+          symbol = data?data.targetURLSymbol:'';
+      if(symbol && urlMap[symbol]){//跳转升级
+          let productNmae = this.state.productNmae;
+          let {origin,pathname,hash} = location;
+          let pre  = encodeURIComponent(`${origin}${pathname}${hash}`),
+              next = encodeURIComponent(`${origin}${pathname}${hash}&updated=true&productName=${productName}&productId=${this.state.Id}&productCode=${this.props.location.query.productCode}`);
+          sessionStorage.setItem(UPDATEING, true);
+          App.call(['isNeedJSBack'],null,null,{status:'false'});
+          location.href = urlMap[symbol]+`?preLink=${pre}&nextLink=${next}`
+      }
+      sessionStorage.setItem('clientNo', data.clientNo);
+      if(symbol && symbol==='04'){//查询是否满足18岁
+          this.checkIfAdult(this.goSubmit.bind(this));
+      }
+  }
+  checkIfAdult(cb){
+      api.checkIfAdult()
+          .then(res => {
+              incinerator('checkIfAdult', res.responseCode, {
+                  success: ()=>{
+                      cb();
+                  },
+                  fail:()=>{
+                      this.setState({
+                        errorContent:res.responseMessage
+                      })
+                  },
+                  unlogin:()=>{
+                      const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
+                      YztApp.accessNativeModule(loginUrl,()=>{
+                      })
+                  }
+              })
+          })
+          .fail(() => {
+              this.setState({
+                errorContent:'接口请求失败'
+              })
+          });
+  }
   onClickInsure() {
     const fillMationInfo = {
       productName: this.state.productNmae,
@@ -372,8 +438,59 @@ export default class premium extends React.Component {
     }
     sessionStorage.setItem("prePara",JSON.stringify(prePara))
     sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
-    this.props.getUpdateInfo()
+    YztApp.getLoginStatus((status,data)=>{
+      if(status==='success' && (!data.clientNo||(data.loginStatus == '0'))){//未登录先去登录
+          YztApp.accessNativeModule('patoa://pingan.com/login',()=>{
+              //登录后需要调用升级
+              this.goSubmit();
+          })
+      }
+      else{
+          //升级
+          YztApp.getSSOTicket((status,data)=>{
+              if(status!=='success'){
+                  this.showError('native api call error')
+                  return;
+              }
+              let sso = data?data:false;
+              sessionStorage.setItem("sso", JSON.stringify(sso))
+              if(status==='success' && sso && !sso.signature){
+                  this.goUpdate({targetURLSymbol:'02'});
+              }
+              if(status==='success' && sso && sso.signature){
+                this.getUpdateInfo(sso)
+              }
+          })
+      }
+    })
   }
+  getUpdateInfo(sso){
+        api.checkOrderPayCondition(sso) //同步登录态
+            .then(res => {
+                incinerator('checkOrderPayCondition', res.responseCode, {
+                    success: ()=>{
+                        this.goUpdate(res.responseData);
+                    },
+                    fail:()=>{
+                      this.setState({
+                        errorContent:res.responseMessage
+                      })
+                    },
+                    unlogin:()=>{
+                        const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
+                        YztApp.accessNativeModule(loginUrl,()=>{
+                        })
+                    }
+                })
+            })
+            .fail(() => {
+              this.setState({
+                errorContent: "接口请求失败"
+              })
+            });
+
+    }
+
   addBepoleDate() {
     let bePeopleDates = this.state.bePeopleDate
     bePeopleDates.push({
@@ -405,6 +522,8 @@ export default class premium extends React.Component {
   }
   onChageStartDate(e) {
     this.setState({
+      minEndDate: util.getEndDatet(e.target.value, 1, 'D'),
+      maxEndDate: util.getEndDatet(e.target.value, this.state.endPriod, this.state.endPriodUnit),
       startDate: e.target.value,
       premiumStatus: 0
     })
@@ -508,7 +627,7 @@ export default class premium extends React.Component {
       this.state.bePeopleDate.map((val, index) => {
         let i = index
         return(
-          <div className="col-line-threeetbd" key={index}>
+          <div className="col-line-threeetnbd" key={index}>
             <div className="col-line-with">
               <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, i)}>
               </span>
@@ -516,7 +635,9 @@ export default class premium extends React.Component {
             </div>
             <span>￥
               {this.state.premiumInfos.length > 0 ? this.state.premiumInfos[index].payPrem : 0}
-              /人</span>
+              /人
+            </span>
+            <div className="bepe-date-title">出生日期</div>
           </div>
         )
       })
@@ -530,6 +651,8 @@ export default class premium extends React.Component {
           <input
             type="date"
             className="input-style"
+            min={this.state.minEndDate}
+            max={this.state.maxEndDate}
             onChange={this.onChangeEndDate.bind(this)}
             value={this.state.endDate || ""}
           />
@@ -606,7 +729,8 @@ export default class premium extends React.Component {
                   type="date"
                   className="input-style"
                   placeholder="开始时间"
-                  maxLength="11"
+                  min={this.state.minStartDate}
+                  max={this.state.maxStartDate}
                   onChange={this.onChageStartDate.bind(this)}
                   value={this.state.startDate || ''}
                 />
@@ -683,11 +807,11 @@ export default class premium extends React.Component {
           this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />
         }
         {
-          <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
-            <span className="pre-btn-rbtn">
-              立即投保
-            </span>
-          </span>
+          // <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
+          //   <span className="pre-btn-rbtn">
+          //     立即投保
+          //   </span>
+          // </span>
         }
       </div>
     )

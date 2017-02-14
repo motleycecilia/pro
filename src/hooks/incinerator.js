@@ -18,6 +18,10 @@ export default function (name, code, handlers) {
       statusCode:defaultSetting
     },
     {
+      name:'checkIfAdult',
+      statusCode:defaultSetting
+    },
+    {
       name: 'insuredInfo',
       statusCode: defaultSetting
     },

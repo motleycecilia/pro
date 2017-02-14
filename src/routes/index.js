@@ -21,7 +21,7 @@ import confirm from 'react-router!views/fillmation/confirm'
 export default (
   <Route        component={CoreLayout} path='/'>
     <IndexRoute component={detail}/>
-    <Route      component={detail} path='/detail' title="详情"/>
+    <Route      component={detail} path='/detail' title="产品详情"/>
     <Route      component={bePeople} path='/bePeople' title="被投保人信息编辑"/>
     <Route      component={supervise} path='/supervise' title="被投保人管理"/>
     <Route      component={guarantee} path='/guarantee' title="保障内容"/>

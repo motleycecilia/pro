@@ -572,7 +572,7 @@ export function resetUpdataInfo(){
 export function getUpdateInfo(params){
 	return (dispatch, getState) => {
 		dispatch(getUpdataInfoBegin())
-		return api.getUpdateInfo(params)
+		return api.checkOrderPayCondition(params)
 			.then(res => {
         console.log(res)
 				incinerator('checkOrderPayCondition', res.responseCode, {

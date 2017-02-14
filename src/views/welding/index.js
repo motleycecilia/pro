@@ -61,7 +61,7 @@ class Welding extends React.Component {
           content: `${errMessage}，点击确认返回详情页`,
           goto: () => {
               this.setState({isModalVisible: false})
-              let preMiumPara = sessionStorage.getItem("preMiumPara")
+              let preMiumPara = JSON.parse(sessionStorage.getItem("prePara"))
               this.context.router.push({
                 pathname: '/detail',
                 query: {
