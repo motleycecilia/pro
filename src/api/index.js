@@ -6,15 +6,17 @@ const domain = process.env.DEV_ENV === 'production' ?
 const isGp = true
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
-const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'
+//http:34980  https:34943
+// const gpUrl = ais === 1 ? 'https://toa-gp-dmzstg1.pingan.com.cn:34943/toa-mgw/rest/webgateway' :  'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'
+const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp/'
 const osTypes = App.IS_IOS === true ? "1" : "2"
-const publicParam = {"osType": osTypes, "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"};
+const publicParam = {"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"};
 const detailParams = [{"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"},{productId:'10028680',
 productCode:'10007603', productSide: '20001', platformType: '002'}]
 
 function gpFn(operationType, paramas) {
 	return request({
-    url: domainGP + '/yizhangtong/api/gp',
+    url: gpUrl,
     method: 'post',
 		contentType: 'application/x-www-form-urlencoded',
     type: 'json',
@@ -47,7 +49,7 @@ export function queryDetilInfo(productId, productCode) {
 //核保
 export function preSubmit(params){
 	let paramst = {
-		clientNo: '613591470048742560',
+		// clientNo: '613591470048742560',
 		from: 'wap-chaoshi',
 		userChannel: '0',
 		buyPlatform: '1',
@@ -109,7 +111,7 @@ export function premiumMeasure(params){
 	}
 	console.log(JSON.stringify(paramsGp))
 	let paramst = {
-			"clientNo": "4215114760062584223",
+			// "clientNo": "4215114760062584223",
 			"productId": "10028680",
 			"productInsuranceCode": "P1130B48",
 			"productCode": "10007603",
@@ -242,7 +244,7 @@ export function isLogin() {
 */
 export function getPolicyUserInfo() {
 	if(isGp === true) {
-		return gpFn('GetInsurerInfo', {clientNo: '613591470048742560'})
+		return gpFn('GetInsurerInfo', {})
 	}else {
 		return request({
 			url: domain + '/support/insurance/getNewInsurer.do',
@@ -258,7 +260,7 @@ export function getPolicyUserInfo() {
 */
 export function updatePolicyUserInfo(params){
 	let paramst = {
-		clientNo: '613591470048742560',
+		// clientNo: '613591470048742560',
 		insurerId: params.insurerId,
 		insurerName: params.insurerName,
 		insurerIdNo: params.insurerIdNo,
@@ -293,7 +295,7 @@ export function updatePolicyUserInfo(params){
 
 export function getInsuredUserInfo(id){
 	if(isGp === true) {
-		return gpFn('GetInsurantInfo', {clientNo: '613591470048742560'})
+		return gpFn('GetInsurantInfo', {})
 	}else {
 		return request({
 			url: domain + '/support/insurance/getNewInsurant.do',///support/insurance/getNewInsurant.do
@@ -310,7 +312,7 @@ export function getInsuredUserInfo(id){
 
 export function updateInsuredUserInfo(params){
 	let paramst = {
-		clientNo: '613591470048742560',
+		// clientNo: '613591470048742560',
 		insurantId: params.insurerId,
 		insurantName: params.insurantName,
 		insurantIdNo: params.insurantIdNo,
@@ -345,7 +347,7 @@ export function updateInsuredUserInfo(params){
 
 export function addInsuredUserInfo(params){
 	const paramst = {
-		clientNo: '613591470048742560',
+		// clientNo: '613591470048742560',
 		insurantName: params.insurantName,
 		insurantIdNo: params.insurantIdNo,
 		insurantIdType: params.insurantIdType,
@@ -370,7 +372,7 @@ export function addInsuredUserInfo(params){
 //
 export function deleteInsuredUserInfo(insurantId){
 	if(isGp === true) {
-		return gpFn('RemoveInsurantInfo', {clientNo: '613591470048742560', insurantId: insurantId})
+		return gpFn('RemoveInsurantInfo', {insurantId: insurantId})
 	}else {
 		return request({
 			url: domain + '/support/insurance/deleteNewInsurant.do',
@@ -396,6 +398,9 @@ export function getAccessTicket(sso) {
     contentType: 'application/json;charset=utf-8',
     data: sso
   })
+}
+export function getAccessTicketGP(params) {
+	return gpFn('mamcLogin', params)
 }
 /* 是否需要升级 */
 export function checkOrderPayCondition(params) {

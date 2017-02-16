@@ -71,10 +71,10 @@ export default class policyUser extends React.Component {
       })
       return
     }
-    if(policyUser.getResultData) {
+    if(policyUser.getResultData === true) {
       this.setState({
         insurerId: policyUser.getResultData.id,
-        isbindCard: policyUser.getResultData.isBindCard,
+        isbindCard: policyUser.getResultData.isBindCard || "0",
         name: policyUser.getResultData.insurerName,
         cardNo: policyUser.getResultData.insurerIdNo,
         phoneNo: policyUser.getResultData.insurerMobile,
@@ -376,7 +376,7 @@ export default class policyUser extends React.Component {
       <div>
         <section className="bePeople-content">
           {
-            this.state.isbindCard === "0" ? this.renderSureEdit(policyUser) : this.renderNoEdit(policyUser)
+            this.state.isbindCard === "1" ? this.renderNoEdit(policyUser) : this.renderSureEdit(policyUser) 
           }
           <div className="input-outer m-t24">
             <div className="select-tit">手机号</div>
@@ -436,13 +436,19 @@ export default class policyUser extends React.Component {
 
   render() {
     const { title } = this.props.route
-    const policyUser = this.props.policyUser
+    let policyUser = this.props.policyUser
+    let policyUserInfo = policyUser.getResultData === true ? policyUser.getResultData : {
+      isbindCard: '0',
+      insurerName: '',
+      insurerIdNo: '',
+      insurerMobile: '',
+      insurerEmail: ''
+    }
     return(
       <div>
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={title}/>
         {
-          // this.renderContent({})
-          policyUser.getPolicyUserSuccess ? this.renderContent(policyUser.getResultData) : <Loading />
+          policyUser.getPolicyUserSuccess ? this.renderContent(policyUserInfo) : <Loading />
         }
       </div>
     )

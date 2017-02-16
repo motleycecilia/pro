@@ -1,24 +1,5 @@
 const policy  = {
-  {
-  "responseMessage": "处理成功",
-    "responseData": [
-      {
-        "isBindCard": "0",
-        "id": 2045,
-        "insurerName": "xiaosi",
-        "insurerEmail": "3333@qq.com",
-        "createTime": "2017-01-19 18:52:31.013701",
-        "insurerAddress": "酒红色的计划是绝好的",
-        "insurerBirthday": "1977-11-11",
-        "updateTime": "2017-01-19 19:18:58.061311",
-        "insurerMobile": "13922222222",
-        "insurerIdNo": "111111",
-        "insurerClientNo": "911961466048741282",
-        "insurerSex": "M"
-      }
-    ],
-    "responseCode": "000000"
-  }
+  result: []
 }
 
 // const policy = {

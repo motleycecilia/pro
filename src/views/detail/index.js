@@ -5,7 +5,7 @@ import Header from 'components/Header'
 import { queryDetilInfo } from 'actions'
 import { getUrlParam } from 'utils/urlParams'
 import Loading from 'components/loading'
-import detailInfos from 'mock/detail'
+import detailInfos from 'mock/dets'
 
 @connect(
   state => ({
@@ -24,7 +24,8 @@ export default class detail extends React.Component {
     guaranteeIndex: -1,
     productId: '',
     productCode: '',
-    captionDoc: ''
+    captionDoc: '',
+    skuId: ''
   }
 
   static contextTypes = {
@@ -75,7 +76,8 @@ export default class detail extends React.Component {
         pathname: '/healthInform',
         query: {
           productId: this.state.productId,
-          productCode: this.state.productCode
+          productCode: this.state.productCode,
+          skuId: this.state.skuId
         }
       })
       return
@@ -84,17 +86,19 @@ export default class detail extends React.Component {
       pathname: '/premium',
       query: {
         productId: this.state.productId,
-        productCode: this.state.productCode
+        productCode: this.state.productCode,
+        skuId: this.state.skuId
       }
     })
   }
-  onClickCurrent(index) {
+  onClickCurrent(index, skuIds) {
     this.setState({
       currentIndex: index,
-      guaranteeIndex: -1
+      guaranteeIndex: -1,
+      skuId: skuIds
     })
   }
-  onClickGuarantee(index) {
+  onClickGuarantee(index, skuIds) {
     this.setState({
       guaranteeIndex: index === this.state.guaranteeIndex ? -1 : index
     })
@@ -112,11 +116,13 @@ export default class detail extends React.Component {
     return(
       typeList.map((val, index) => {
         return(
-          <li className={this.state.currentIndex === index ? "current" : ""} onTouchTap={this.onClickCurrent.bind(this, index)} key={index}>
+          <li className={this.state.currentIndex === index ? "current" : ""} onTouchTap={this.onClickCurrent.bind(this, index, val.skuId)} key={index}>
             <h2>{val.priceName}</h2>
-            <p>
-              {val.minPrice}元-{val.maxPrice}元
-            </p>
+            {
+              false && <p>
+                {val.minPrice}元-{val.maxPrice}元
+              </p>
+            }
           </li>
         )
       })

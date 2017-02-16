@@ -43,7 +43,8 @@ export default class healthInform extends React.Component {
       pathname: '/premium',
       query: {
         productId: this.props.location.query.productId,
-        productCode: this.props.location.query.productCode
+        productCode: this.props.location.query.productCode,
+        skuId: this.props.location.query.skuId
       }
     })
   }

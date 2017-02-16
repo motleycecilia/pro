@@ -130,6 +130,9 @@ export default class supervise extends React.Component {
             添加被保险人
           </div>
         </div>
+        <div className="complete-fill-btn position-rela" onTouchTap={this.onClickRight.bind(this)}>
+            完成
+        </div>
       </div>
     )
   }
@@ -139,7 +142,7 @@ export default class supervise extends React.Component {
     const { insured } = this.props
     return(
       <div>
-        <Header isVisibility={true} rightTxt="完成" onClickRight={this.onClickRight.bind(this)} onClickBack={this.onClickBack.bind(this)} title={title}/>
+        <Header isVisibility={!App.IS_YZT} rightTxt="完成" onClickRight={this.onClickRight.bind(this)} onClickBack={this.onClickBack.bind(this)} title={title}/>
         {
           insured.getInsuredUserBegin ?
           <Loading /> :

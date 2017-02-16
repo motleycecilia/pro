@@ -46,7 +46,7 @@ export default class fillmation extends React.Component {
     policyMobileNo: '',
     btnLodding: false,
     isConfirm: false,
-    isAgreeElement: false,
+    isAgreeElement: true,
     showConfirmPolicy: false,
     ConfirmBepoleIndex: -1,
     ConfirmGuaranteeIndex: -1,
@@ -99,7 +99,7 @@ export default class fillmation extends React.Component {
       })
       return
     }
-    if(policyUser.getPolicyUserSuccess === true) {
+    if(policyUser.getPolicyUserSuccess === true && policyUser.getResultData) {
       this.setState({
         policyName: policyUser.getResultData.insurerName,
         policyNo: policyUser.getResultData.id,
@@ -404,6 +404,15 @@ export default class fillmation extends React.Component {
   onClickConfirmGuarantee(index) {
     this.setState({
       ConfirmGuaranteeIndex: index === this.state.ConfirmGuaranteeIndex ? -1 : index
+    })
+  }
+  onClickStatement(category) {
+    this.context.router.push({
+      pathname: '/guarantee',
+      query: {
+        productId: this.state.productId,
+        category: category
+      }
     })
   }
   onClickSaveInfo() {
@@ -831,7 +840,7 @@ export default class fillmation extends React.Component {
               <div className="row-box-list-title router-action1">
                 <div className="name col-name">
                   {
-                    policyUser.insurerName
+                    policyUser && policyUser.insurerName
                   }
                 </div>
                 <span className="arrowbox arrow-right"></span>
@@ -867,11 +876,21 @@ export default class fillmation extends React.Component {
             this.state.iphoneChoseBtn ? this.renderInvoice(policyUser) : ''
           }
           <div className="fill-statement">
-            <div className="m-r10" onTouchTap={::this.onClickAgreeElement}>
-              <input type="checkbox" className="ipt-checkbox" id="cbx-2"/>
-              <label className="lab-checkbox2" htmlFor="cbx-2"></label>
-            </div>
-            同意授权声明并通过用户投保
+            {
+              false && <div className="m-r10" onTouchTap={::this.onClickAgreeElement}>
+                <input type="checkbox" className="ipt-checkbox" id="cbx-2"/>
+                <label className="lab-checkbox2" htmlFor="cbx-2"></label>
+              </div>
+            }
+          </div>
+          <div className="fillmation-footer">
+            <p>
+              点击{'"确定"'}即表示你阅读并同意
+            </p>
+            <p>
+              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 1)}>《投保须知》</span>和
+              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 2)}>《保险条款》</span>
+            </p>
           </div>
           {
             !this.state.btnLodding && <div className="policy-error fill-error">
