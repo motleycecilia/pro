@@ -3,7 +3,7 @@ import { App, YztApp } from 'utils/native_h5'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
   'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//
-const isGp = true
+const isGp = false
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
 //http:34980  https:34943
@@ -57,7 +57,7 @@ export function preSubmit(params){
 		orderType: '0',
 		productId: params.productId,
 		productCode: params.productCode,
-		orderSpliteFlag: '1',
+		orderSpliteFlag: params.orderSpliteFlag,
 		productInsuranceCode: params.productInsuranceCode,
 		skuId: params.skuid,
 		policyholdersInfo: params.insurerInfo,
@@ -100,12 +100,12 @@ export function premiumMeasure(params){
 		serialNo: params.serialNo,
 		from: 'wap-chaoshi',
 		userChannel: '0',
-		quantity: params.insurantInfoList.length,
+		quantity: 1,//params.insurantInfoList.length,
 		buyPlatform: '1',
 		orderType: '2',
 		productId: params.productId,
 		productCode: params.productCode,
-		orderSpliteFlag: '1',
+		orderSpliteFlag: params.orderSpliteFlag,
 		productInsuranceCode: params.productInsuranceCode || "P1130B48",
 		insuranceInfoList: params.insurantInfoList
 	}

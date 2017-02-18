@@ -248,10 +248,16 @@ export default class bePeople extends React.Component {
   }
 
   onClickBirthDay(e) {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人编辑页_出生日期", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     e.target.type = 'date'
   }
 
   onClickPreserve() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人编辑页_保存信息", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     let checkNmae = this.state.cardType === '1' ? 'idCard' : 'otherCardNo'
     let checkList = [
       {
@@ -302,8 +308,15 @@ export default class bePeople extends React.Component {
       })
     }
   }
-
+  onClickInput(val) {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人编辑页_"+val, false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
+  }
   onClickDeleteInsuret() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人编辑页_删除", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     this.props.deleteInsuredUserInfo(this.state.insurerId)
   }
 
@@ -319,6 +332,7 @@ export default class bePeople extends React.Component {
                 'input-style input-style-error' : 'input-style'}
               placeholder="姓名"
               defaultValue={beInsure.insurantName || ""}
+              onTouchTap={this.onClickInput.bind(this, "姓名")}
               ref="name"
               maxLength="20"
               onFocus={::this.onFocusName}
@@ -336,7 +350,7 @@ export default class bePeople extends React.Component {
           <div className="input-outer m-t24">
             <div className="select-tit">证件类型</div>
             <span className="select-icon"></span>
-            <select className="select-cont" onChange={this.onChangeCardType.bind(this)} defaultValue={beInsure.insurantIdType || "1"}>
+            <select className="select-cont" onTouchTap={this.onClickInput.bind(this, "证件类型")} onChange={this.onChangeCardType.bind(this)} defaultValue={beInsure.insurantIdType || "1"}>
               <option value="1">身份证</option>
               <option value="2">护照</option>
               <option value="3">军人证</option>
@@ -354,6 +368,7 @@ export default class bePeople extends React.Component {
               maxLength="18"
               defaultValue={beInsure.insurantIdNo || ""}
               ref="cardNo"
+              onTouchTap={this.onClickInput.bind(this, "证件号码")}
               onFocus={::this.onFocusCardNo}
               onChange={::this.onChangeCardNo}
               onBlur={::this.onBlurCardNo}
@@ -377,6 +392,7 @@ export default class bePeople extends React.Component {
               placeholder="手机号"
               pattern="[0-9]*"
               maxLength="11"
+              onTouchTap={this.onClickInput.bind(this, "手机号")}
               onFocus={::this.onFocusPhone}
               onChange={::this.onChangePhone}
               onBlur={::this.onBlurPhone}
@@ -393,6 +409,7 @@ export default class bePeople extends React.Component {
             <div className="select-tit">与投保人关系</div>
             <span className="select-icon"></span>
             <select className="select-cont"
+              onTouchTap={this.onClickInput.bind(this, "与投保人关系")}
               onChange={this.onChangeRelation.bind(this)}
               defaultValue={beInsure.insurantRelation || "1"}>
               <option value="1">本人</option>
@@ -420,6 +437,7 @@ export default class bePeople extends React.Component {
             <select
               className="select-cont"
               ref="sex"
+              onTouchTap={this.onClickInput.bind(this, "性别")}
               onChange={this.onChangeSex.bind(this)}
               defaultValue={beInsure.insurantSex || "M"}
             >

@@ -25,7 +25,8 @@ export default class detail extends React.Component {
     productId: '',
     productCode: '',
     captionDoc: '',
-    skuId: ''
+    skuId: '',
+    productInsuranceCode: ''
   }
 
   static contextTypes = {
@@ -47,6 +48,8 @@ export default class detail extends React.Component {
       YztApp.setTitle(detailInfo.detail.productName)
       this.setState({
         title: detailInfo.detail.productName,
+        skuId: detailInfo.detail.priceList[0].skuId,//detailInfos.result.priceList[0].skuId,//
+        productInsuranceCode: detailInfo.detail.priceList[0].productInsuranceCode,//detailInfos.result.priceList[0].productInsuranceCode,//
         productId: getUrlParam('productId') || detailInfo.detail.productId,
         productCode: getUrlParam('productCode') || detailInfo.detail.productCode,
         captionDoc: detailInfo.detail.captionDoc
@@ -71,13 +74,17 @@ export default class detail extends React.Component {
     })
   }
   onClickPremium() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "详情页_保费测算", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     if(this.state.captionDoc) {
       this.context.router.push({
         pathname: '/healthInform',
         query: {
           productId: this.state.productId,
           productCode: this.state.productCode,
-          skuId: this.state.skuId
+          skuId: this.state.skuId,
+          productInsuranceCode: this.state.productInsuranceCode
         }
       })
       return
@@ -87,15 +94,17 @@ export default class detail extends React.Component {
       query: {
         productId: this.state.productId,
         productCode: this.state.productCode,
-        skuId: this.state.skuId
+        skuId: this.state.skuId,
+        productInsuranceCode: this.state.productInsuranceCode
       }
     })
   }
-  onClickCurrent(index, skuIds) {
+  onClickCurrent(index, skuIds, productInsuranceCodes) {
     this.setState({
       currentIndex: index,
       guaranteeIndex: -1,
-      skuId: skuIds
+      skuId: skuIds,
+      productInsuranceCode: productInsuranceCodes
     })
   }
   onClickGuarantee(index, skuIds) {
@@ -116,7 +125,7 @@ export default class detail extends React.Component {
     return(
       typeList.map((val, index) => {
         return(
-          <li className={this.state.currentIndex === index ? "current" : ""} onTouchTap={this.onClickCurrent.bind(this, index, val.skuId)} key={index}>
+          <li className={this.state.currentIndex === index ? "current" : ""} onTouchTap={this.onClickCurrent.bind(this, index, val.skuId, val.productInsuranceCode)} key={index}>
             <h2>{val.priceName}</h2>
             {
               false && <p>
@@ -136,7 +145,7 @@ export default class detail extends React.Component {
             <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
               <div className="content-list-title">
                 <span className="project-name">{val.securityProName}</span>
-                <span className="money">{val.securityProAssuredSum/10000}万元</span>
+                <span className="money">{val.securityProAssuredSum ? val.securityProAssuredSum/10000 : 0}万元</span>
               </div>
             </a>
             <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>
@@ -154,7 +163,7 @@ export default class detail extends React.Component {
       <div>
         <section className="banner">
           <a href="javascript:void(0);">
-            <img src="https://m.pingan.com/app_images/wap/v30/c3/chaoshi/sys/baoxian/gaoyuanyou_banner.jpg"/>
+            <img src={detail.productbannerUrl}/>
           </a>
           <div className="banner-text">
             <h2>{detail.productIntroduce}</h2>
@@ -205,7 +214,7 @@ export default class detail extends React.Component {
           <div className="content-list white-bg ma-t13">
             <ul>
               <li>
-                <a href="javascript:void(0);" className="arrow-right" onTouchTap={this.onClickStatement.bind(this, 3)}>
+                <a is href="javascript:void(0);" otitle="详情_常见问题" otype="button" class="arrow-right" onTouchTap={this.onClickStatement.bind(this, 3)}>
                   <div className="content-list-title">
                     <span className="project-name">常见问题</span>
                     <span className="money"></span>
@@ -213,7 +222,7 @@ export default class detail extends React.Component {
                 </a>
               </li>
               <li>
-              <a href="javascript:void(0);" className="arrow-right" onTouchTap={this.onClickStatement.bind(this, 4)}>
+              <a is href="javascript:void(0);" otitle="详情_理赔流程" otype="button" class="arrow-right" onTouchTap={this.onClickStatement.bind(this, 4)}>
                 <div className="content-list-title">
                   <span className="project-name">理赔流程</span>
                   <span className="money"></span>
@@ -221,7 +230,7 @@ export default class detail extends React.Component {
               </a>
               </li>
               <li>
-                <a href="javascript:void(0);" className="arrow-right" onTouchTap={this.onClickStatement.bind(this, 1)}>
+                <a is href="javascript:void(0);" otitle="详情_投保声明" otype="button" class="arrow-right" onTouchTap={this.onClickStatement.bind(this, 1)}>
                   <div className="content-list-title">
                     <span className="project-name">投保声明</span>
                     <span className="money"></span>
@@ -229,7 +238,7 @@ export default class detail extends React.Component {
                 </a>
               </li>
               <li>
-                <a href="javascript:void(0);" className="arrow-right" onTouchTap={this.onClickStatement.bind(this, 2)}>
+                <a is href="javascript:void(0);" otitle="详情_保险条款" otype="button" class="arrow-right" onClick={this.onClickStatement.bind(this, 2)}>
                   <div className="content-list-title">
                     <span className="project-name">保险条款</span>
                     <span className="money"></span>
@@ -240,7 +249,7 @@ export default class detail extends React.Component {
             <div className="bottom-line"></div>
           </div>
         </section>
-        <div className="complete-fill-btn" onTouchTap={this.onClickPremium.bind(this)}>保费测算</div>
+        <div className="complete-fill-btn" onClick={this.onClickPremium.bind(this)}>保费测算</div>
       </div>
     )
   }

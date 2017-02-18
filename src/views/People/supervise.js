@@ -56,6 +56,9 @@ export default class supervise extends React.Component {
     history.go(-1)
   }
   onClickRight() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人管理页_完成", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     let choseLists = [],
     beLists = this.state.beList;
     this.state.choseList.forEach((val, index) => {
@@ -83,6 +86,9 @@ export default class supervise extends React.Component {
     })
   }
   onclickAddInsured() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "被保人管理页_添加被保险人", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     this.context.router.push({
       pathname: '/bePeople',
       query: { operation: 0 }

@@ -17,7 +17,10 @@ export default class loginView extends React.Component {
   onClickBack() {
     history.go(-1)
   }
-
+  onClickBackDetail() {
+    let preMiumPara = JSON.parse(sessionStorage.getItem('prePara'))
+    location.href=`https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/static/finance/ylx3/index.html?productCode=${preMiumPara.productCode}&productId=${preMiumPara.productId}`
+  }
 
   render() {
     const { title } = this.props.route
@@ -25,7 +28,7 @@ export default class loginView extends React.Component {
       <div>
         <Header isVisibility={!App.IS_YZT} onClickBack={this.onClickBack.bind(this)} title={title}/>
         <div className="login-err">
-          会话失效请点击<a href={"http://m.pingan.com/chaoshi/fenlei.shtml?productId="+11312312}>返回</a>重新从详情页登录
+          会话失效请点击<span onTouchTap={::this.onClickBackDetail}>返回</span>重新从详情页登录
         </div>
       </div>
     )

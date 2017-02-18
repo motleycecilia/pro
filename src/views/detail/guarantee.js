@@ -22,8 +22,8 @@ export default class guarantee extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(this.props.location.query.productId)//
-    this.props.queryDetilInfo(10028680, 10007603)
+    this.props.queryDetilInfo(this.props.location.query.productId,this.props.location.query.productCode)//
+    // this.props.queryDetilInfo(10028680, 10007603)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)

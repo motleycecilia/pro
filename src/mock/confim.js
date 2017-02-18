@@ -31,8 +31,7 @@ const confim = {
       {
 
         "policyInfo": {
-
-          "detailOrderMemo": "NO",
+          "detailOrderMemo": "您已经投保过该款产品并且保单已经生效，无法再次购买。",
 
           "insurancePeriod": 40,
 
@@ -80,7 +79,7 @@ const confim = {
 
             "insurantCount": 1,
 
-            "relation": "1",
+            "relation": "2",
 
             "insurantBirth": 1466352000000,
 

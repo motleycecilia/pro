@@ -35,6 +35,7 @@ import detsInfo from 'mock/dets'
 
 export default class premium extends React.Component {
   state = {
+    priceNames: [],
     loodNum: 0,
     startDate: '',
     endDate: '',
@@ -62,6 +63,7 @@ export default class premium extends React.Component {
     tourismKey: '0',
     currentTime: '',
     skuId: '',
+    productInsuranceCode: '',
     minInsureAge: 0,
     maxInsureAge: 2,
     maxInsureAgeUnit: 'Y',
@@ -73,7 +75,8 @@ export default class premium extends React.Component {
     minStartDate: '',
     maxStartDate: '',
     minBirthDay: '',
-    maxBirthDay: ''
+    maxBirthDay: '',
+    orderSpliteFlag: '0'
   }
 
   static contextTypes = {
@@ -81,9 +84,8 @@ export default class premium extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10013242)
-    // this.props.queryDetilInfo(10028680, 10007603)
-    this.props.queryDetilInfo(this.props.location.query.productId, this.props.location.query.productCode)
+    this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(this.props.location.query.productId, this.props.location.query.productCode)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -92,58 +94,75 @@ export default class premium extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { detailInfo, premiumInfo, loginInfo } = nextProps
     if(detailInfo.getDetailSuccess === true && this.state.loodNum === 0) {
-      let insurantUnit = detailInfo.detail.insurancePriodUnit//detsInfo.result.insurancePriodUnit//
+      let arr1 =[], arr2 = []
+      let priceNames = detsInfo.result.priceList.map((val, index)=> {
+        return val.priceName
+      })
+      arr1 = detsInfo.result.copyPriceList.filter((val,index)=>{
+        return val.priceName == priceNames[0] && val
+      })
+      arr2 = detsInfo.result.copyPriceList.filter((val,index)=>{
+        return val.priceName == priceNames[1] && val
+      })
+      console.log(arr1)
+      let insurancePriods = detsInfo.result.insurancePriod//detailInfo.detail.insurancePriod//
+      let insurantUnit = detsInfo.result.insurancePriodUnit//detailInfo.detail.insurancePriodUnit//
+      let currentTimes = detsInfo.result.currentTime.substring(0, 10)//detailInfo.detail.currentTime.substring(0, 10)//
       const getEle = document.querySelector.bind(document)
-      getEle('#sysDate').value = detailInfo.detail.currentTime.substring(0, 10)//detsInfo.result.currentTime.substring(0, 10) //
-      let startDates = util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].minValue, detailInfo.detail.insuranceProductTerms[0].minValueUnit)
+      getEle('#sysDate').value = currentTimes
+      let startDates = util.getEndDatet(detsInfo.result.currentTime.substring(0,10), detsInfo.result.insuranceProductTerms[0].minValue || '1', detsInfo.result.insuranceProductTerms[0].minValueUnit || 'D')//util.getEndDatet(detailInfo.detail.currentTime.substring(0,10), detailInfo.detail.insuranceProductTerms[0].minValue || '1', detailInfo.detail.insuranceProductTerms[0].minValueUnit || "D")//
       this.setState({
         loodNum: 1,
-        // productNmae: detsInfo.result.productName,
-        // skuId: this.props.location.query.skuId || detsInfo.result.priceList[0].skuId,
-        // productInsuranceCode: detsInfo.result.priceList[0].productInsuranceCode,
-        // name: detsInfo.result.priceList[0].priceName,
-        // minPeriod: detsInfo.result.insuranceProductTerms[0].minValue,
-        // maxPeriod: detsInfo.result.insuranceProductTerms[0].maxValue,
-        // periodMinUnit: detsInfo.result.insuranceProductTerms[0].minValueUnit,
-        // periodMaxUnit: detsInfo.result.insuranceProductTerms[0].maxValueUnit,
-        // insurancePriod: insurantUnit === 'Y' ? "" + (12 * detsInfo.result.insurancePriod.split("-")[0]) : detsInfo.result.insurancePriod.split("-")[0],//保险期限
-        // productPriod: insurantUnit === 'Y' ? true : false,
-        // endPriod: insurantUnit === 'Y' ? "12" : detsInfo.result.insurancePriod.split("-")[1],
-        // endPriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,
-        // currentTime: detsInfo.result.currentTime,
-        // minInsureAge: detsInfo.result.minInsureAge,
-        // maxInsureAge: detsInfo.result.maxInsureAge,
-        // maxInsureAgeUnit: detsInfo.result.maxInsureAgeUnit,
-        // minInsureAgeUnit: detsInfo.result.minInsureAgeUnit,
-        // startDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
-        // minStartDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
-        // maxStartDate: util.getEndDatet(detsInfo.result.currentTime, detsInfo.result.insuranceProductTerms[0].maxValue, detsInfo.result.insuranceProductTerms[0].maxValueUnit),
-        // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
-        // isShowAddCountry: TYpes.productS.indexOf("" + detsInfo.result.productId) > -1 ? true : false//根据产品ID判断旅游型
-        productNmae: detailInfo.detail.productName,
-        skuId: this.props.location.query.skuId || detailInfo.detail.priceList[0].skuId,
-        productInsuranceCode: detailInfo.detail.priceList[0].productInsuranceCode,
-        name: detailInfo.detail.priceList[0].priceName,
-        minPeriod: detailInfo.detail.insuranceProductTerms[0].minValue,
-        maxPeriod: detailInfo.detail.insuranceProductTerms[0].maxValue,
-        periodMinUnit: detailInfo.detail.insuranceProductTerms[0].minValueUnit,
-        periodMaxUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit,
-        insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod[0],//保险期限
-        productPriod: detailInfo.detail.insurancePriod === '1年' ? true : false,
-        endPriod: insurantUnit === 'Y' ? "12" : detailInfo.detail.insurancePriod.split("-")[1],
-        endPriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,
-        currentTime: detailInfo.detail.currentTime.substring(0, 10),
-        minInsureAge: detailInfo.detail.minInsureAge,
-        maxInsureAge: detailInfo.detail.maxInsureAge,
-        minInsureAgeUnit: detailInfo.detail.minInsureAgeUnit,
-        maxInsureAgeUnit: detailInfo.detail.maxInsureAgeUnit,
+        productNmae: detsInfo.result.productName,
+        orderSpliteFlag: detsInfo.result.orderSpliteFlag || "0",
+        skuId: this.props.location.query.skuId || detsInfo.result.priceList[0].skuId,
+        productInsuranceCode: this.props.location.query.productInsuranceCode || detsInfo.result.priceList[0].productInsuranceCode,
+        name: detsInfo.result.priceList[0].priceName,
+        minPeriod: detsInfo.result.insuranceProductTerms[0].minValue || 1,
+        maxPeriod: detsInfo.result.insuranceProductTerms[0].maxValue || 365,
+        periodMinUnit: detsInfo.result.insuranceProductTerms[0].minValueUnit || 'D',
+        periodMaxUnit: detsInfo.result.insuranceProductTerms[0].maxValueUnit || 'D',
+        insurancePriod: insurantUnit === 'Y' ? "" + (12 * detsInfo.result.insurancePriod.split("-")[0]) : detsInfo.result.insurancePriod.split("-")[0],//保险期限
+        productPriod: detsInfo.result.insurancePriod  === '1年' ? true : false,
+        endPriod: insurancePriods === '1年' ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
+        endPriodUnit: insurancePriods === '1年' ? 'M' : 'D',
+        currentTime: currentTimes,
+        minInsureAge: detsInfo.result.minInsureAge,
+        maxInsureAge: detsInfo.result.maxInsureAge,
+        maxInsureAgeUnit: detsInfo.result.maxInsureAgeUnit,
+        minInsureAgeUnit: detsInfo.result.minInsureAgeUnit,
         startDate: startDates,
-        endDate: detailInfo.detail.insurancePriod === '1年' ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
-        endFormatDate: detailInfo.detail.insurancePriod === '1年' ? util.getEndDatet(startDates, 1, 'Y') : '',
-        minStartDate: util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].minValue, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
-        maxStartDate: util.getEndDatet(detailInfo.detail.currentTime, detailInfo.detail.insuranceProductTerms[0].maxValue, detailInfo.detail.insuranceProductTerms[0].maxValueUnit),
+        endDate: detsInfo.result.insurancePriod === '1年' ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
+        endFormatDate: detsInfo.result.insurancePriod === '1年' ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        minStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
+        maxStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].maxValue, detsInfo.result.insuranceProductTerms[0].maxValueUnit),
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
-        isShowAddCountry: TYpes.productS.indexOf("" + detailInfo.detail.productId) > -1 ? true : false// 产品分类是否旅游类型
+        isShowAddCountry: TYpes.productS.indexOf("" + detsInfo.result.productId) > -1 ? true : false//根据产品ID判断旅游型
+        // productNmae: detailInfo.detail.productName,
+        // orderSpliteFlag: detailInfo.detail.orderSpliteFlag || "0",
+        // skuId: this.props.location.query.skuId || detailInfo.detail.priceList[0].skuId,
+        // productInsuranceCode: this.props.location.query.productInsuranceCode || detailInfo.detail.priceList[0].productInsuranceCode,
+        // name: detailInfo.detail.priceList[0].priceName,
+        // minPeriod: detailInfo.detail.insuranceProductTerms[0].minValue || '1',
+        // maxPeriod: detailInfo.detail.insuranceProductTerms[0].maxValue || '365',
+        // periodMinUnit: detailInfo.detail.insuranceProductTerms[0].minValueUnit || 'D',
+        // periodMaxUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit || 'D',
+        // insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod[0],//保险期限
+        // productPriod: detailInfo.detail.insurancePriod === '1年' ? true : false,
+        // endPriod: insurancePriods === '1年' ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
+        // endPriodUnit: insurancePriods === '1年' ? 'M' : 'D',
+        // currentTime: currentTimes,
+        // minInsureAge: detailInfo.detail.minInsureAge,
+        // maxInsureAge: detailInfo.detail.maxInsureAge,
+        // minInsureAgeUnit: detailInfo.detail.minInsureAgeUnit,
+        // maxInsureAgeUnit: detailInfo.detail.maxInsureAgeUnit,
+        // startDate: startDates,
+        // endDate: detailInfo.detail.insurancePriod === '1年' ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
+        // endFormatDate: detailInfo.detail.insurancePriod === '1年' ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        // minStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].minValue, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
+        // maxStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].maxValue, detailInfo.detail.insuranceProductTerms[0].maxValueUnit),
+        // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit,//保险期限单位
+        // isShowAddCountry: TYpes.productS.indexOf("" + detailInfo.detail.productId) > -1 ? true : false// 产品分类是否旅游类型
       })
     }
     if(premiumInfo.measurePremiumBegin === true) {
@@ -153,16 +172,27 @@ export default class premium extends React.Component {
       return
     }
     if(premiumInfo.measurePremiumSuccess === true) {
-      this.setState({
-        premiumStatus: 1,
-        errorContent: '',
-        // serialNo: preInfo.result.serialNo,
-        // premiumInfos: preInfo.result.payPremList,
-        // totalPayPrem: preInfo.result.totalPayPrem
-        serialNo: premiumInfo.premiumResultData.serialNo,
-        premiumInfos: premiumInfo.premiumResultData.payPremList,
-        totalPayPrem: premiumInfo.premiumResultData.totalPayPrem
-      })
+      // if(premiumInfo.premiumResultData.serialNo) {
+      if(preInfo.result.serialNo) {
+        this.setState({
+          premiumStatus: 1,
+          errorContent: '',
+          serialNo: preInfo.result.serialNo,
+          premiumInfos: preInfo.result.payPremList,
+          totalPayPrem: preInfo.result.totalPayPrem
+          // serialNo: premiumInfo.premiumResultData.serialNo,
+          // premiumInfos: premiumInfo.premiumResultData.payPremList,
+          // totalPayPrem: premiumInfo.premiumResultData.totalPayPrem
+        })
+      }else {
+        this.props.premiumMeasureReset()
+        this.setState({
+          premiumStatus: 0,
+          showModal: true,
+          content: "数据异常请重新测算"
+        })
+      }
+      return
     }
     if(premiumInfo.measurePremiumError === true) {
       this.setState({
@@ -170,6 +200,7 @@ export default class premium extends React.Component {
         showModal: true,
         content: premiumInfo.errorMsg
       })
+      return
     }
     if(loginInfo.appLoginSuccess === true){
       this.context.router.push({
@@ -241,6 +272,7 @@ export default class premium extends React.Component {
     location.href = "http://www.cmjd.net/xxdt/danger/"
   }
   onClickChoseOption(val) {
+    this.props.premiumMeasureReset()
     this.setState({
       name: val.priceName,
       premiumStatus: 0,
@@ -249,13 +281,15 @@ export default class premium extends React.Component {
     })
   }
   onClickChoseTourismName(key) {
-    let edDate = key === "0" ? "" : ""+util.replaceAll(util.getEndDatet(util.getEndDatet(this.state.startDate, 1, 'Y'),-1 , 'D'), "-", "/")
-    console.log(edDate)
+    // let edDate = key === "0" ? "" : ""+util.replaceAll(util.getEndDatet(util.getEndDatet(this.state.startDate, 1, 'Y'),-1 , 'D'), "-", "/")
+    let edDate = key === "0" ? this.state.endDate : util.getEndDatet(util.getEndDatet(this.state.startDate, 1, 'Y'),-1 , 'D')
     this.setState({
       tourismKey: key,
       endDate: edDate,
-      endFormatDate: util.getEndDatet(this.state.startDate, 1, 'Y')
+      premiumStatus: 0,
+      endFormatDate: edDate
     })
+    this.props.premiumMeasureReset()
   }
   onClickCountry(name) {
     let country = this.state.countrys
@@ -273,10 +307,14 @@ export default class premium extends React.Component {
     })
   }
   onClickIsAddCountry(flag) {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "报价页_添加旅游目的地", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     this.setState({
       isShowCountry: flag,
       premiumStatus: 0
     })
+    this.props.premiumMeasureReset()
   }
   onClickDeleteBeDate(index) {
     let bePeopleDates = this.state.bePeopleDate
@@ -285,11 +323,15 @@ export default class premium extends React.Component {
       premiumStatus: 0,
       bePeopleDate: bePeopleDates
     })
+    this.props.premiumMeasureReset()
   }
   onClickTakeEffectStartDate(e) {
     e.target.type = 'date'
   }
   onClickMeasurePremium() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "报价页_测算保费", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     let checkList = [{
         checkfnName: "checkEmpty",
         checkValue: this.state.startDate,
@@ -309,10 +351,12 @@ export default class premium extends React.Component {
       })
     }
     const [minStartDate, maxStartDate] = [util.getEndDatet(this.state.currentTime, this.state.minPeriod-1, this.state.periodMinUnit), util.getEndDatet(this.state.currentTime, this.state.maxPeriod-1, this.state.periodMaxUnit)]
-    const maxEndDate = util.getEndDatet(this.state.started, this.state.endPriod-1, this.state.endPriodUnit)
+    const minEndDate = util.getEndDatet(this.state.startDate, 1, 'D')
+    const maxEndDate = util.getEndDatet(this.state.startDate, this.state.endPriod-1, this.state.endPriodUnit)
     if(util.maxDate(minStartDate, this.state.startDate) || util.maxDate(this.state.startDate, maxStartDate)) {
       this.setState({
-        errorContent: `开始时间必须在${this.state.minPeriod}${TYpes.date[this.state.periodMinUnit]}-${this.state.maxPeriod}${TYpes.date[this.state.periodMaxUnit]}之内`
+        // errorContent: `开始时间必须在${this.state.minPeriod}${TYpes.date[this.state.periodMinUnit]}-${this.state.maxPeriod}${TYpes.date[this.state.periodMaxUnit]}之内`
+        errorContent: `保障开始时间必须为${minStartDate}到${maxStartDate}之间`
       })
       return
     }
@@ -324,7 +368,7 @@ export default class premium extends React.Component {
     }else {
       if(util.maxDate(this.state.startDate, this.state.endDate) || util.maxDate(this.state.endDate, maxEndDate)) {
         this.setState({
-          errorContent: `结束时间必须在开始时间-${this.state.endPriod}${TYpes.date[this.state.endPriodUnit]}之内`
+          errorContent: `保障结束时间必须为${minEndDate}到${maxEndDate}之间`
         })
         return
       }
@@ -349,8 +393,8 @@ export default class premium extends React.Component {
           insuranceBeginTime: this.state.startDate,
           insuranceStartTime: this.state.startDate,
           insuranceEndTime: this.state.endFormatDate,
-          insurancePeriod: this.state.insurancePriod,
-          insurancePriodUnit: this.state.insurancePriodUnit
+          insurancePeriod: this.state.productPriod === true || this.state.tourismKey === '1' ? 12 : util.DateDiff(this.state.startDate, this.state.endDate),
+          insurancePriodUnit: this.state.productPriod === true || this.state.tourismKey === '1' ? 'M' : 'D'
         }
         const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
           return {
@@ -364,7 +408,8 @@ export default class premium extends React.Component {
           productInsuranceCode: this.state.productInsuranceCode,
           productId: this.props.location.query.productId,
           productCode: this.props.location.query.productCode,
-          insurantInfoList: insuranceInfoList
+          insurantInfoList: insuranceInfoList,
+          orderSpliteFlag: this.state.orderSpliteFlag
         }
         this.props.premiumMeasure(params)
       }else {
@@ -391,10 +436,13 @@ export default class premium extends React.Component {
       let urlMap = api.getUpdateUrl(),
           symbol = data?data.targetURLSymbol:'';
       if(symbol && urlMap[symbol]){//跳转升级
+        this.setState({
+          premiumStatus: 1
+        })
           let productNmae = this.state.productNmae;
           let {origin,pathname,hash} = location;
           let pre  = encodeURIComponent(`${origin}${pathname}${hash}`),
-              next = encodeURIComponent(`${origin}${pathname}${hash}&updated=true&productName=${productName}&productId=${this.state.Id}&productCode=${this.props.location.query.productCode}`);
+              next = encodeURIComponent(`${origin}${pathname}${hash}&updated=true&productName=${productNmae}&productId=${this.state.Id}&productCode=${this.props.location.query.productCode}`);
           sessionStorage.setItem(UPDATEING, true);
           App.call(['isNeedJSBack'],null,null,{status:'false'});
           location.href = urlMap[symbol]+`?preLink=${pre}&nextLink=${next}`
@@ -429,7 +477,10 @@ export default class premium extends React.Component {
               })
           });
   }
-  onClickInsure() {
+  onClickInsure(cc) {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "报价页_立即投保", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     const fillMationInfo = {
       productName: this.state.productNmae,
       name: this.state.name
@@ -441,6 +492,7 @@ export default class premium extends React.Component {
       productInsuranceCode: this.state.productInsuranceCode,
       minBirthDay: this.state.minBirthDay,
       maxBirthDay: this.state.maxBirthDay,
+      orderSpliteFlag: this.state.orderSpliteFlag,
       birthDayErrorInfo: `被保险人的年龄必须在${this.state.minInsureAge}${TYpes.bePeoAgeInfo[this.state.minInsureAgeUnit]}-${this.state.maxInsureAge}${TYpes.bePeoAgeInfo[this.state.maxInsureAgeUnit]}之间`,
       skuid: this.state.skuId
     }
@@ -448,12 +500,17 @@ export default class premium extends React.Component {
     sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
     YztApp.getLoginStatus((status,data)=>{
       if(status==='success' && (!data.clientNo||(data.loginStatus == '0'))){//未登录先去登录
+          console.log("0")
           YztApp.accessNativeModule('patoa://pingan.com/login',()=>{
               //登录后需要调用升级
-              this.goSubmit();
+              console.log("1")
+              cc();
           })
       }
       else{
+        this.setState({
+          premiumStatus: 2
+        })
           //升级
           YztApp.getSSOTicket((status,data)=>{
               if(status!=='success'){
@@ -481,13 +538,19 @@ export default class premium extends React.Component {
                 },
                 fail:()=>{
                   this.setState({
+                    premiumStatus: 1,
                     errorContent:res.responseMessage
                   })
                 },
                 unlogin:()=>{
-                    const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
-                    YztApp.accessNativeModule(loginUrl,()=>{
-                    })
+                  // console.log('未登录')
+                  // this.goSubmit()
+                  this.setState({
+                    premiumStatus: 1
+                  })
+                  const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
+                  YztApp.accessNativeModule(loginUrl,()=>{
+                  })
                 }
             })
         })
@@ -505,11 +568,22 @@ export default class premium extends React.Component {
                       this.wapMallcheckOrderPayCondition(sso)
                     },
                     fail:()=>{
-                      this.setState({
-                        errorContent:res.memo
-                      })
+                      if(res.resultStatus == "5000"){
+                        YztApp.accessNativeModule('patoa://pingan.com/login',()=>{
+                            //登录后需要调用升级
+                            this.goSubmit();
+                        })
+                      }else {
+                        this.setState({
+                          premiumStatus: 1,
+                          errorContent:res.memo
+                        })
+                      }
                     },
                     gpUnlogin:()=>{
+                        this.setState({
+                          premiumStatus: 1
+                        })
                         const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
                         YztApp.accessNativeModule(loginUrl,()=>{
                         })
@@ -538,6 +612,7 @@ export default class premium extends React.Component {
       premiumStatus: 0,
       bePeopleDate: bePeopleDates
     })
+    this.props.premiumMeasureReset()
   }
   onFocusPhone() {
     const { phone } = this.refs
@@ -554,6 +629,10 @@ export default class premium extends React.Component {
     })
   }
   onChageStartDate(e) {
+      // <div>
+      //   util.getEndDatet(detail.currentTime.substring(0,10), detail.insuranceProductTerms[0].minValue || '1', detail.insuranceProductTerms[0].minValueUnit || 'D')
+      // </div>
+    this.props.premiumMeasureReset()
     this.setState({
       minEndDate: util.getEndDatet(e.target.value, 1, 'D'),
       maxEndDate: util.getEndDatet(e.target.value, this.state.endPriod, this.state.endPriodUnit),
@@ -563,8 +642,9 @@ export default class premium extends React.Component {
     if(this.state.productPriod === true || this.state.tourismKey === '1'){
       console.log(util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"))
       this.setState({
-        endDate: util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"),
-        endFormatDate: util.getEndDatet(this.state.startDate, 1, 'Y')
+        // endDate: util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"),
+        endDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),
+        endFormatDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D')
       })
     }
   }
@@ -574,6 +654,7 @@ export default class premium extends React.Component {
       endFormatDate: e.target.value,
       premiumStatus: 0
     })
+    this.props.premiumMeasureReset()
   }
   onBlurPhone() {
     const { phone } = this.refs
@@ -611,14 +692,14 @@ export default class premium extends React.Component {
     return(
       typelist.map((val, index) => {
         return(
-          <div className="col-line-for m-t24" key={index}>
+          <div className="col-line-for m-t24" key={index} onTouchTap={this.onClickChoseOption.bind(this, val)}>
             <div>
               {
                 val.priceName
               }
             </div>
-            <div className={this.state.skuId == val.skuId ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseOption.bind(this, val)}></span>
+            <div className={this.state.skuId == val.skuId && this.state.productInsuranceCode == val.productInsuranceCode ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+              <span className="lab-checkbox-2" htmlFor="cbx-3" ></span>
               <span className="checbox-chose"></span>
             </div>
           </div>
@@ -630,7 +711,7 @@ export default class premium extends React.Component {
     return(
       [{name: '单次', key: '0'}, {name: '多次', key: '1'}].map((val, index) => {
         return(
-          <div className="col-line-for m-t24" key={index}>
+          <div className="col-line-for m-t24" key={index} onTouchTap={this.onClickChoseTourismName.bind(this, val.key)}>
             <div>
               {
                 val.name
@@ -639,7 +720,7 @@ export default class premium extends React.Component {
               </p>
             </div>
             <div className={this.state.tourismKey === val.key ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
-              <span className="lab-checkbox-2" htmlFor="cbx-3" onTouchTap={this.onClickChoseTourismName.bind(this, val.key)}></span>
+              <span className="lab-checkbox-2" htmlFor="cbx-3"></span>
               <span className="checbox-chose"></span>
             </div>
           </div>
@@ -666,10 +747,11 @@ export default class premium extends React.Component {
             <div className="col-line-with">
               <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, i)}>
               </span>
-              <input type="date" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}/>
+              <input type="text" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}
+                onTouchTap={::this.onClickTakeEffectStartDate}/>
             </div>
             <span>￥
-              {this.state.premiumInfos.length > 0 ? this.state.premiumInfos[index].payPrem : 0}
+              {this.state.premiumInfos.length > index ? this.state.premiumInfos[index].payPrem : 0}
               /人
             </span>
             <div className="bepe-date-title">出生日期</div>
@@ -684,12 +766,12 @@ export default class premium extends React.Component {
         <div className="input-outer">
           <div className="select-tit">结束时间</div>
           <input
-            type="date"
+            ref="eDate"
+            type="text"
             className="input-style"
-            min={this.state.minEndDate}
-            max={this.state.maxEndDate}
+            onTouchTap={::this.onClickTakeEffectStartDate}
             onChange={this.onChangeEndDate.bind(this)}
-            value={this.state.endDate || ""}
+            defaultValue={this.state.endDate || ""}
           />
         </div>
       </section>
@@ -700,9 +782,11 @@ export default class premium extends React.Component {
       <section className="pre-date-tr">
         <div className="input-outer">
           <div className="select-tit">结束时间</div>
-          <div type="date" className="input-style">
-            {this.state.endDate}
-          </div>
+          <input type="text" className="input-style"
+            ref="eDatet"
+            readOnly
+            value={this.state.endDate}
+            />
         </div>
       </section>
     )
@@ -716,8 +800,8 @@ export default class premium extends React.Component {
   renderInsureBtn() {
     return(
       <div className="pre-btn">
-        <span className="pre-btn-left">保费总额：{this.state.totalPayPrem}元</span>
-        <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
+        <span className="pre-btn-left">保费总额：{''+this.state.totalPayPrem}元</span>
+        <span className="pre-btn-right" onClick={this.onClickInsure.bind(this, this.goSubmit.bind(this))}>
           <span className="pre-btn-rbtn">
             立即投保
           </span>
@@ -761,12 +845,9 @@ export default class premium extends React.Component {
               <div className="input-outer">
                 <div className="select-tit">开始时间</div>
                 <input
-                  ref="date"
                   type="text"
                   className="input-style"
-                  min={this.state.minStartDate}
-                  max={this.state.maxStartDate}
-                  onTouchTap={this.onClickTakeEffectStartDate}
+                  onTouchTap={::this.onClickTakeEffectStartDate}
                   onChange={this.onChageStartDate.bind(this)}
                   value={this.state.startDate}
                 />
@@ -826,18 +907,18 @@ export default class premium extends React.Component {
             title="保费测算"/>
         }
         {
-          this.state.isShowCountry ?
-          <Country
-            productId={this.props.location.query.productId}
-            onClickCountry={this.onClickCountry.bind(this)}
-            onClickBacks={this.onClickIsAddCountry.bind(this, false)}
-          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : <Loading />
           // this.state.isShowCountry ?
           // <Country
           //   productId={this.props.location.query.productId}
           //   onClickCountry={this.onClickCountry.bind(this)}
           //   onClickBacks={this.onClickIsAddCountry.bind(this, false)}
-          // /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detsInfo.result) : <Loading />
+          // /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detailInfo.detail) : <Loading />
+          this.state.isShowCountry ?
+          <Country
+            productId="10028680"
+            onClickCountry={this.onClickCountry.bind(this)}
+            onClickBacks={this.onClickIsAddCountry.bind(this, false)}
+          /> : detailInfo.getDetailSuccess === true ? this.renderPremium(detsInfo.result) : <Loading />
         }
         {
           this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />

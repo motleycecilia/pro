@@ -55,7 +55,10 @@ export default class policyUser extends React.Component {
     }
     if(policyUser.updatePolicyUserSuccess === true) {
       this.context.router.push({
-        pathname: '/fillmation'
+        pathname: '/fillmation',
+        query: {
+          choseBeList: this.props.location.query.choseBeList
+        }
       })
       return
     }
@@ -71,7 +74,7 @@ export default class policyUser extends React.Component {
       })
       return
     }
-    if(policyUser.getResultData === true) {
+    if(policyUser.getResultData) {
       this.setState({
         insurerId: policyUser.getResultData.id,
         isbindCard: policyUser.getResultData.isBindCard || "0",
@@ -231,6 +234,9 @@ export default class policyUser extends React.Component {
     history.go(-1)
   }
   onClickSaveInfo() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "投保人编辑页_保存信息", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     let checkList = [
         {
           checkfnName: "uName",
@@ -376,7 +382,7 @@ export default class policyUser extends React.Component {
       <div>
         <section className="bePeople-content">
           {
-            this.state.isbindCard === "1" ? this.renderNoEdit(policyUser) : this.renderSureEdit(policyUser) 
+            this.state.isbindCard === "1" ? this.renderNoEdit(policyUser) : this.renderSureEdit(policyUser)
           }
           <div className="input-outer m-t24">
             <div className="select-tit">手机号</div>
@@ -437,7 +443,7 @@ export default class policyUser extends React.Component {
   render() {
     const { title } = this.props.route
     let policyUser = this.props.policyUser
-    let policyUserInfo = policyUser.getResultData === true ? policyUser.getResultData : {
+    let policyUserInfo = policyUser.getResultData ? policyUser.getResultData : {
       isbindCard: '0',
       insurerName: '',
       insurerIdNo: '',

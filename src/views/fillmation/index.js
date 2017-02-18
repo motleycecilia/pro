@@ -9,6 +9,8 @@ import { createChecker } from 'utils/checker'
 import BtnLoading from 'components/btnLoading'
 import confimInfo from 'mock/confim'
 import util from 'utils/utils'
+import Modal from 'components/modal'
+import TYpes from 'utils/Types'
 
 @connect(
   state => ({
@@ -44,6 +46,8 @@ export default class fillmation extends React.Component {
     policyName: '',
     policyNo: '',
     policyMobileNo: '',
+    showModal: false,
+    content: '',
     btnLodding: false,
     isConfirm: false,
     isAgreeElement: true,
@@ -86,6 +90,7 @@ export default class fillmation extends React.Component {
       YztApp.setTitle('保单信息确认')
       this.setState({
         btnLodding: false,
+        ConfirmBepoleIndex: 0,
         isConfirm: true,
         orderNo: underwriting.preResultData.orderNo,
         payOrderNo: underwriting.preResultData.payOrderNo
@@ -95,7 +100,8 @@ export default class fillmation extends React.Component {
     if(underwriting.getPreSubmitError === true) {
       this.setState({
         btnLodding: false,
-        errorInfo: underwriting.errorMsg
+        showModal: true,
+        content: underwriting.errorMsg
       })
       return
     }
@@ -103,6 +109,7 @@ export default class fillmation extends React.Component {
       this.setState({
         policyName: policyUser.getResultData.insurerName,
         policyNo: policyUser.getResultData.id,
+        phoneNo: policyUser.getResultData.insurerMobile,
         policyMobileNo: policyUser.getResultData.insurerMobile
       })
     }
@@ -132,7 +139,10 @@ export default class fillmation extends React.Component {
   }
   onClickUpdatePolicy() {
     this.context.router.push({
-      pathname: '/policyUser'
+      pathname: '/policyUser',
+      query: {
+        choseBeList: this.props.location.query.choseBeList
+      }
     })
   }
   onClickEdit() {
@@ -280,6 +290,9 @@ export default class fillmation extends React.Component {
     })
   }
   onClickpreSubmit() {
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "保单页_确定", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     let checkList = [{
       checkfnName: "checkEmpty",
       checkValue: this.state.policyName,
@@ -326,7 +339,14 @@ export default class fillmation extends React.Component {
       //   return util.maxDate(minDate, val.insurantBirth) && util.maxDate(val.insurantBirth, maxDate)
       // })
       let insurantList = this.state.beList.map((val, index) => {
-        return {insurantId: val.id}
+        return [{
+          insurantId: val.id,
+          type: "1",//index === 0 ? "1" : "2"
+          relation: "1"
+        }]
+      })
+      let insuranceInfoList = insurantList.map((val, index) => {
+        return {insurantInfoList: val}
       })
       // const preParams = {
       //   serialNo: '1801ca94-1b09-4fca-a3f8-d6be5cde004f',
@@ -337,7 +357,7 @@ export default class fillmation extends React.Component {
       //   insurerInfo: {
       //     insurantId: this.state.policyNo
       //   },
-      //   insuranceInfoList: [{insurantInfoList: insurantList}],
+      //   insuranceInfoList: insuranceInfoList,//[{insurantInfoList: insurantList}],
       //   linkManInfo: {
       //     linkManName: this.state.policyName,
       //     linkManMobileNo: this.state.policyMobileNo
@@ -350,18 +370,20 @@ export default class fillmation extends React.Component {
       //     invoceAddress: this.state.address
       //   }
       // }
+      // console.log(preParams)
       // this.props.preSubmit(preParams)
       // return
       const preParams = {
         serialNo: prePara.serialNo,
         productId: prePara.productId,
+        orderSpliteFlag: prePara.orderSpliteFlag,
   			productCode: prePara.productCode,
   			productInsuranceCode: prePara.productInsuranceCode,
         skuid: prePara.skuid,
         insurerInfo: {
           insurantId: this.state.policyNo
         },
-        insuranceInfoList: [{insurantInfoList: insurantList}],
+        insuranceInfoList: insuranceInfoList,//[{insurantInfoList: insurantList}],
         linkManInfo: {
           linkManName: this.state.policyName,
           linkManMobileNo: this.state.policyMobileNo
@@ -388,13 +410,25 @@ export default class fillmation extends React.Component {
     })
   }
   onClickPay() {
+    this.setState({
+      btnLodding: true
+    })
+    if (typeof (pa_sdcajax) === 'function') {
+      pa_sdcajax('WT.ti', "保单页_立即支付", false,'WT.obj', 'button', false, 'DCS.dcsuri', window.location.pathname+'\/click.event', false, 'WT.pageurl','http://'+window.location.hostname+window.location.pathname, false, 'WT.pagetitle',  document.title, false, 'WT.dl', '25', false, 'DCSext.wt_click', 'page', false)
+    }
     const sso = JSON.parse(sessionStorage.getItem('sso'))
+    const preMiumPara = JSON.parse(sessionStorage.getItem('prePara'))
     const orderNo = this.state.orderNo//'20170208017363391'//
     const payOrderNo = this.state.payOrderNo//'2017020801664619'//
-    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=/baoxian/liebiao.shtml&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
+    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.protocol}${location.port}${location.pathname}?productId=${preMiumPara.productId}&productCode=${preMiumPara.productCode}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
     //hook: 出现异常页面
     //订单页面 收银台固定
     //
+  }
+  goto() {
+    this.setState({
+      showModal: false
+    })
   }
   onClickConfirmBepole(index) {
     this.setState({
@@ -647,9 +681,19 @@ export default class fillmation extends React.Component {
                     与投保人关系
                   </span>
                   <span className="fill-content-txt">
-                    {val.insurantInfoList[0].relation}
+                    {TYpes.relation[val.insurantInfoList[0].relation]}
                   </span>
                 </div>
+                {
+                  val.policyInfo.detailOrderMemo !== "OK" && <div className="p-b-20">
+                    <span className="fill-content-tit">
+                      未通过核保
+                    </span>
+                    <span className="fill-content-txt confim-be-error">
+                      {val.policyInfo.detailOrderMemo}
+                    </span>
+                  </div>
+                }
               </div>
             </div>
           </div>
@@ -678,6 +722,13 @@ export default class fillmation extends React.Component {
       })
     )
   }
+  renderNowPayBtn() {
+    return(
+      <div className="complete-fill-btn" onTouchTap={::this.onClickPay}>
+        立即支付
+      </div>
+    )
+  }
   renderConfirm(preResultData) {
     return(
       <div>
@@ -694,12 +745,14 @@ export default class fillmation extends React.Component {
                 </dd>
               </dl>
             </div>
-            <div className="p-l-10">
-              <dl>
-                <dt>旅行目的地</dt>
-                <dd>🇮🇹、🇵🇱、🇬🇷、🇦🇺</dd>
-              </dl>
-            </div>
+            {
+              false && <div className="p-l-10">
+                <dl>
+                  <dt>旅行目的地</dt>
+                  <dd>🇮🇹、🇵🇱、🇬🇷、🇦🇺</dd>
+                </dl>
+              </div>
+            }
             <div className="p-l-10">
               <dl>
                 <dt>套餐类型</dt>
@@ -764,25 +817,34 @@ export default class fillmation extends React.Component {
               this.renderConfirmbePeople(preResultData.insuranceInfoList)
             }
           <div className="content white-bg m-t10">
-            <div className="content-title">保障范围</div>
-            <div className="content-list content0">
-              <ul>
-                {
-                  this.renderGuarantee()
-                }
-              </ul>
-            </div>
+            {
+              false && <div>
+                <div className="content-title">保障范围</div>
+                <div className="content-list content0">
+                  <ul>
+                    {
+                      this.renderGuarantee()
+                    }
+                  </ul>
+                </div>
+              </div>
+            }
             <div className="bottom-line"></div>
           </div>
-          <div className="confirm-pre-money">
-            保单测算金额： <span className="txt-through">￥234234.00</span>
-          </div>
+          {
+            false && <div className="confirm-pre-money">
+              保单测算金额： <span className="txt-through">￥234234.00</span>
+            </div>
+          }
           <div className="confirm-fill-money">
             实际保额: ￥{preResultData.payPrem}
           </div>
-          <div className="complete-fill-btn" onTouchTap={::this.onClickPay}>
-            立即支付
-          </div>
+          {
+            this.state.btnLodding ?
+            this.renderLoddingBtn() :
+            this.renderNowPayBtn()
+          }
+
         </div>
       </div>
     )
@@ -897,7 +959,6 @@ export default class fillmation extends React.Component {
               {this.state.errorInfo}
             </div>
           }
-
         </div>
         {
           this.state.btnLodding ?
@@ -919,6 +980,9 @@ export default class fillmation extends React.Component {
         {
           this.state.isConfirm && this.renderConfirm(underwriting.preResultData)
           // this.state.isConfirm && this.renderConfirm(confimInfo.responseData)
+        }
+        {
+          this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />
         }
       </div>
     )
