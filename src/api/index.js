@@ -3,7 +3,7 @@ import { App, YztApp } from 'utils/native_h5'
 const domain = process.env.DEV_ENV === 'production' ?
 	'https://m.pingan.com/chaoshi' :
   'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//
-const isGp = false
+const isGp = true
 const timeout = 10000
 const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
 //http:34980  https:34943

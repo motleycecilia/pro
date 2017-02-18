@@ -7,6 +7,7 @@ import {getInsuredUserInfo, getPolicyUserInfo, resetInsuredUserInfo,  preSubmit,
 import { App, YztApp } from 'utils/native_h5'
 import { createChecker } from 'utils/checker'
 import BtnLoading from 'components/btnLoading'
+// import confimInfo from 'mock/confim'
 import confimInfo from 'mock/confim'
 import util from 'utils/utils'
 import Modal from 'components/modal'
@@ -636,6 +637,75 @@ export default class fillmation extends React.Component {
       })
     )
   }
+  renderConfirmbePeoplet(insuranceInfoList) {
+    return(
+      insuranceInfoList.map((val, index) => {
+        return(
+          <div className="confirm-center-contents" key={index}>
+            <div className="center-content">
+              <div className="col-line-fillmation" onTouchTap={this.onClickConfirmBepole.bind(this, index)}>
+                <span>{val.insurantName}</span>
+                {
+                  false && <span className={val.policyInfo.detailOrderMemo === "OK" ? "col-line-cr" : "col-line-cr color-red"}>
+                    {
+                      val.policyInfo.detailOrderMemo === "OK" ? "保费  " + val.policyInfo.actualPremium : "未通过核保"
+                    }
+                  </span>
+                }
+                <span className={this.state.ConfirmBepoleIndex === index ? "icon-max-up" : "icon-max-down"}></span>
+              </div>
+              <div className={this.state.ConfirmBepoleIndex === index ? "" : "hide"}>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    证件号码
+                  </span>
+                  <span className="fill-content-txt">
+                    {val.insurantIdno}
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    手机号码
+                  </span>
+                  <span className="fill-content-txt">
+                    {val.mobile}
+                  </span>
+                </div>
+                <div className="p-b-20">
+                  <span className="fill-content-tit">
+                    生日
+                  </span>
+                  <span className="fill-content-txt">
+                    {val.insurantBirth}
+                  </span>
+                </div>
+                {
+                  false && <div className="p-b-20">
+                    <span className="fill-content-tit">
+                      与投保人关系
+                    </span>
+                    <span className="fill-content-txt">
+                      {TYpes.relation[val.relation]}
+                    </span>
+                  </div>
+                }
+                {
+                  false && val.policyInfo.detailOrderMemo !== "OK" && <div className="p-b-20">
+                    <span className="fill-content-tit">
+                      未通过核保
+                    </span>
+                    <span className="fill-content-txt confim-be-error">
+                      {val.policyInfo.detailOrderMemo}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        )
+      })
+    )
+  }
   renderConfirmbePeople(insuranceInfoList) {
     return(
       insuranceInfoList.map((val, index) => {
@@ -676,14 +746,16 @@ export default class fillmation extends React.Component {
                     {val.insurantInfoList[0].insurantBirth}
                   </span>
                 </div>
-                <div className="p-b-20">
-                  <span className="fill-content-tit">
-                    与投保人关系
-                  </span>
-                  <span className="fill-content-txt">
-                    {TYpes.relation[val.insurantInfoList[0].relation]}
-                  </span>
-                </div>
+                {
+                  false && <div className="p-b-20">
+                    <span className="fill-content-tit">
+                      与投保人关系
+                    </span>
+                    <span className="fill-content-txt">
+                      {TYpes.relation[val.insurantInfoList[0].relation]}
+                    </span>
+                  </div>
+                }
                 {
                   val.policyInfo.detailOrderMemo !== "OK" && <div className="p-b-20">
                     <span className="fill-content-tit">
@@ -729,6 +801,49 @@ export default class fillmation extends React.Component {
       </div>
     )
   }
+  renderInsure(preResultData) {
+    return(
+      <div>
+        <div className="confirm-center-tit">
+          投保人
+        </div>
+        <div className="confirm-center-contents">
+          <div className="center-content">
+            <div className="col-line-fillmation" onTouchTap={::this.onClickConfimPolicy}>
+              <span>{preResultData.orderSpliteFlag === "0" ? preResultData.invoceInfo.insurantName :  preResultData.policyholdersInfo.insurantName}</span>
+              <span className={this.state.showConfirmPolicy ? "icon-max-up" : "icon-max-down"}></span>
+            </div>
+            <div className={this.state.showConfirmPolicy ? "" : "hide"}>
+              <div className="p-b-20">
+                <span className="fill-content-tit">
+                  身份证号
+                </span>
+                <span className="fill-content-txt">
+                  {preResultData.orderSpliteFlag === "0" ? preResultData.invoceInfo.insurantIdno : preResultData.policyholdersInfo.insurantIdno}
+                </span>
+              </div>
+              <div className="p-b-20">
+                <span className="fill-content-tit">
+                  手机号码
+                </span>
+                <span className="fill-content-txt">
+                  {preResultData.orderSpliteFlag === "0" ? preResultData.invoceInfo.mobile : preResultData.policyholdersInfo.mobile}
+                </span>
+              </div>
+              <div className="p-b-20">
+                <span className="fill-content-tit">
+                  电子邮箱
+                </span>
+                <span className="fill-content-txt">
+                  {preResultData.orderSpliteFlag === "0" ? preResultData.invoceInfo.email : preResultData.policyholdersInfo.email}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
   renderConfirm(preResultData) {
     return(
       <div>
@@ -768,53 +883,20 @@ export default class fillmation extends React.Component {
                 保障时间
               </div>
               <div className="confirm-date-dates">
-                <p>{preResultData.insuranceInfoList[0].policyInfo.insuranceStartTime}起</p>
-                <p>{preResultData.insuranceInfoList[0].policyInfo.insuranceEndTime}止</p>
+                <p>{preResultData.orderSpliteFlag === "0" ? preResultData.policyInfo.insuranceStartTime :  preResultData.insuranceInfoList[0].policyInfo.insuranceStartTime}起</p>
+                <p>{preResultData.orderSpliteFlag === "0" ? preResultData.policyInfo.insuranceEndTime : preResultData.insuranceInfoList[0].policyInfo.insuranceEndTime}止</p>
               </div>
             </div>
           </div>
-          <div className="confirm-center-tit">
-            投保人
-          </div>
-          <div className="confirm-center-contents">
-            <div className="center-content">
-              <div className="col-line-fillmation" onTouchTap={::this.onClickConfimPolicy}>
-                <span>{preResultData.policyholdersInfo.insurantName}</span>
-                <span className={this.state.showConfirmPolicy ? "icon-max-up" : "icon-max-down"}></span>
-              </div>
-              <div className={this.state.showConfirmPolicy ? "" : "hide"}>
-                <div className="p-b-20">
-                  <span className="fill-content-tit">
-                    身份证号
-                  </span>
-                  <span className="fill-content-txt">
-                    {preResultData.policyholdersInfo.insurantIdno}
-                  </span>
-                </div>
-                <div className="p-b-20">
-                  <span className="fill-content-tit">
-                    手机号码
-                  </span>
-                  <span className="fill-content-txt">
-                    {preResultData.policyholdersInfo.mobile}
-                  </span>
-                </div>
-                <div className="p-b-20">
-                  <span className="fill-content-tit">
-                    电子邮箱
-                  </span>
-                  <span className="fill-content-txt">
-                    {preResultData.policyholdersInfo.email}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+
+            {
+              preResultData.orderSpliteFlag !== "0" && this.renderInsure(preResultData)
+            }
           <div className="confirm-center-tit">
             被保人
           </div>
             {
-              this.renderConfirmbePeople(preResultData.insuranceInfoList)
+              preResultData.orderSpliteFlag === "0" ? this.renderConfirmbePeoplet(preResultData.insurantInfoList) : this.renderConfirmbePeople(preResultData.insuranceInfoList)
             }
           <div className="content white-bg m-t10">
             {

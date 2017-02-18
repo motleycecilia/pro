@@ -5,7 +5,7 @@ import incinerator from 'hooks/incinerator'
 /*
 查询详情页
 */
-const isGp = false
+const isGp = true
 export function queryDetilInfo(productId, productCode){
   return (dispatch, getState) => {
     dispatch(getDetailInfoBegin())

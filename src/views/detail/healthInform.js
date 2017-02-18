@@ -44,7 +44,8 @@ export default class healthInform extends React.Component {
       query: {
         productId: this.props.location.query.productId,
         productCode: this.props.location.query.productCode,
-        skuId: this.props.location.query.skuId
+        skuId: this.props.location.query.skuId,
+        productInsuranceCode: this.props.location.query.productInsuranceCode
       }
     })
   }
