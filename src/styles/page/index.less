@@ -27,6 +27,24 @@
       right: 10px;
     }
 }
+.disbtn-add-icon {
+    .btn;
+    position: relative;
+    .button-width(58px, 22px, @font-size-smaller, 22px,30px);
+    .button-variant(#ccc,@content-block,1px,#ccc);
+    .disbtn-icon-imgs {
+        .square(8px);
+        position: absolute;
+        top: 7px;
+        left: 10px;
+        .img-retina('~images/disable-add.jpg'; 8px; 8px);
+    }
+    .disbtn-icon-txt {
+      position: absolute;
+      top: 0px;
+      right: 10px;
+    }
+}
 /*被保人管理页面*/
 .sup-btns {
   position: relative;
@@ -57,4 +75,13 @@
   margin-top: 10px;
   font-size: 14px;
   color: #9b9b9b;
+}
+
+.login-err{
+  padding-top: 31px;
+  text-align: center;
+}
+.no-login-back{
+  color: blue;
+  font-size: 22px;
 }

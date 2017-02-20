@@ -421,10 +421,10 @@ export default class fillmation extends React.Component {
     const preMiumPara = JSON.parse(sessionStorage.getItem('prePara'))
     const orderNo = this.state.orderNo//'20170208017363391'//
     const payOrderNo = this.state.payOrderNo//'2017020801664619'//
-    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.protocol}${location.port}${location.pathname}?productId=${preMiumPara.productId}&productCode=${preMiumPara.productCode}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
+    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.href}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
     //hook: 出现异常页面
     //订单页面 收银台固定
-    //
+    //${location.protocol}//${location.hostname}:${location.port}${location.pathname}?productId=${preMiumPara.productId}&productCode=${preMiumPara.productCode}
   }
   goto() {
     this.setState({
@@ -942,7 +942,7 @@ export default class fillmation extends React.Component {
   }
   renderSubmitBtn() {
     return(
-      <div className="complete-fill-btn" onTouchTap={::this.onClickpreSubmit}>确定</div>
+      <div className="complete-fill-btn-sub" onTouchTap={::this.onClickpreSubmit}>确定</div>
     )
   }
   renderContent(policyUser) {

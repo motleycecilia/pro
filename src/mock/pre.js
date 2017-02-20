@@ -11,7 +11,7 @@ id: 1486561142273,
       productName: "境外旅行保险（全球）"
     },{
       orderStatus: "2003",
-      payPrem: "84.00",
+      payPrem: ".00",
       preOrderNo: "2017020800030567",
       productId: "10028680",
       productName: "境外旅行保险（全球）"

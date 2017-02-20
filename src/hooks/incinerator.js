@@ -3,7 +3,7 @@ export default function (name, code, handlers) {
     success: '000000',// 1000
     unlogin: '900002',
     gpSuccess: 1000,
-    gpUnlogin: 9999
+    gpUnlogin: 4001
   }
   const apiMap = [ {//news
       name: 'getDetail',

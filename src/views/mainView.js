@@ -133,6 +133,15 @@ export default class mainView extends React.Component {
           </div>
           <div className="p-l-10">
             <div className="col-line-threee">
+              <span>left</span>
+              <div className="disbtn-add-icon" >
+                  <span className="disbtn-icon-imgs"></span>
+                  <span className="disbtn-icon-txt">编辑</span>
+              </div>
+            </div>
+          </div>
+          <div className="p-l-10">
+            <div className="col-line-threee">
               <div className="col-line-with">
                 <span className="delete-icon-btn m-l3">
                 </span>

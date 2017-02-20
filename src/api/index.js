@@ -5,10 +5,12 @@ const domain = process.env.DEV_ENV === 'production' ?
   'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//
 const isGp = true
 const timeout = 10000
-const domainGP = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943' //location.origin
+const domainGP = process.env.DEV_ENV === 'production' ?
+	'https://toa-web.pingan.com.cn' :
+	'https://test-toa-web-h5-stg1.pingan.com.cn:34943'
 //http:34980  https:34943
 // const gpUrl = ais === 1 ? 'https://toa-gp-dmzstg1.pingan.com.cn:34943/toa-mgw/rest/webgateway' :  'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp'
-const gpUrl = 'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp/'
+const gpUrl = process.env.DEV_ENV === 'production' ? 'https://toa-web.pingan.com.cn/yizhangtong/api/gp/' :  'https://test-toa-web-h5-stg1.pingan.com.cn:34943/yizhangtong/api/gp/'
 const osTypes = App.IS_IOS === true ? "1" : "2"
 const publicParam = {"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"};
 const detailParams = [{"osType": "3", "deviceId": "D14634788288402628", "longitude": "22", "appVersion": "5.2.9", "osVersion": "9.3", "appClientId": "C14634788288460974", "reqTracer": "D14634788288402628C5AE6248-8E8D-452B-8B12-3AC4ECABD9DD", "latitude":"22", "dpi":"750x1334"},{productId:'10028680',

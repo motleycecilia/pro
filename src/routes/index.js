@@ -35,6 +35,6 @@ export default (
     <Route      component={country} path='/country' title="国家"/>
     <Route      component={mainView} path='/main' title="main"/>
     <Route      component={testView} path='/testView' title="testView"/>
-    <Route      component={login} path='/login' title="回话超时"/>
+    <Route      component={login} path='/login' title="登录超时"/>
   </Route>
 );

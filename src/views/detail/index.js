@@ -145,7 +145,7 @@ export default class detail extends React.Component {
             <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
               <div className="content-list-title">
                 <span className="project-name">{val.securityProName}</span>
-                <span className="money">{val.securityProAssuredSum ? val.securityProAssuredSum/10000 : 0}万元</span>
+                <span className="money">{val.securityProAssuredSum ? val.securityProAssuredSum/10000+"万元" : ""}</span>
               </div>
             </a>
             <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>

@@ -78,7 +78,8 @@ export default class premium extends React.Component {
     maxStartDate: '',
     minBirthDay: '',
     maxBirthDay: '',
-    orderSpliteFlag: '0'
+    orderSpliteFlag: '0',
+    isDisAddBeBirDayBtn: false
   }
 
   static contextTypes = {
@@ -363,6 +364,7 @@ export default class premium extends React.Component {
     bePeopleDates.splice(index, 1)
     this.setState({
       premiumStatus: 0,
+      isDisAddBeBirDayBtn: false,
       bePeopleDate: bePeopleDates
     })
     this.props.premiumMeasureReset()
@@ -542,8 +544,11 @@ export default class premium extends React.Component {
     sessionStorage.setItem("fillMationInfo",JSON.stringify(fillMationInfo))
     YztApp.getLoginStatus((status,data)=>{
       if(status==='success' && (!data.clientNo||(data.loginStatus == '0'))){//未登录先去登录
-          YztApp.accessNativeModule('patoa://pingan.com/login',()=>{
-              //登录后需要调用升级
+          // YztApp.accessNativeModule('patoa://pingan.com/login',()=>{
+          //     //登录后需要调用升级
+          // })
+          const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
+          YztApp.accessNativeModule(loginUrl,()=>{
           })
       }
       else{
@@ -580,7 +585,7 @@ export default class premium extends React.Component {
                 },
                 fail:()=>{
                   this.setState({
-                    premiumStatus: 1,
+                    premiumStatus: 0,
                     errorContent:res.responseMessage
                   })
                 },
@@ -610,13 +615,16 @@ export default class premium extends React.Component {
                       this.wapMallcheckOrderPayCondition(sso)
                     },
                     fail:()=>{
+                      this.setState({
+                        premiumStatus: 1
+                      })
                       if(res.resultStatus == 5000){
                         const loginUrl = `patoa://pingan.com/login${App.IS_IOS?'?force=1':''}`
                         YztApp.accessNativeModule(loginUrl,()=>{
                         })
                       }else {
                         this.setState({
-                          premiumStatus: 1,
+                          premiumStatus: 0,
                           errorContent:res.memo
                         })
                       }
@@ -641,6 +649,7 @@ export default class premium extends React.Component {
 
   addBepoleDate() {
     let bePeopleDates = this.state.bePeopleDate
+    let isDisAddBeBirDayBtn = this.state.isShowAddCountry === true ? false : true
     bePeopleDates.push({
       insurantSex:'F',
       insurantBirth: '',
@@ -651,7 +660,8 @@ export default class premium extends React.Component {
     })
     this.setState({
       premiumStatus: 0,
-      bePeopleDate: bePeopleDates
+      bePeopleDate: bePeopleDates,
+      isDisAddBeBirDayBtn: isDisAddBeBirDayBtn
     })
     this.props.premiumMeasureReset()
   }
@@ -733,7 +743,7 @@ export default class premium extends React.Component {
     return(
       typelist.map((val, index) => {
         return(
-          <div className="col-line-for m-t24" key={index} onTouchTap={this.onClickChoseOption.bind(this, val)}>
+          <div className="col-pre-line" key={index} onTouchTap={this.onClickChoseOption.bind(this, val)}>
             <div>
               {
                 val.priceName
@@ -744,6 +754,17 @@ export default class premium extends React.Component {
               <span className="checbox-chose"></span>
             </div>
           </div>
+          // <div className="col-line-for m-t24" key={index} onTouchTap={this.onClickChoseOption.bind(this, val)}>
+          //   <div>
+          //     {
+          //       val.priceName
+          //     }
+          //   </div>
+          //   <div className={this.state.name == val.priceName ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
+          //     <span className="lab-checkbox-2" htmlFor="cbx-3" ></span>
+          //     <span className="checbox-chose"></span>
+          //   </div>
+          // </div>
         )
       })
     )
@@ -752,13 +773,11 @@ export default class premium extends React.Component {
     return(
       [{name: '单次', key: '0'}, {name: '多次', key: '1'}].map((val, index) => {
         return(
-          <div className="col-line-for m-t24" key={index} onTouchTap={this.onClickChoseTourismName.bind(this, val.key)}>
+          <div className="col-pre-line" key={index} onTouchTap={this.onClickChoseTourismName.bind(this, val.key)}>
             <div>
               {
                 val.name
               }
-              <p className="m-t8">
-              </p>
             </div>
             <div className={this.state.tourismKey === val.key ? "lab-checkbox-contain lab-contain-chose" : "lab-checkbox-contain"}>
               <span className="lab-checkbox-2" htmlFor="cbx-3"></span>
@@ -772,10 +791,12 @@ export default class premium extends React.Component {
   renderTourismContent() {
     return(
       <div className="pre-center-package">
-        <p>旅游类型</p>
-        {
-          this.renderTourism()
-        }
+        <p className="pre-prename-p">旅游类型</p>
+        <div className="col-one-line">
+          {
+            this.renderTourism()
+          }
+        </div>
       </div>
     )
   }
@@ -788,7 +809,7 @@ export default class premium extends React.Component {
             <div className="col-line-with">
               <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBeDate.bind(this, i)}>
               </span>
-              <input type="text" placeholder="被保人出生日期" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}
+              <input type="text" value={this.state.bePeopleDate[index].insurantBirth || ""} className="premium-chose-date" onChange={this.onChangeBepopleDate.bind(this, i)}
                 onTouchTap={::this.onClickTakeEffectStartDate}/>
             </div>
             <span>￥
@@ -850,6 +871,22 @@ export default class premium extends React.Component {
       </div>
     )
   }
+  renderAddBeBirthday() {
+    return(
+      <div className="btn-add-icon" onTouchTap={this.addBepoleDate.bind(this)}>
+          <span className="add-icon-imgs"></span>
+          <span className="add-icon-txt">添加</span>
+      </div>
+    )
+  }
+  renderDisAddBirthday() {
+    return(
+      <div className="disbtn-add-icon" >
+          <span className="disbtn-icon-imgs"></span>
+          <span className="disbtn-icon-txt">编辑</span>
+      </div>
+    )
+  }
   renderPremium(detail) {
     return(
       <div>
@@ -872,10 +909,12 @@ export default class premium extends React.Component {
             <div className="clear"></div>
           </div>
           <div className="pre-center-package">
-            <p>套餐类型</p>
-            {
-              this.renderPackageType(detail.priceList)
-            }
+            <p className="pre-prename-p">套餐类型</p>
+            <div className="col-one-line">
+              {
+                this.renderPackageType(detail.priceList)
+              }
+            </div>
           </div>
           {
             this.state.isShowAddCountry && this.renderTourismContent()
@@ -904,10 +943,11 @@ export default class premium extends React.Component {
             }
             <div className="col-line-threee col-no-bd">
               <span>被保险人出生日期</span>
-              <div className="btn-add-icon" onTouchTap={this.addBepoleDate.bind(this)}>
-                  <span className="add-icon-imgs"></span>
-                  <span className="add-icon-txt">添加</span>
-              </div>
+              {
+                this.state.isDisAddBeBirDayBtn === true ?
+                this.renderDisAddBirthday() :
+                this.renderAddBeBirthday()
+              }
             </div>
             {
               this.renderBePopleDate()
