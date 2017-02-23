@@ -421,8 +421,8 @@ export default class fillmation extends React.Component {
     const preMiumPara = JSON.parse(sessionStorage.getItem('prePara'))
     const orderNo = this.state.orderNo//'20170208017363391'//
     const payOrderNo = this.state.payOrderNo//'2017020801664619'//
-    window.location.href = `https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.href}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
-    //hook: 出现异常页面
+    window.location.href = `https://m.pingan.com/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.href}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
+    //hook: 出现异常页面pa18-wapmall-dmzstg1.pingan.com.cn:53443
     //订单页面 收银台固定
     //${location.protocol}//${location.hostname}:${location.port}${location.pathname}?productId=${preMiumPara.productId}&productCode=${preMiumPara.productCode}
   }

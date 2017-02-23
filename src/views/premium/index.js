@@ -102,10 +102,10 @@ export default class premium extends React.Component {
       let priceNames = detailInfo.detail.priceList.map((val, index)=> {
         return val.priceName
       })
+      fName = detailInfo.detail.copyPriceList.filter((val, index) => {
+        return val.skuId == this.props.location.query.skuId && val
+      })
       if(isShowAddCountry == true) {
-        fName = detailInfo.detail.copyPriceList.filter((val, index) => {
-          return val.skuId == this.props.location.query.skuId && val
-        })
         arr1 = detailInfo.detail.copyPriceList.filter((val,index)=>{
           return val.priceName == priceNames[0] && val
         })
@@ -123,6 +123,7 @@ export default class premium extends React.Component {
       }
       let insurancePriods = detailInfo.detail.insurancePriod//detsInfo.result.insurancePriod//
       let insurantUnit = detailInfo.detail.insurancePriodUnit//detsInfo.result.insurancePriodUnit//
+      let isAYear = insurancePriods === '1' && insurantUnit === 'Y' ? true : false
       let currentTimes = detailInfo.detail.currentTime.substring(0, 10)//detsInfo.result.currentTime.substring(0, 10)//
       const getEle = document.querySelector.bind(document)
       getEle('#sysDate').value = currentTimes
@@ -138,22 +139,22 @@ export default class premium extends React.Component {
         // orderSpliteFlag: detsInfo.result.orderSpliteFlag || "0",
         // skuId: isShowAddCountry == true ? bChoseSkuObj.skuId : this.props.location.query.skuId,
         // productInsuranceCode: isShowAddCountry == true ? bChoseSkuObj.productInsuranceCode : this.props.location.query.productInsuranceCode,
-        // minPeriod: detsInfo.result.insuranceProductTerms[0].minValue || 1,
-        // maxPeriod: detsInfo.result.insuranceProductTerms[0].maxValue || 365,
-        // periodMinUnit: detsInfo.result.insuranceProductTerms[0].minValueUnit || 'D',
-        // periodMaxUnit: detsInfo.result.insuranceProductTerms[0].maxValueUnit || 'D',
-        // insurancePriod: insurantUnit === 'Y' ? "" + (12 * detsInfo.result.insurancePriod.split("-")[0]) : detsInfo.result.insurancePriod.split("-")[0],//保险期限
-        // productPriod: detsInfo.result.insurancePriod  === '1年' ? true : false,
-        // endPriod: insurancePriods === '1年' ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
-        // endPriodUnit: insurancePriods === '1年' ? 'M' : 'D',
+        // minPeriod: detsInfo.result.minEffectDelay|| 1,
+        // maxPeriod: detsInfo.result.maxEffectDelay || 365,
+        // periodMinUnit: 'D',
+        // periodMaxUnit: 'D',
+        // insurancePriod: insurantUnit === 'Y' ? "" + (12 * insurancePriods) : insurancePriods.split("-")[0],//保险期限
+        // productPriod: isAYear  === true ? true : false,
+        // endPriod: isAYear  === true ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
+        // endPriodUnit: isAYear  === true ? 'M' : 'D',
         // currentTime: currentTimes,
         // minInsureAge: detsInfo.result.minInsureAge,
         // maxInsureAge: detsInfo.result.maxInsureAge,
         // maxInsureAgeUnit: detsInfo.result.maxInsureAgeUnit,
         // minInsureAgeUnit: detsInfo.result.minInsureAgeUnit,
         // startDate: startDates,
-        // endDate: detsInfo.result.insurancePriod === '1年' ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
-        // endFormatDate: detsInfo.result.insurancePriod === '1年' ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        // endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
+        // endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
         // minStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
         // maxStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].maxValue, detsInfo.result.insuranceProductTerms[0].maxValueUnit),
         // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit//保险期限单位
@@ -166,22 +167,22 @@ export default class premium extends React.Component {
         orderSpliteFlag: detailInfo.detail.orderSpliteFlag || "0",
         skuId: isShowAddCountry == true ? bChoseSkuObj.skuId : this.props.location.query.skuId,
         productInsuranceCode: isShowAddCountry == true ? bChoseSkuObj.productInsuranceCode : this.props.location.query.productInsuranceCode,
-        minPeriod: detailInfo.detail.insuranceProductTerms[0].minValue || '1',
-        maxPeriod: detailInfo.detail.insuranceProductTerms[0].maxValue || '365',
-        periodMinUnit: detailInfo.detail.insuranceProductTerms[0].minValueUnit || 'D',
-        periodMaxUnit: detailInfo.detail.insuranceProductTerms[0].maxValueUnit || 'D',
-        insurancePriod: insurantUnit === 'Y' ? 12 * detailInfo.detail.insurancePriod.split("-")[0] : detailInfo.detail.insurancePriod[0],//保险期限
-        productPriod: detailInfo.detail.insurancePriod === '1年' ? true : false,
-        endPriod: insurancePriods === '1年' ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
-        endPriodUnit: insurancePriods === '1年' ? 'M' : 'D',
+        minPeriod: detailInfo.detail.minEffectDelay|| 1,
+        maxPeriod: detailInfo.detail.maxEffectDelay || 365,
+        periodMinUnit: 'D',
+        periodMaxUnit: 'D',
+        insurancePriod: insurantUnit === 'Y' ? 12 * insurancePriods : insurancePriods.split("-")[0],//保险期限
+        productPriod: isAYear  === true ? true : false,//insurancePriods === '1年'
+        endPriod: isAYear  === true ? "12" : parseInt(insurancePriods.split("-")[1].split("/")[0]),
+        endPriodUnit: isAYear  === true ? 'M' : 'D',
         currentTime: currentTimes,
         minInsureAge: detailInfo.detail.minInsureAge,
         maxInsureAge: detailInfo.detail.maxInsureAge,
         minInsureAgeUnit: detailInfo.detail.minInsureAgeUnit,
         maxInsureAgeUnit: detailInfo.detail.maxInsureAgeUnit,
         startDate: startDates,
-        endDate: detailInfo.detail.insurancePriod === '1年' ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
-        endFormatDate: detailInfo.detail.insurancePriod === '1年' ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
+        endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
         minStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].minValue, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
         maxStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].maxValue, detailInfo.detail.insuranceProductTerms[0].maxValueUnit),
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit//保险期限单位
