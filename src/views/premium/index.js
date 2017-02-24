@@ -87,7 +87,7 @@ export default class premium extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(10000400)
     this.props.queryDetilInfo(this.props.location.query.productId, this.props.location.query.productCode)
     App.goBackAction = function () {
       this.onClickBack()
@@ -128,6 +128,7 @@ export default class premium extends React.Component {
       const getEle = document.querySelector.bind(document)
       getEle('#sysDate').value = currentTimes
       let startDates = util.getEndDatet(detailInfo.detail.currentTime.substring(0,10), detailInfo.detail.insuranceProductTerms[0].minValue || '1', detailInfo.detail.insuranceProductTerms[0].minValueUnit || "D")//util.getEndDatet(detsInfo.result.currentTime.substring(0,10), detsInfo.result.insuranceProductTerms[0].minValue || '1', detsInfo.result.insuranceProductTerms[0].minValueUnit || 'D')//
+      let endDates = util.getEndDatet(startDates, 7, 'D')
       this.setState({
         loodNum: 1,
         // priceNames: priceNames,
@@ -153,8 +154,8 @@ export default class premium extends React.Component {
         // maxInsureAgeUnit: detsInfo.result.maxInsureAgeUnit,
         // minInsureAgeUnit: detsInfo.result.minInsureAgeUnit,
         // startDate: startDates,
-        // endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
-        // endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        // endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : endDates,
+        // endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : endDates,
         // minStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].minValue, detsInfo.result.insuranceProductTerms[0].minValueUnit),
         // maxStartDate: util.getEndDatet(currentTimes, detsInfo.result.insuranceProductTerms[0].maxValue, detsInfo.result.insuranceProductTerms[0].maxValueUnit),
         // insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit//保险期限单位
@@ -181,8 +182,8 @@ export default class premium extends React.Component {
         minInsureAgeUnit: detailInfo.detail.minInsureAgeUnit,
         maxInsureAgeUnit: detailInfo.detail.maxInsureAgeUnit,
         startDate: startDates,
-        endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : "",
-        endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : '',
+        endDate: isAYear  === true ? util.replaceAll(util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D'), "-", "/") : endDates,
+        endFormatDate: isAYear  === true ? util.getEndDatet(util.getEndDatet(startDates, 1, 'Y'),-1 , 'D') : endDates,
         minStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].minValue, detailInfo.detail.insuranceProductTerms[0].minValueUnit),
         maxStartDate: util.getEndDatet(currentTimes, detailInfo.detail.insuranceProductTerms[0].maxValue, detailInfo.detail.insuranceProductTerms[0].maxValueUnit),
         insurancePriodUnit: insurantUnit === 'Y' ? 'M' : insurantUnit//保险期限单位
@@ -424,7 +425,7 @@ export default class premium extends React.Component {
     }
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
-      let [minDate, maxDate] = [util.getEndDatet(this.state.currentTime, -this.state.minInsureAge ,this.state.minInsureAgeUnit),  util.getEndDatet(this.state.currentTime, -this.state.maxInsureAge, this.state.maxInsureAgeUnit)]
+      let [minDate, maxDate] = [util.getEndDatet(this.state.startDate, -this.state.minInsureAge ,this.state.minInsureAgeUnit),  util.getEndDatet(this.state.startDate, -this.state.maxInsureAge, this.state.maxInsureAgeUnit)]
       let checkBeDate = this.state.bePeopleDate.every(function(val, index) {
         return util.maxDate(minDate, val.insurantBirth) && util.maxDate(val.insurantBirth, maxDate)
       })
@@ -677,13 +678,16 @@ export default class premium extends React.Component {
     let bePeopleDates = this.state.bePeopleDate
     bePeopleDates[index].insurantBirth = e.target.value
     this.setState({
-      bePeopleDate: bePeopleDates
+      bePeopleDate: bePeopleDates,
+      premiumStatus: 0
     })
   }
   onChageStartDate(e) {
       // <div>
       //   util.getEndDatet(detail.currentTime.substring(0,10), detail.insuranceProductTerms[0].minValue || '1', detail.insuranceProductTerms[0].minValueUnit || 'D')
       // </div>
+    const {eDate} = this.refs
+    eDate.value = util.getEndDatet(e.target.value, 7, 'D')
     this.props.premiumMeasureReset()
     this.setState({
       minEndDate: util.getEndDatet(e.target.value, 1, 'D'),
@@ -697,6 +701,12 @@ export default class premium extends React.Component {
         // endDate: util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"),
         endDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),
         endFormatDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D')
+      })
+    }else {
+      this.setState({
+        // endDate: util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"),
+        endDate: util.getEndDatet(e.target.value, 7, 'D'),
+        endFormatDate: util.getEndDatet(e.target.value, 7, 'D')
       })
     }
   }
@@ -1006,13 +1016,6 @@ export default class premium extends React.Component {
         }
         {
           this.state.showModal && <Modal content={this.state.content} goto={this.goto.bind(this)} />
-        }
-        {
-          // <span className="pre-btn-right" onTouchTap={this.onClickInsure.bind(this)}>
-          //   <span className="pre-btn-rbtn">
-          //     立即投保
-          //   </span>
-          // </span>
         }
       </div>
     )

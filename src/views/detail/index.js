@@ -34,7 +34,7 @@ export default class detail extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10013242)
+    // this.props.queryDetilInfo(10000400)
     // this.props.queryDetilInfo(10028680, 10007603)
     this.props.queryDetilInfo(getUrlParam('productId'), getUrlParam('productCode'))
     App.goBackAction = function () {

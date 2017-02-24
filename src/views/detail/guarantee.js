@@ -23,14 +23,16 @@ export default class guarantee extends React.Component {
 
   componentWillMount() {
     this.props.queryDetilInfo(this.props.location.query.productId,this.props.location.query.productCode)//
-    // this.props.queryDetilInfo(10028680, 10007603)
+    // this.props.queryDetilInfo(10000400)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
     let category = this.props.location.query.category
     let titles = category === '1' ? '投保声明' :
     category === '2' ? '保险条款' :
-    category === '3' ? '常见问题' : '理赔流程'
+    category === '3' ? '常见问题' :
+    category === '5' ? '投保须知' :
+    '理赔流程'
     YztApp.setTitle(titles)
   }
   onClickBack() {
@@ -75,10 +77,10 @@ export default class guarantee extends React.Component {
     return(
         clauseList.map((val, index) => {
           return(
-            <div className="col-line" onTouchTap={this.onClickGurantInfo.bind(this,val.downloadUrl)} key={index}>
-              <span>{val.name}</span>
-              <span className="icon-right"></span>
-            </div>
+              <a className="col-line" href={val.downloadUrl} key={index}>
+                <span>{val.name}</span>
+                <span className="icon-right"></span>
+              </a>
           )
         })
     )
@@ -100,6 +102,14 @@ export default class guarantee extends React.Component {
     )
   }
 
+  insuranceNotice(insuranceNotice) {
+    return(
+      <div className="guarantee-content">
+        {insuranceNotice}
+      </div>
+    )
+  }
+
   renderContent(resData, category) {
     return(
         category === '1' ?
@@ -108,6 +118,8 @@ export default class guarantee extends React.Component {
         this.renderInsure(resData.insuranceClauseList) :
         category === '3' ?
         this.renderProblem(resData.commonIssue) :
+        category === '5' ?
+        this.insuranceNotice(resData.insuranceNotice) :
         this.renderClaims(resData.urlLiPeiFuWu)
     )
   }
@@ -116,7 +128,9 @@ export default class guarantee extends React.Component {
     let category = this.props.location.query.category
     let titles = category === '1' ? '投保声明' :
     category === '2' ? '保险条款' :
-    category === '3' ? '常见问题' : '理赔流程'
+    category === '3' ? '常见问题' :
+    category === '5' ? '投保须知' :
+    '理赔流程'
     const { detailInfo } = this.props
     return (
       <div className="bg-fff">
@@ -124,7 +138,7 @@ export default class guarantee extends React.Component {
           title={titles}/>
         {
            !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfo.detail, this.props.location.query.category)
-          // !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfos, this.props.location.query.category)
+          // !detailInfo.getDetailSuccess ? <Loading /> : this.renderContent(detailInfos.result, this.props.location.query.category)
          }
       </div>
     )

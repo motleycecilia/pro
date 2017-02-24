@@ -12,6 +12,10 @@ const checkers = {
 	checkEmpty: function(val, errMsg) {
 		return this.isEmpty(val) ? false : errMsg
 	},
+	/*检查是否为英文*/
+	checkEng: function(val, errMsg) {
+		return this.isEmpty(val) && /^[A-Za-z]+$/.test(val) ? false : errMsg
+	},
 	checkTureFalse: function(flag, errMsg) {
 		return flag ? false : errMsg
 	},

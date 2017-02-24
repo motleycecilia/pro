@@ -7,7 +7,6 @@ import {getInsuredUserInfo, getPolicyUserInfo, resetInsuredUserInfo,  preSubmit,
 import { App, YztApp } from 'utils/native_h5'
 import { createChecker } from 'utils/checker'
 import BtnLoading from 'components/btnLoading'
-// import confimInfo from 'mock/confim'
 import confimInfo from 'mock/confim'
 import util from 'utils/utils'
 import Modal from 'components/modal'
@@ -32,6 +31,7 @@ export default class fillmation extends React.Component {
     iphoneChoseBtn: false,
     fillmationInfo: {},
     beList: [],
+    englishNameList: [],
     name: '',
     phoneNo: '',
     address: '',
@@ -118,10 +118,14 @@ export default class fillmation extends React.Component {
       let beListId = this.props.location.query.choseBeList
       if(beListId) {
         let bePoleList = insured.getIResultData.filter((val, index) => {
-          return beListId.indexOf(val.id) > -1 && val
+          return beListId.split(",").indexOf("" +val.id) > -1 && val
+        })
+        let englishNameList = bePoleList.map((val, index) =>{
+          return {englishName: ""}
         })
         this.setState({
-          beList: bePoleList
+          beList: bePoleList,
+          englishNameList: englishNameList
         })
       }
     }
@@ -310,6 +314,13 @@ export default class fillmation extends React.Component {
         errMsg: '请同意授权说明'
       }
     ]
+    this.state.englishNameList.forEach((val, index) => {
+      checkList.push({
+        checkfnName: "checkEng",
+        checkValue: val.englishName,
+        errMsg: '被保人护照英文名或姓名全拼格式有误'
+      })
+    })
     if(this.state.iphoneChoseBtn) {
       let invoiceCheckList = [
         {
@@ -339,11 +350,13 @@ export default class fillmation extends React.Component {
       // let checkBeDate = this.state.beList.every(function(val, index) {
       //   return util.maxDate(minDate, val.insurantBirth) && util.maxDate(val.insurantBirth, maxDate)
       // })
+      let englishNameList = this.state.englishNameList
       let insurantList = this.state.beList.map((val, index) => {
         return [{
           insurantId: val.id,
           type: "1",//index === 0 ? "1" : "2"
-          relation: "1"
+          relation: "1",
+          englishName: englishNameList[index].englishName
         }]
       })
       let insuranceInfoList = insurantList.map((val, index) => {
@@ -404,6 +417,13 @@ export default class fillmation extends React.Component {
         errorInfo: errorContents
       })
     }
+  }
+  onBlurEngName(i, e) {
+    let englishNameLists = this.state.englishNameList
+    englishNameLists[i].englishName = e.target.value.trim()
+    this.setState({
+      englishNameList: englishNameLists
+    })
   }
   onClickConfimPolicy() {
     this.setState({
@@ -623,15 +643,22 @@ export default class fillmation extends React.Component {
     return (
       this.state.beList.map((val, index) => {
         return(
-          <div className="col-line-threeetbd" key={index}>
-            <div className="col-line-with">
-              <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBepole.bind(this,index)}>
-              </span>
-              {
-                val.insurantName
-              }
+          <div key={index}>
+            <div className="col-line-threeetbd">
+              <div className="col-line-with">
+                <span className="delete-icon-btn m-l3" onTouchTap={this.onClickDeleteBepole.bind(this,index)}>
+                </span>
+                {
+                  val.insurantName
+                }
+              </div>
+              <span className="icon-max-right" onTouchTap={this.onClickEditBepole.bind(this, val.id)}></span>
             </div>
-            <span className="icon-max-right" onTouchTap={this.onClickEditBepole.bind(this, val.id)}></span>
+            <div className="row-box-list">
+              <div className="col-fill-be-pinyin">
+                <input type="text" placeholder="请输入护照英文名或姓名全拼" className="fill-be-pinyin" onBlur={this.onBlurEngName.bind(this, index)}/>
+              </div>
+            </div>
           </div>
         )
       })
@@ -1032,7 +1059,7 @@ export default class fillmation extends React.Component {
               点击{'"确定"'}即表示你阅读并同意
             </p>
             <p>
-              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 1)}>《投保须知》</span>和
+              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 5)}>《投保须知》</span>和
               <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 2)}>《保险条款》</span>
             </p>
           </div>
