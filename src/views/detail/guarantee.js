@@ -23,7 +23,7 @@ export default class guarantee extends React.Component {
 
   componentWillMount() {
     this.props.queryDetilInfo(this.props.location.query.productId,this.props.location.query.productCode)//
-    // this.props.queryDetilInfo(10000400)
+    // this.props.queryDetilInfo(10013242)
     App.goBackAction = function () {
       this.onClickBack()
     }.bind(this)
@@ -46,7 +46,14 @@ export default class guarantee extends React.Component {
       }
     })
   }
-
+  goProtocol(href){
+    return ()=>{
+      if(href){
+        App.call(['isNeedJSBack'],null,null,{status:'false'});
+        location.href = href;
+      }
+    }
+  }
   renderProblemList(commonIssue) {
     return(
         commonIssue.map((val, index) => {
@@ -77,7 +84,7 @@ export default class guarantee extends React.Component {
     return(
         clauseList.map((val, index) => {
           return(
-              <a className="col-line" href={val.downloadUrl} key={index}>
+              <a className="col-line" onClick={this.goProtocol(val.downloadUrl||'')} key={index}>
                 <span>{val.name}</span>
                 <span className="icon-right"></span>
               </a>

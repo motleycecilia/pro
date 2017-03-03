@@ -12,6 +12,10 @@ import util from 'utils/utils'
 import Modal from 'components/modal'
 import TYpes from 'utils/Types'
 
+const domain = process.env.DEV_ENV === 'production' ?
+	'https://m.pingan.com/chaoshi' :
+  'https://pa18-wapmall-dmzstg1.pingan.com.cn:53443/chaoshi'//
+
 @connect(
   state => ({
     insured: state.insured,
@@ -56,7 +60,8 @@ export default class fillmation extends React.Component {
     ConfirmBepoleIndex: -1,
     ConfirmGuaranteeIndex: -1,
     orderNo: '',
-    payOrderNo: ''
+    payOrderNo: '',
+		isShowInvoice: false
   }
 
   static contextTypes = {
@@ -68,7 +73,7 @@ export default class fillmation extends React.Component {
     }.bind(this)
     YztApp.setTitle(this.props.route.title)
     this.setState({
-      fillmationInfo: JSON.parse(sessionStorage.getItem("fillMationInfo"))
+      fillmationInfo: JSON.parse(sessionStorage.getItem("fillMationInfo"))//{"productName":"境外旅行保险（全球）","name":"豪华型","isShowAddCountry":true}
     })
     this.props.getPolicyUserInfo();
     this.props.getInsuredUserInfo('')
@@ -314,20 +319,17 @@ export default class fillmation extends React.Component {
         errMsg: '请同意授权说明'
       }
     ]
-    this.state.englishNameList.forEach((val, index) => {
-      checkList.push({
-        checkfnName: "checkEng",
-        checkValue: val.englishName,
-        errMsg: '被保人护照英文名或姓名全拼格式有误'
+    if(this.state.fillmationInfo.isShowAddCountry === true) {
+      this.state.englishNameList.forEach((val, index) => {
+        checkList.push({
+          checkfnName: "checkEng",
+          checkValue: val.englishName,
+          errMsg: '被保人护照英文名或姓名全拼信息有误'
+        })
       })
-    })
+    }
     if(this.state.iphoneChoseBtn) {
       let invoiceCheckList = [
-        {
-          checkfnName: "checkEmpty",
-          checkValue: this.state.ititle,
-          errMsg: "请填写发票抬头"
-        },
         {
           checkfnName: "mobile",
           checkValue: this.state.phoneNo
@@ -378,7 +380,7 @@ export default class fillmation extends React.Component {
       //   },
       //   invoceInfo: {
       //     invoceName: this.state.policyName,
-      //     invoceHeading: this.state.ititle,
+      //     invoceHeading: this.state.policyName,
       //     invoceZipCode: this.state.zipCode,
       //     invoceMobileNo: this.state.phoneNo,
       //     invoceAddress: this.state.address
@@ -404,7 +406,7 @@ export default class fillmation extends React.Component {
         },
         invoceInfo: {
           invoceName: this.state.policyName,
-          invoceHeading: this.state.ititle,
+          invoceHeading: this.state.policyName,
           invoceZipCode: this.state.zipCode,
           invoceMobileNo: this.state.phoneNo,
           invoceAddress: this.state.address
@@ -441,7 +443,7 @@ export default class fillmation extends React.Component {
     const preMiumPara = JSON.parse(sessionStorage.getItem('prePara'))
     const orderNo = this.state.orderNo//'20170208017363391'//
     const payOrderNo = this.state.payOrderNo//'2017020801664619'//
-    window.location.href = `https://m.pingan.com/chaoshi/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.href}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
+    window.location.href = `${domain}/payPre/life/index.shtml?channel=1982&channelSecond=1982003&platId=999201007&payClassify=13&orderNo=${orderNo}&payOrderNo=${payOrderNo}&digest=&from=wap-chaoshi&productSide=&customid&hook=${location.href}&ssoTicket=${sso.ssoTicket}&timestamp=${sso.timestamp}&sign=${sso.sign}`//
     //hook: 出现异常页面pa18-wapmall-dmzstg1.pingan.com.cn:53443
     //订单页面 收银台固定
     //${location.protocol}//${location.hostname}:${location.port}${location.pathname}?productId=${preMiumPara.productId}&productCode=${preMiumPara.productCode}
@@ -528,9 +530,8 @@ export default class fillmation extends React.Component {
               placeholder="发票抬头"
               ref="ititle"
               maxLength="20"
-              onFocus={::this.onFocusTitle}
-              onChange={::this.onChangeTitle}
-              onBlur={::this.onBlurTitle}
+              defaultValue={this.state.policyName}
+              readOnly
             />
             {
               !!this.state.errorTitle &&
@@ -654,11 +655,13 @@ export default class fillmation extends React.Component {
               </div>
               <span className="icon-max-right" onTouchTap={this.onClickEditBepole.bind(this, val.id)}></span>
             </div>
-            <div className="row-box-list">
-              <div className="col-fill-be-pinyin">
-                <input type="text" placeholder="请输入护照英文名或姓名全拼" className="fill-be-pinyin" onBlur={this.onBlurEngName.bind(this, index)}/>
+            {
+              this.state.fillmationInfo.isShowAddCountry === true && <div className="row-box-list">
+                <div className="col-fill-be-pinyin">
+                  <input type="text" placeholder="请在此输入护照英文名或姓名全拼" className="fill-be-pinyin" onChange={this.onBlurEngName.bind(this, index)}/>
+                </div>
               </div>
-            </div>
+            }
           </div>
         )
       })
@@ -972,6 +975,20 @@ export default class fillmation extends React.Component {
       <div className="complete-fill-btn-sub" onTouchTap={::this.onClickpreSubmit}>确定</div>
     )
   }
+	renderBetInfo(){
+		return(
+			<div className="fill-describe">
+				*被保险人必须为本人、配偶或直系亲属
+			</div>
+		)
+	}
+	renderBetInfoC() {
+		return(
+			<div className="fill-describe">
+				*被保险人为未成年人时,投保人必须是其父母
+			</div>
+		)
+	}
   renderContent(policyUser) {
     return(
       <div>
@@ -1032,17 +1049,19 @@ export default class fillmation extends React.Component {
               }
             </div>
           </section>
-          <div className="fill-describe">
-            *被保险人必须为本人、配偶或直系亲属
-          </div>
-          <div className="invoice-info">
-            <span>需要发票</span>
-              <section>
-                <div className={this.state.iphoneChoseBtn ? "iphone-chose bg-3399ff bd-col-3399ff" : "iphone-chose"} onTouchTap={this.onClickChoseBtn.bind(this)}>
-                  <div className={this.state.iphoneChoseBtn ? "iphone-nochose-btn iphone-chose-btn" : "iphone-nochose-btn"}></div>
-                </div>
-              </section>
-          </div>
+					{
+						this.state.fillmationInfo.isShowAddCountry === false ? this.renderBetInfo() :this.renderBetInfoC()
+					}
+					{
+						this.state.isShowInvoice && <div className="invoice-info">
+	            <span>需要发票</span>
+	              <section>
+	                <div className={this.state.iphoneChoseBtn ? "iphone-chose bg-3399ff bd-col-3399ff" : "iphone-chose"} onTouchTap={this.onClickChoseBtn.bind(this)}>
+	                  <div className={this.state.iphoneChoseBtn ? "iphone-nochose-btn iphone-chose-btn" : "iphone-nochose-btn"}></div>
+	                </div>
+	              </section>
+	          </div>
+					}
           {
             this.state.iphoneChoseBtn ? this.renderInvoice(policyUser) : ''
           }
@@ -1059,7 +1078,7 @@ export default class fillmation extends React.Component {
               点击{'"确定"'}即表示你阅读并同意
             </p>
             <p>
-              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 5)}>《投保须知》</span>和
+              <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 1)}>《投保声明》</span>和
               <span className="col-1da4f9" onTouchTap={this.onClickStatement.bind(this, 2)}>《保险条款》</span>
             </p>
           </div>

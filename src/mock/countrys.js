@@ -1,10 +1,61 @@
 const countrysData = {
   "10003240": [
     {
-      name: 'AFG 阿富汗 Afghanistan'
+      name: 'AUS 澳大利亚 Australia'
     },
     {
-      name: 'ALB 阿尔巴尼亚 Albania'
+      "name": "USA 美国 United States of America (USA)"
+    },
+    {
+      "name": "SIN 新加坡 Singapore"
+    },
+    {
+      "name": "INA 印尼 Indonesia"
+    },
+    {
+      "name": "NED 荷兰 Netherlands"
+    },
+    {
+      "name": "TWN 台湾 Taiwan"
+    },
+    {
+      "name": "SWE 瑞典 Sweden"
+    },
+    {
+      "name": "MAS 马来西亚 Malaysia"
+    },
+    {
+      "name": "CAM 柬埔寨 Cambodia"
+    },
+    {
+      "name": "MAC 澳门 Macau"
+    },
+    {
+      "name": "CAN 加拿大 Canada"
+    },
+    {
+      "name": "KOR 韩国 Korea"
+    },
+    {
+      "name": "ITA 意大利 Italy"
+    },
+    {
+      "name": "SUI 瑞士 Switzerland"
+    },
+    {
+      "name": "JPN 日本 Japan"
+    },
+    {
+      "name": "GER 德国 Germany"
+    },
+    {
+      "name": "GBR 英国 United Kingdom"
+    },
+    {
+      "name": "FRA 法国 France"
+    },
+    {
+      "name": "HK 香港 Hong Kong"
     },
     {
       name: 'ALG 阿尔及利亚 Algeria'
@@ -23,9 +74,6 @@ const countrysData = {
     },
     {
       name: 'ARM 亚美尼亚 Armenia'
-    },
-    {
-      name: 'AUS 澳大利亚 Australia'
     },
     {
       name: 'AUT 奥地利 Austria'
@@ -47,9 +95,6 @@ const countrysData = {
     },
     {
       name: 'BEN 贝宁 Benin'
-    },
-    {
-      name: 'BDI 布隆迪 Burundi'
     },
     {
       name: 'BHU 不丹 Bhutan'
@@ -82,18 +127,6 @@ const countrysData = {
       name: 'BUL 保加利亚 Bulgaria'
     },
     {
-      name: 'BUR 布基纳法索、 Burkina Faso'
-    },{
-      "name": "CAF 中非 Central African Republic"
-    }, {
-      "name": "CAM 柬埔寨 Cambodia"
-    }, {
-      "name": "CAN 加拿大 Canada"
-    }, {
-      "name": "CHA 乍得 Chad"
-    }, {
-      "name": "CGO 刚果 Congo"
-    }, {
       "name": "CHI 智利 Chile"
     }, {
       "name": "CIV 科特迪瓦 Cote d'Ivoire"
@@ -137,28 +170,20 @@ const countrysData = {
       "name": "ESP 西班牙 Spain"
     }, {
       "name": "EST 爱沙尼亚 Estonia"
-    }, {
-      "name": "ETH 埃塞俄比亚 Ethiopia"
     },{
       "name": "FIJ 斐济 Fiji"
     }, {
       "name": "FIN 芬兰 Finland"
     }, {
       "name": "FSM 密克罗尼西亚 Micronesia"
-    }, {
-      "name": "FRA 法国 France"
     },{
       "name": "GAB 加蓬 Gabon"
     }, {
       "name": "GAM 冈比亚 Gambia"
     }, {
-      "name": "GBR 英国 United Kingdom"
-    }, {
       "name": "GEO 格鲁吉亚 Georgia"
     }, {
       "name": "GEQ 赤几 Equatorial Guinea"
-    }, {
-      "name": "GER 德国 Germany"
     }, {
       "name": "GHA 加纳 Ghana"
     }, {
@@ -170,31 +195,19 @@ const countrysData = {
     }, {
       "name": "GUA 危地马拉Guatemala"
     }, {
-      "name": "GUI 几内亚 Guinea"
-    }, {
       "name": "GUY 圭亚那 Guyana"
     },{
-      "name": "IND 印度 India"
-    }, {
-      "name": "INA 印尼 Indonesia"
-    }, {
       "name": "IRI 伊朗 Iran"
     }, {
       "name": "IRL 爱尔兰 Ireland"
     }, {
-      "name": "IRQ 伊拉克 Iraq"
-    }, {
       "name": "ISL 冰岛 Iceland"
     }, {
       "name": "ISR 以色列 Israel"
-    }, {
-      "name": "ITA 意大利 Italy"
     },{
       "name": "JAM 牙买加 Jamaica"
     }, {
       "name": "JOR 约旦 Jordan"
-    }, {
-      "name": "JPN 日本 Japan"
     },{
       "name": "KAZ 哈萨克斯坦 Kazakhstan"
     }, {
@@ -204,26 +217,16 @@ const countrysData = {
     }, {
       "name": "KIR 基里巴斯 Kiribati"
     }, {
-      "name": "KOR 韩国 Korea"
-    }, {
-      "name": "KSA 沙特阿拉伯 Saudi Arabia"
-    }, {
       "name": "KUW 科威特 Kuwait"
     },{
       "name": "LAO 老挝 Laos"
     }, {
       "name": "LAT 拉脱维亚 Latvia"
     }, {
-      "name": "LBA 利比亚 Libya"
-    }, {
-      "name": "LBR 利比里亚 Liberia"
-    }, {
       "name": "LCA 圣卢西亚 Saint Lucia"
     }, {
       "name": "LES 莱索托 Lesotho"
-    }, {
-      "name": "LIB 黎巴嫩 Lebanon"
-    }, {
+    },{
       "name": "LIE 列支敦士登 Liechtenstein"
     }, {
       "name": "LTU 立陶宛 Lithuania"
@@ -233,8 +236,6 @@ const countrysData = {
       "name": "MAD 马达加斯加 Madagascar"
     }, {
       "name": "MAR 摩洛哥 Morocco"
-    }, {
-      "name": "MAS 马来西亚 Malaysia"
     }, {
       "name": "MAW 马拉维 Malawi"
     }, {
@@ -247,9 +248,7 @@ const countrysData = {
       "name": "MGL 蒙古 Mongolia"
     }, {
       "name": "MKD 马其顿 Macedonia"
-    }, {
-      "name": "MLI 马里 Mali"
-    }, {
+    },{
       "name": "MLT 马耳他 Malta"
     }, {
       "name": "MON 摩纳哥 Monaco"
@@ -258,8 +257,6 @@ const countrysData = {
     }, {
       "name": "MRI 毛里求斯 Mauritius"
     }, {
-      "name": "MTN 毛里塔尼亚 Mauritania"
-    }, {
       "name": "MYA 缅甸 Myanmar"
     }, {
       "name": "NAM 纳米比亚 Namibia"
@@ -267,8 +264,6 @@ const countrysData = {
       "name": "NEP 尼泊尔 Nepal"
     }, {
       "name": "NCA 尼加拉瓜 Nicaragua"
-    }, {
-      "name": "NED 荷兰 Netherlands"
     }, {
       "name": "NGR 尼日利亚 Nigeria"
     }, {
@@ -281,8 +276,6 @@ const countrysData = {
       "name": "NZL 新西兰 New Zealand"
     }, {
       "name": "OMA 阿曼 Oman"
-    }, {
-      "name": "PAK 巴基斯坦 Pakistan"
     }, {
       "name": "PAN 巴拿马 Panama"
     }, {
@@ -324,8 +317,6 @@ const countrysData = {
     }, {
       "name": "SEY 塞舌尔 Seychelles"
     }, {
-      "name": "SIN 新加坡 Singapore"
-    }, {
       "name": "SKN 圣基茨和尼维斯 Saint Kitts-Nevis"
     }, {
       "name": "SLE 塞拉利昂 Sierra Leone"
@@ -335,27 +326,19 @@ const countrysData = {
       "name": "SMR 圣马力诺 San Marino"
     }, {
       "name": "SOL 所罗门群岛 Solomon Islands"
-    }, {
-      "name": "SOM 索马里 Somalia"
-    }, {
+    },{
       "name": "SRI 斯里兰卡 Sri Lanka"
     }, {
       "name": "STP 圣多美和普林西比 Sao Tome and Principe"
     }, {
       "name": "SUD 苏丹 Sudan"
     }, {
-      "name": "SUI 瑞士 Switzerland"
-    }, {
       "name": "SUR 苏里南 Suriname"
     }, {
       "name": "SVK 斯洛伐克 Slovakia"
     }, {
       "name": "SWZ 斯威士兰 Swaziland"
-    }, {
-      "name": "SWE 瑞典 Sweden"
-    }, {
-      "name": "SYR 叙利亚 Syria"
-    }, {
+    },{
       "name": "TAN 坦桑尼亚 Tanzania"
     }, {
       "name": "TGA 汤加 Tonga"
@@ -366,14 +349,10 @@ const countrysData = {
     }, {
       "name": "TKM 土库曼斯坦 Turkmenistan"
     }, {
-      "name": "TLS 东帝汶 East Timor"
-    }, {
       "name": "TOG 多哥 Togo"
     }, {
       "name": "TRI 特立尼达和多巴哥 Trinidad and Tobago"
-    }, {
-      "name": "TUN 突尼斯 Tunisia"
-    }, {
+    },{
       "name": "TUR 土耳其 Turkey"
     }, {
       "name": "TUV 图瓦卢 Tuvalu"
@@ -386,8 +365,6 @@ const countrysData = {
     }, {
       "name": "URU 乌拉圭 Uruguay"
     }, {
-      "name": "USA 美国 United States of America (USA)"
-    }, {
       "name": "UZB 乌兹别克斯坦 Uzbekistan"
     }, {
       "name": "VAN 瓦努阿图 Vanuatu"
@@ -398,123 +375,142 @@ const countrysData = {
     }, {
       "name": "VIE 越南 Vietnam"
     }, {
+      "name": "IND 印度 India"
+    },{
       "name": "VIN 圣文森特和格林纳丁斯 Saint Vincent and the Grenadines"
-    }, {
-      "name": "YEM 也门 Yemen"
-    }, {
+    },{
       "name": "ZAM 赞比亚 Zambia"
     }, {
       "name": "ZIM 津巴布韦 Zimbabwe"
     }
   ],
-  "10009760": [
+  "10009760":[
     {
-      "name": "UAE 阿联酋 United Arab Emirates"
-    }, {
-      "name": "OMA 阿曼 Oman"
-    }, {
-      "name": "MAC 澳门 Macau"
-    }, {
-      "name": "BRN 巴林 Bahrain"
-    }, {
-      "name": "BHU 不丹 Bhutan"
-    }, {
-      "name": "DPRK 朝鲜 DPR Korea"
-    }, {
-      "name": "RUS 俄罗斯联邦 Russia"
-    }, {
-      "name": "PHI 菲律宾 Philippines"
-    }, {
       "name": "KOR 韩国 Korea"
-    }, {
-      "name": "KAZ 哈萨克斯坦 Kazakhstan"
-    }, {
-      "name": "CAM 柬埔寨 Cambodia"
-    }, {
-      "name": "KGZ 吉尔吉斯斯坦 Kyrgyzstan"
-    }, {
-      "name": "QAT 卡塔尔 Qatar"
-    }, {
-      "name": "KUW 科威特 Kuwait"
-    }, {
-      "name": "LAO 老挝 Laos"
-    }, {
-      "name": "LIB 黎巴嫩 Lebanon"
-    }, {
-      "name": "MDV 马尔代夫 Maldives"
-    }, {
-      "name": "MAS 马来西亚 Malaysia"
-    }, {
-      "name": "MGL 蒙古 Mongolia"
-    }, {
-      "name": "BAN 孟加拉国 Bangladesh"
-    }, {
-      "name": "MYA 缅甸 Myanmar"
-    }, {
-      "name": "NEP 尼泊尔 Nepal"
-    }, {
-      "name": "CYP 塞浦路斯 Cyprus"
-    }, {
-      "name": "KSA 沙特阿拉伯 Saudi Arabia"
-    }, {
-      "name": "SRI 斯里兰卡 Sri Lanka"
-    }, {
+    },
+    {
       "name": "THA 泰国 Thailand"
-    }, {
-      "name": "TWN 台湾 Taiwan"
-    }, {
-      "name": "TJK 塔吉克斯坦 Tajikistan"
-    }, {
-      "name": "TUR 土耳其 Turkey"
-    }, {
-      "name": "TKM 土库曼斯坦 Turkmenistan"
-    }, {
-      "name": "BRU 文莱 Brunei"
-    }, {
-      "name": "UZB 乌兹别克斯坦 Uzbekistan"
-    }, {
-      "name": "HK 香港 Hong Kong"
-    }, {
-      "name": "YEM 也门 Republic of Yemen"
-    }, {
-      "name": "IRI 伊朗 Iran"
-    }, {
+    },
+    {
+      "name": "SGP 新加坡 Singapore"
+    },
+    {
+      "name": "MAS 马来西亚 Malaysia"
+    },
+    {
       "name": "IND 印度 India"
-    }, {
-      "name": "INA 印尼 Indonesia"
-    }, {
-      "name": "ISR 以色列 Israel"
-    }, {
-      "name": "JOR 约旦 Jordan"
-    }, {
+    },
+    {
+      "name": "MDV 马尔代夫 Maldives"
+    },
+    {
+      "name": "CAM 柬埔寨 Cambodia"
+    },
+    {
       "name": "VIE 越南 Vietnam"
-    }
+    },
+    {
+      "name": "TUR 土耳其 Turkey"
+    },
+   {
+     "name": "UAE 阿联酋 United Arab Emirates"
+   },
+   {
+     "name": "PHI 菲律宾 Philippines"
+   },{
+     "name": "OMA 阿曼 Oman"
+   }, {
+     "name": "MAC 澳门 Macau"
+   }, {
+     "name": "BRN 巴林 Bahrain"
+   }, {
+     "name": "BHU 不丹 Bhutan"
+   }, {
+     "name": "DPRK 朝鲜 DPR Korea"
+   }, {
+     "name": "RUS 俄罗斯联邦 Russia"
+   }, {
+     "name": "KAZ 哈萨克斯坦 Kazakhstan"
+   }, {
+     "name": "KGZ 吉尔吉斯斯坦 Kyrgyzstan"
+   }, {
+     "name": "QAT 卡塔尔 Qatar"
+   }, {
+     "name": "KUW 科威特 Kuwait"
+   }, {
+     "name": "LAO 老挝 Laos"
+   }, {
+     "name": "LIB 黎巴嫩 Lebanon"
+   }, {
+     "name": "MGL 蒙古 Mongolia"
+   }, {
+     "name": "BAN 孟加拉国 Bangladesh"
+   }, {
+     "name": "MYA 缅甸 Myanmar"
+   }, {
+     "name": "NEP 尼泊尔 Nepal"
+   }, {
+     "name": "CYP 塞浦路斯 Cyprus"
+   }, {
+     "name": "KSA 沙特阿拉伯 Saudi Arabia"
+   }, {
+     "name": "SRI 斯里兰卡 Sri Lanka"
+   }, {
+     "name": "TWN 台湾 Taiwan"
+   }, {
+     "name": "TJK 塔吉克斯坦 Tajikistan"
+   }, {
+     "name": "TKM 土库曼斯坦 Turkmenistan"
+   }, {
+     "name": "BRU 文莱 Brunei"
+   }, {
+     "name": "UZB 乌兹别克斯坦 Uzbekistan"
+   }, {
+     "name": "HK 香港 Hong Kong"
+   }, {
+     "name": "YEM 也门 Republic of Yemen"
+   }, {
+     "name": "IRI 伊朗 Iran"
+   }, {
+     "name": "INA 印尼 Indonesia"
+   }, {
+     "name": "ISR 以色列 Israel"
+   }, {
+     "name": "JOR 约旦 Jordan"
+   }
   ],
   "10003320": [
+    {
+      "name": "意大利 (Italy)ITA"
+    },
+    {
+      "name": "荷兰 (Netherlands)NED"
+    },
+    {
+      "name": "瑞典 (Sweden)SWE"
+    },
+    {
+      "name": "瑞士（Switzerland）SUI"
+    },
+    {
+      "name": "法国 (France)FRA"
+    }, {
+      "name": "德国 (Germany)GER"
+    },
     {
       "name": "奥地利 (Austria)AUT"
     }, {
       "name": "比利时 (Belgium)BEL"
-    }, {
-      "name": "法国 (France)FRA"
-    }, {
-      "name": "德国 (Germany)GER"
-    }, {
+    },{
       "name": "希腊 (Greece)GRE"
     }, {
-      "name": "意大利 (Italy)ITA"
-    }, {
       "name": "卢森堡 (Luxembourg)LUX"
-    }, {
-      "name": "荷兰 (Netherlands)NED"
     }, {
       "name": "西班牙 (Spain)ESP"
     }, {
       "name": "葡萄牙 (Portugal)POR"
     }, {
       "name": "丹麦 (Demark)DEN"
-    }, {
-      "name": "瑞典 (Sweden)SWE"
     }, {
       "name": "挪威 (Norway)NOR"
     }, {
@@ -540,17 +536,66 @@ const countrysData = {
     }, {
       "name": "马耳他（Malta）MLT"
     }, {
-      "name": "瑞士（Switzerland）SUI"
-    }, {
       "name": "列支敦士登（Liechtenstein）LIE"
     }
   ],
   "10028680": [
     {
-      name: 'AFG 阿富汗 Afghanistan'
+      name: 'AUS 澳大利亚 Australia'
     },
     {
-      name: 'ALB 阿尔巴尼亚 Albania'
+      "name": "USA 美国 United States of America (USA)"
+    },
+    {
+      "name": "SIN 新加坡 Singapore"
+    },
+    {
+      "name": "INA 印尼 Indonesia"
+    },
+    {
+      "name": "NED 荷兰 Netherlands"
+    },
+    {
+      "name": "TWN 台湾 Taiwan"
+    },
+    {
+      "name": "SWE 瑞典 Sweden"
+    },
+    {
+      "name": "MAS 马来西亚 Malaysia"
+    },
+    {
+      "name": "CAM 柬埔寨 Cambodia"
+    },
+    {
+      "name": "MAC 澳门 Macau"
+    },
+    {
+      "name": "CAN 加拿大 Canada"
+    },
+    {
+      "name": "KOR 韩国 Korea"
+    },
+    {
+      "name": "ITA 意大利 Italy"
+    },
+    {
+      "name": "SUI 瑞士 Switzerland"
+    },
+    {
+      "name": "JPN 日本 Japan"
+    },
+    {
+      "name": "GER 德国 Germany"
+    },
+    {
+      "name": "GBR 英国 United Kingdom"
+    },
+    {
+      "name": "FRA 法国 France"
+    },
+    {
+      "name": "HK 香港 Hong Kong"
     },
     {
       name: 'ALG 阿尔及利亚 Algeria'
@@ -569,9 +614,6 @@ const countrysData = {
     },
     {
       name: 'ARM 亚美尼亚 Armenia'
-    },
-    {
-      name: 'AUS 澳大利亚 Australia'
     },
     {
       name: 'AUT 奥地利 Austria'
@@ -593,9 +635,6 @@ const countrysData = {
     },
     {
       name: 'BEN 贝宁 Benin'
-    },
-    {
-      name: 'BDI 布隆迪 Burundi'
     },
     {
       name: 'BHU 不丹 Bhutan'
@@ -628,18 +667,6 @@ const countrysData = {
       name: 'BUL 保加利亚 Bulgaria'
     },
     {
-      name: 'BUR 布基纳法索、 Burkina Faso'
-    },{
-      "name": "CAF 中非 Central African Republic"
-    }, {
-      "name": "CAM 柬埔寨 Cambodia"
-    }, {
-      "name": "CAN 加拿大 Canada"
-    }, {
-      "name": "CHA 乍得 Chad"
-    }, {
-      "name": "CGO 刚果 Congo"
-    }, {
       "name": "CHI 智利 Chile"
     }, {
       "name": "CIV 科特迪瓦 Cote d'Ivoire"
@@ -683,28 +710,20 @@ const countrysData = {
       "name": "ESP 西班牙 Spain"
     }, {
       "name": "EST 爱沙尼亚 Estonia"
-    }, {
-      "name": "ETH 埃塞俄比亚 Ethiopia"
     },{
       "name": "FIJ 斐济 Fiji"
     }, {
       "name": "FIN 芬兰 Finland"
     }, {
       "name": "FSM 密克罗尼西亚 Micronesia"
-    }, {
-      "name": "FRA 法国 France"
     },{
       "name": "GAB 加蓬 Gabon"
     }, {
       "name": "GAM 冈比亚 Gambia"
     }, {
-      "name": "GBR 英国 United Kingdom"
-    }, {
       "name": "GEO 格鲁吉亚 Georgia"
     }, {
       "name": "GEQ 赤几 Equatorial Guinea"
-    }, {
-      "name": "GER 德国 Germany"
     }, {
       "name": "GHA 加纳 Ghana"
     }, {
@@ -716,31 +735,19 @@ const countrysData = {
     }, {
       "name": "GUA 危地马拉Guatemala"
     }, {
-      "name": "GUI 几内亚 Guinea"
-    }, {
       "name": "GUY 圭亚那 Guyana"
     },{
-      "name": "IND 印度 India"
-    }, {
-      "name": "INA 印尼 Indonesia"
-    }, {
       "name": "IRI 伊朗 Iran"
     }, {
       "name": "IRL 爱尔兰 Ireland"
     }, {
-      "name": "IRQ 伊拉克 Iraq"
-    }, {
       "name": "ISL 冰岛 Iceland"
     }, {
       "name": "ISR 以色列 Israel"
-    }, {
-      "name": "ITA 意大利 Italy"
     },{
       "name": "JAM 牙买加 Jamaica"
     }, {
       "name": "JOR 约旦 Jordan"
-    }, {
-      "name": "JPN 日本 Japan"
     },{
       "name": "KAZ 哈萨克斯坦 Kazakhstan"
     }, {
@@ -750,26 +757,16 @@ const countrysData = {
     }, {
       "name": "KIR 基里巴斯 Kiribati"
     }, {
-      "name": "KOR 韩国 Korea"
-    }, {
-      "name": "KSA 沙特阿拉伯 Saudi Arabia"
-    }, {
       "name": "KUW 科威特 Kuwait"
     },{
       "name": "LAO 老挝 Laos"
     }, {
       "name": "LAT 拉脱维亚 Latvia"
     }, {
-      "name": "LBA 利比亚 Libya"
-    }, {
-      "name": "LBR 利比里亚 Liberia"
-    }, {
       "name": "LCA 圣卢西亚 Saint Lucia"
     }, {
       "name": "LES 莱索托 Lesotho"
-    }, {
-      "name": "LIB 黎巴嫩 Lebanon"
-    }, {
+    },{
       "name": "LIE 列支敦士登 Liechtenstein"
     }, {
       "name": "LTU 立陶宛 Lithuania"
@@ -779,8 +776,6 @@ const countrysData = {
       "name": "MAD 马达加斯加 Madagascar"
     }, {
       "name": "MAR 摩洛哥 Morocco"
-    }, {
-      "name": "MAS 马来西亚 Malaysia"
     }, {
       "name": "MAW 马拉维 Malawi"
     }, {
@@ -793,9 +788,7 @@ const countrysData = {
       "name": "MGL 蒙古 Mongolia"
     }, {
       "name": "MKD 马其顿 Macedonia"
-    }, {
-      "name": "MLI 马里 Mali"
-    }, {
+    },{
       "name": "MLT 马耳他 Malta"
     }, {
       "name": "MON 摩纳哥 Monaco"
@@ -804,8 +797,6 @@ const countrysData = {
     }, {
       "name": "MRI 毛里求斯 Mauritius"
     }, {
-      "name": "MTN 毛里塔尼亚 Mauritania"
-    }, {
       "name": "MYA 缅甸 Myanmar"
     }, {
       "name": "NAM 纳米比亚 Namibia"
@@ -813,8 +804,6 @@ const countrysData = {
       "name": "NEP 尼泊尔 Nepal"
     }, {
       "name": "NCA 尼加拉瓜 Nicaragua"
-    }, {
-      "name": "NED 荷兰 Netherlands"
     }, {
       "name": "NGR 尼日利亚 Nigeria"
     }, {
@@ -827,8 +816,6 @@ const countrysData = {
       "name": "NZL 新西兰 New Zealand"
     }, {
       "name": "OMA 阿曼 Oman"
-    }, {
-      "name": "PAK 巴基斯坦 Pakistan"
     }, {
       "name": "PAN 巴拿马 Panama"
     }, {
@@ -870,8 +857,6 @@ const countrysData = {
     }, {
       "name": "SEY 塞舌尔 Seychelles"
     }, {
-      "name": "SIN 新加坡 Singapore"
-    }, {
       "name": "SKN 圣基茨和尼维斯 Saint Kitts-Nevis"
     }, {
       "name": "SLE 塞拉利昂 Sierra Leone"
@@ -881,27 +866,19 @@ const countrysData = {
       "name": "SMR 圣马力诺 San Marino"
     }, {
       "name": "SOL 所罗门群岛 Solomon Islands"
-    }, {
-      "name": "SOM 索马里 Somalia"
-    }, {
+    },{
       "name": "SRI 斯里兰卡 Sri Lanka"
     }, {
       "name": "STP 圣多美和普林西比 Sao Tome and Principe"
     }, {
       "name": "SUD 苏丹 Sudan"
     }, {
-      "name": "SUI 瑞士 Switzerland"
-    }, {
       "name": "SUR 苏里南 Suriname"
     }, {
       "name": "SVK 斯洛伐克 Slovakia"
     }, {
       "name": "SWZ 斯威士兰 Swaziland"
-    }, {
-      "name": "SWE 瑞典 Sweden"
-    }, {
-      "name": "SYR 叙利亚 Syria"
-    }, {
+    },{
       "name": "TAN 坦桑尼亚 Tanzania"
     }, {
       "name": "TGA 汤加 Tonga"
@@ -912,14 +889,10 @@ const countrysData = {
     }, {
       "name": "TKM 土库曼斯坦 Turkmenistan"
     }, {
-      "name": "TLS 东帝汶 East Timor"
-    }, {
       "name": "TOG 多哥 Togo"
     }, {
       "name": "TRI 特立尼达和多巴哥 Trinidad and Tobago"
-    }, {
-      "name": "TUN 突尼斯 Tunisia"
-    }, {
+    },{
       "name": "TUR 土耳其 Turkey"
     }, {
       "name": "TUV 图瓦卢 Tuvalu"
@@ -932,8 +905,6 @@ const countrysData = {
     }, {
       "name": "URU 乌拉圭 Uruguay"
     }, {
-      "name": "USA 美国 United States of America (USA)"
-    }, {
       "name": "UZB 乌兹别克斯坦 Uzbekistan"
     }, {
       "name": "VAN 瓦努阿图 Vanuatu"
@@ -944,10 +915,10 @@ const countrysData = {
     }, {
       "name": "VIE 越南 Vietnam"
     }, {
+      "name": "IND 印度 India"
+    },{
       "name": "VIN 圣文森特和格林纳丁斯 Saint Vincent and the Grenadines"
-    }, {
-      "name": "YEM 也门 Yemen"
-    }, {
+    },{
       "name": "ZAM 赞比亚 Zambia"
     }, {
       "name": "ZIM 津巴布韦 Zimbabwe"
@@ -955,112 +926,131 @@ const countrysData = {
   ],
   "10028681": [
     {
-      "name": "UAE 阿联酋 United Arab Emirates"
-    }, {
-      "name": "OMA 阿曼 Oman"
-    }, {
-      "name": "MAC 澳门 Macau"
-    }, {
-      "name": "BRN 巴林 Bahrain"
-    }, {
-      "name": "BHU 不丹 Bhutan"
-    }, {
-      "name": "DPRK 朝鲜 DPR Korea"
-    }, {
-      "name": "RUS 俄罗斯联邦 Russia"
-    }, {
-      "name": "PHI 菲律宾 Philippines"
-    }, {
       "name": "KOR 韩国 Korea"
-    }, {
-      "name": "KAZ 哈萨克斯坦 Kazakhstan"
-    }, {
-      "name": "CAM 柬埔寨 Cambodia"
-    }, {
-      "name": "KGZ 吉尔吉斯斯坦 Kyrgyzstan"
-    }, {
-      "name": "QAT 卡塔尔 Qatar"
-    }, {
-      "name": "KUW 科威特 Kuwait"
-    }, {
-      "name": "LAO 老挝 Laos"
-    }, {
-      "name": "LIB 黎巴嫩 Lebanon"
-    }, {
-      "name": "MDV 马尔代夫 Maldives"
-    }, {
-      "name": "MAS 马来西亚 Malaysia"
-    }, {
-      "name": "MGL 蒙古 Mongolia"
-    }, {
-      "name": "BAN 孟加拉国 Bangladesh"
-    }, {
-      "name": "MYA 缅甸 Myanmar"
-    }, {
-      "name": "NEP 尼泊尔 Nepal"
-    }, {
-      "name": "CYP 塞浦路斯 Cyprus"
-    }, {
-      "name": "KSA 沙特阿拉伯 Saudi Arabia"
-    }, {
-      "name": "SRI 斯里兰卡 Sri Lanka"
-    }, {
+    },
+    {
       "name": "THA 泰国 Thailand"
-    }, {
-      "name": "TWN 台湾 Taiwan"
-    }, {
-      "name": "TJK 塔吉克斯坦 Tajikistan"
-    }, {
-      "name": "TUR 土耳其 Turkey"
-    }, {
-      "name": "TKM 土库曼斯坦 Turkmenistan"
-    }, {
-      "name": "BRU 文莱 Brunei"
-    }, {
-      "name": "UZB 乌兹别克斯坦 Uzbekistan"
-    }, {
-      "name": "HK 香港 Hong Kong"
-    }, {
-      "name": "YEM 也门 Republic of Yemen"
-    }, {
-      "name": "IRI 伊朗 Iran"
-    }, {
+    },
+    {
+      "name": "SGP 新加坡 Singapore"
+    },
+    {
+      "name": "MAS 马来西亚 Malaysia"
+    },
+    {
       "name": "IND 印度 India"
-    }, {
-      "name": "INA 印尼 Indonesia"
-    }, {
-      "name": "ISR 以色列 Israel"
-    }, {
-      "name": "JOR 约旦 Jordan"
-    }, {
+    },
+    {
+      "name": "MDV 马尔代夫 Maldives"
+    },
+    {
+      "name": "CAM 柬埔寨 Cambodia"
+    },
+    {
       "name": "VIE 越南 Vietnam"
-    }
+    },
+    {
+      "name": "TUR 土耳其 Turkey"
+    },
+   {
+     "name": "UAE 阿联酋 United Arab Emirates"
+   },
+   {
+     "name": "PHI 菲律宾 Philippines"
+   },{
+     "name": "OMA 阿曼 Oman"
+   }, {
+     "name": "MAC 澳门 Macau"
+   }, {
+     "name": "BRN 巴林 Bahrain"
+   }, {
+     "name": "BHU 不丹 Bhutan"
+   }, {
+     "name": "DPRK 朝鲜 DPR Korea"
+   }, {
+     "name": "RUS 俄罗斯联邦 Russia"
+   }, {
+     "name": "KAZ 哈萨克斯坦 Kazakhstan"
+   }, {
+     "name": "KGZ 吉尔吉斯斯坦 Kyrgyzstan"
+   }, {
+     "name": "QAT 卡塔尔 Qatar"
+   }, {
+     "name": "KUW 科威特 Kuwait"
+   }, {
+     "name": "LAO 老挝 Laos"
+   }, {
+     "name": "LIB 黎巴嫩 Lebanon"
+   }, {
+     "name": "MGL 蒙古 Mongolia"
+   }, {
+     "name": "BAN 孟加拉国 Bangladesh"
+   }, {
+     "name": "MYA 缅甸 Myanmar"
+   }, {
+     "name": "NEP 尼泊尔 Nepal"
+   }, {
+     "name": "CYP 塞浦路斯 Cyprus"
+   }, {
+     "name": "KSA 沙特阿拉伯 Saudi Arabia"
+   }, {
+     "name": "SRI 斯里兰卡 Sri Lanka"
+   }, {
+     "name": "TWN 台湾 Taiwan"
+   }, {
+     "name": "TJK 塔吉克斯坦 Tajikistan"
+   }, {
+     "name": "TKM 土库曼斯坦 Turkmenistan"
+   }, {
+     "name": "BRU 文莱 Brunei"
+   }, {
+     "name": "UZB 乌兹别克斯坦 Uzbekistan"
+   }, {
+     "name": "HK 香港 Hong Kong"
+   }, {
+     "name": "YEM 也门 Republic of Yemen"
+   }, {
+     "name": "IRI 伊朗 Iran"
+   }, {
+     "name": "INA 印尼 Indonesia"
+   }, {
+     "name": "ISR 以色列 Israel"
+   }, {
+     "name": "JOR 约旦 Jordan"
+   }
   ],
   "10028280": [
+    {
+      "name": "意大利 (Italy)ITA"
+    },
+    {
+      "name": "荷兰 (Netherlands)NED"
+    },
+    {
+      "name": "瑞典 (Sweden)SWE"
+    },
+    {
+      "name": "瑞士（Switzerland）SUI"
+    },
+    {
+      "name": "法国 (France)FRA"
+    }, {
+      "name": "德国 (Germany)GER"
+    },
     {
       "name": "奥地利 (Austria)AUT"
     }, {
       "name": "比利时 (Belgium)BEL"
-    }, {
-      "name": "法国 (France)FRA"
-    }, {
-      "name": "德国 (Germany)GER"
-    }, {
+    },{
       "name": "希腊 (Greece)GRE"
     }, {
-      "name": "意大利 (Italy)ITA"
-    }, {
       "name": "卢森堡 (Luxembourg)LUX"
-    }, {
-      "name": "荷兰 (Netherlands)NED"
     }, {
       "name": "西班牙 (Spain)ESP"
     }, {
       "name": "葡萄牙 (Portugal)POR"
     }, {
       "name": "丹麦 (Demark)DEN"
-    }, {
-      "name": "瑞典 (Sweden)SWE"
     }, {
       "name": "挪威 (Norway)NOR"
     }, {
@@ -1085,8 +1075,6 @@ const countrysData = {
       "name": "捷克（Czechoslovakia）CZE"
     }, {
       "name": "马耳他（Malta）MLT"
-    }, {
-      "name": "瑞士（Switzerland）SUI"
     }, {
       "name": "列支敦士登（Liechtenstein）LIE"
     }

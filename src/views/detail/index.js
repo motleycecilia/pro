@@ -34,7 +34,7 @@ export default class detail extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10000400)
+    // this.props.queryDetilInfo(10013242)
     // this.props.queryDetilInfo(10028680, 10007603)
     this.props.queryDetilInfo(getUrlParam('productId'), getUrlParam('productCode'))
     App.goBackAction = function () {
@@ -145,7 +145,13 @@ export default class detail extends React.Component {
             <a href="javascript: void(0);" className={this.state.guaranteeIndex === index ? "arrow-up showInfo" : "arrow-down showInfo"}>
               <div className="content-list-title">
                 <span className="project-name">{val.securityProName}</span>
-                <span className="money">{val.securityProAssuredSum ? val.securityProAssuredSum/10000+"万元" : ""}</span>
+                <span className="money">
+                  {
+                    val.amontUnit === 1 ? (val.securityProAssuredSum ? val.securityProAssuredSum/10000 + "万元" : val.securityProAssuredSumDesc) :
+                    val.amontUnit === 3 ? val.securityProAssuredSum + "元/天" :
+                    val.securityProAssuredSum
+                  }
+                </span>
               </div>
             </a>
             <div className={this.state.guaranteeIndex === index ? "content-list-text" : "content-list-text hide"}>
@@ -230,9 +236,9 @@ export default class detail extends React.Component {
               </a>
               </li>
               <li>
-                <a is href="javascript:void(0);" otitle="详情_投保声明" otype="button" class="arrow-right" onTouchTap={this.onClickStatement.bind(this, 1)}>
+                <a is href="javascript:void(0);" otitle="详情_投保须知" otype="button" class="arrow-right" onTouchTap={this.onClickStatement.bind(this, 5)}>
                   <div className="content-list-title">
-                    <span className="project-name">投保声明</span>
+                    <span className="project-name">投保须知</span>
                     <span className="money"></span>
                   </div>
                 </a>

@@ -87,7 +87,7 @@ export default class premium extends React.Component {
   }
 
   componentWillMount() {
-    // this.props.queryDetilInfo(10000400)
+    // this.props.queryDetilInfo(10013242)
     this.props.queryDetilInfo(this.props.location.query.productId, this.props.location.query.productCode)
     App.goBackAction = function () {
       this.onClickBack()
@@ -127,7 +127,7 @@ export default class premium extends React.Component {
       let currentTimes = detailInfo.detail.currentTime.substring(0, 10)//detsInfo.result.currentTime.substring(0, 10)//
       const getEle = document.querySelector.bind(document)
       getEle('#sysDate').value = currentTimes
-      let startDates = util.getEndDatet(detailInfo.detail.currentTime.substring(0,10), detailInfo.detail.insuranceProductTerms[0].minValue || '1', detailInfo.detail.insuranceProductTerms[0].minValueUnit || "D")//util.getEndDatet(detsInfo.result.currentTime.substring(0,10), detsInfo.result.insuranceProductTerms[0].minValue || '1', detsInfo.result.insuranceProductTerms[0].minValueUnit || 'D')//
+      let startDates = util.getEndDatet(detailInfo.detail.currentTime.substring(0,10), +detailInfo.detail.minEffectDelay || '1',  "D")//util.getEndDatet(detsInfo.result.currentTime.substring(0,10), +detsInfo.result.minEffectDelay || '1', 'D')//
       let endDates = util.getEndDatet(startDates, 7, 'D')
       this.setState({
         loodNum: 1,
@@ -140,7 +140,7 @@ export default class premium extends React.Component {
         // orderSpliteFlag: detsInfo.result.orderSpliteFlag || "0",
         // skuId: isShowAddCountry == true ? bChoseSkuObj.skuId : this.props.location.query.skuId,
         // productInsuranceCode: isShowAddCountry == true ? bChoseSkuObj.productInsuranceCode : this.props.location.query.productInsuranceCode,
-        // minPeriod: detsInfo.result.minEffectDelay|| 1,
+        // minPeriod: +detsInfo.result.minEffectDelay|| 1,
         // maxPeriod: detsInfo.result.maxEffectDelay || 365,
         // periodMinUnit: 'D',
         // periodMaxUnit: 'D',
@@ -168,7 +168,7 @@ export default class premium extends React.Component {
         orderSpliteFlag: detailInfo.detail.orderSpliteFlag || "0",
         skuId: isShowAddCountry == true ? bChoseSkuObj.skuId : this.props.location.query.skuId,
         productInsuranceCode: isShowAddCountry == true ? bChoseSkuObj.productInsuranceCode : this.props.location.query.productInsuranceCode,
-        minPeriod: detailInfo.detail.minEffectDelay|| 1,
+        minPeriod: +detailInfo.detail.minEffectDelay|| 1,
         maxPeriod: detailInfo.detail.maxEffectDelay || 365,
         periodMinUnit: 'D',
         periodMaxUnit: 'D',
@@ -397,12 +397,14 @@ export default class premium extends React.Component {
       })
     }
     const [minStartDate, maxStartDate] = [util.getEndDatet(this.state.currentTime, this.state.minPeriod-1, this.state.periodMinUnit), util.getEndDatet(this.state.currentTime, this.state.maxPeriod-1, this.state.periodMaxUnit)]
+    const [minStartDateInfo, maxStartDateInfo] = [util.getEndDatet(this.state.currentTime, this.state.minPeriod, this.state.periodMinUnit), util.getEndDatet(this.state.currentTime, this.state.maxPeriod, this.state.periodMaxUnit)]
     const minEndDate = util.getEndDatet(this.state.startDate, 1, 'D')
     const maxEndDate = util.getEndDatet(this.state.startDate, this.state.endPriod-1, this.state.endPriodUnit)
+    const maxEndDateInfo = util.getEndDatet(this.state.startDate, this.state.endPriod, this.state.endPriodUnit)
     if(util.maxDate(minStartDate, this.state.startDate) || util.maxDate(this.state.startDate, maxStartDate)) {
       this.setState({
         // errorContent: `开始时间必须在${this.state.minPeriod}${TYpes.date[this.state.periodMinUnit]}-${this.state.maxPeriod}${TYpes.date[this.state.periodMaxUnit]}之内`
-        errorContent: `保障开始时间必须为${minStartDate}到${maxStartDate}之间`
+        errorContent: `保障开始时间必须为${minStartDateInfo}到${maxStartDateInfo}之间`
       })
       return
     }
@@ -414,7 +416,7 @@ export default class premium extends React.Component {
     }else {
       if(util.maxDate(this.state.startDate, this.state.endDate) || util.maxDate(this.state.endDate, maxEndDate)) {
         this.setState({
-          errorContent: `保障结束时间必须为${minEndDate}到${maxEndDate}之间`
+          errorContent: `保障结束时间必须为${minEndDate}到${maxEndDateInfo}之间`
         })
         return
       }
@@ -425,7 +427,8 @@ export default class premium extends React.Component {
     }
     let errorContents = createChecker(checkList)
     if(errorContents === false) {
-      let [minDate, maxDate] = [util.getEndDatet(this.state.startDate, -this.state.minInsureAge ,this.state.minInsureAgeUnit),  util.getEndDatet(this.state.startDate, -this.state.maxInsureAge, this.state.maxInsureAgeUnit)]
+      let [minDate, maxDatea] = [util.getEndDatet(this.state.startDate, -this.state.minInsureAge ,this.state.minInsureAgeUnit),  util.getEndDatet(this.state.startDate, -this.state.maxInsureAge, this.state.maxInsureAgeUnit)]
+      let maxDate = util.getEndDatet(util.getEndDatet(maxDatea, 1, 'D'), -1 , 'Y')
       let checkBeDate = this.state.bePeopleDate.every(function(val, index) {
         return util.maxDate(minDate, val.insurantBirth) && util.maxDate(val.insurantBirth, maxDate)
       })
@@ -438,15 +441,15 @@ export default class premium extends React.Component {
           discount: 1,
           insuranceBeginTime: this.state.startDate,
           insuranceStartTime: this.state.startDate,
-          insuranceEndTime: this.state.endFormatDate,
-          insurancePeriod: this.state.productPriod === true || this.state.tourismKey === '1' ? 12 : util.DateDiff(this.state.startDate, this.state.endDate),
+          // insuranceEndTime: util.getEndDatet(this.state.endFormatDate, 1, ''),
+          insurancePeriod: this.state.productPriod === true || this.state.tourismKey === '1' ? 12 : util.DateDiff(this.state.startDate, this.state.endDate) + 1,
           insurancePriodUnit: this.state.productPriod === true || this.state.tourismKey === '1' ? 'M' : 'D'
         }
         const insuranceInfoList = this.state.bePeopleDate.map((val, index)=> {
           return {
             skuId: this.state.skuId,
             policyInfo: policyInfos,
-            insurantInfoList: [val],
+            insurantInfoList: [val]
           }
         })
         const params = {
@@ -529,7 +532,8 @@ export default class premium extends React.Component {
     }
     const fillMationInfo = {
       productName: this.state.productNmae,
-      name: this.state.name
+      name: this.state.name,
+      isShowAddCountry: this.state.isShowAddCountry
     }
     const prePara = {
       serialNo: this.state.serialNo,
@@ -686,8 +690,6 @@ export default class premium extends React.Component {
       // <div>
       //   util.getEndDatet(detail.currentTime.substring(0,10), detail.insuranceProductTerms[0].minValue || '1', detail.insuranceProductTerms[0].minValueUnit || 'D')
       // </div>
-    const {eDate} = this.refs
-    eDate.value = util.getEndDatet(e.target.value, 7, 'D')
     this.props.premiumMeasureReset()
     this.setState({
       minEndDate: util.getEndDatet(e.target.value, 1, 'D'),
@@ -703,6 +705,10 @@ export default class premium extends React.Component {
         endFormatDate: util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D')
       })
     }else {
+      const {eDate} = this.refs
+      if(eDate) {
+        eDate.value = util.getEndDatet(e.target.value, 7, 'D')
+      }
       this.setState({
         // endDate: util.replaceAll(util.getEndDatet(util.getEndDatet(e.target.value, 1, 'Y'),-1 , 'D'),"-","/"),
         endDate: util.getEndDatet(e.target.value, 7, 'D'),
