@@ -73,7 +73,7 @@ export default class fillmation extends React.Component {
     }.bind(this)
     YztApp.setTitle(this.props.route.title)
     this.setState({
-      fillmationInfo: JSON.parse(sessionStorage.getItem("fillMationInfo"))//{"productName":"境外旅行保险（全球）","name":"豪华型","isShowAddCountry":true}
+      fillmationInfo: JSON.parse(sessionStorage.getItem("fillMationInfo"))//{"productName":"境外旅行保险（全球）","name":"豪华型","isShowAddCountry":true}//
     })
     this.props.getPolicyUserInfo();
     this.props.getInsuredUserInfo('')
